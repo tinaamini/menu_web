@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: fa\n"
+
+msgid "Password-based authentication"
+msgstr "احراز هویت بر اساس رمز عبور"
+
+msgid "Enabled"
+msgstr "فعال"
+
+msgid "Disabled"
+msgstr "غیرفعال"
+
+msgid "Enable password-based authentication for this user by setting a password."
+msgstr "با تعیین رمز عبور، امکان ورود با رمز عبور را برای این کاربر فعال کنید."
+
+msgid "If disabled, the current password for this user will be lost."
+msgstr "در صورت غیرفعال‌سازی، رمز عبور فعلی این کاربر حذف خواهد شد."
+
+msgid "Password-based authentication was disabled."
+msgstr "احراز هویت با رمز عبور غیرفعال شد."
+
+msgid "Whether the user will be able to authenticate using a password or not. If disabled, they may still be able to authenticate using other backends, such as Single Sign-On or LDAP."
+msgstr "مشخص می‌کند که آیا کاربر می‌تواند با رمز عبور وارد شود یا خیر. در صورت غیرفعال بودن، ورود فقط از طریق سایر سامانه‌ها (مانند سامانه ورود سازمانی یا SSO) امکان‌پذیر است."
+
+msgid "Run"
+msgstr "اجرا"
+
+msgid "- Select an option -"
+msgstr "--- یک اقدام را انتخاب کنید ---"
+
+msgid "Action:"
+msgstr "اقدام:"
+
+msgid "Actions"
+msgstr "اقدامات"
+
+msgid "Go"
+msgstr "برو"
+
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr "انتخاب تمام %(total_count)s مورد %(module_name)s"
+
+msgid "Clear selection"
+msgstr "لغو انتخاب‌ها"
+
+msgid "0 of %(cnt)s selected"
+msgstr "۰ از %(cnt)s مورد انتخاب شده"
+
+msgid "%(sel)s of %(cnt)s selected"
+msgstr "%(sel)s از %(cnt)s مورد انتخاب شده"

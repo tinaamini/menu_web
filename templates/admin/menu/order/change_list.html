@@ -1,0 +1,235 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* بهینه‌سازی و هماهنگی جدول سفارش‌ها در پنل ادمین */
+    #changelist table {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        width: 100% !important;
+    }
+
+    #changelist thead th {
+        background: #1c1510 !important;
+        color: #d4a574 !important;
+        font-weight: 800 !important;
+        padding: 12px 14px !important;
+        font-size: 0.88rem !important;
+        vertical-align: middle !important;
+        border-bottom: 2px solid rgba(212, 165, 116, 0.4) !important;
+        white-space: nowrap !important;
+        text-align: right !important;
+    }
+
+    #changelist thead th a {
+        color: #d4a574 !important;
+    }
+
+    #changelist tbody tr {
+        transition: background 0.15s ease !important;
+    }
+
+    #changelist tbody tr:hover {
+        background: rgba(212, 165, 116, 0.08) !important;
+    }
+
+    #changelist tbody th,
+    #changelist tbody td {
+        vertical-align: middle !important;
+        padding: 12px 14px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+        text-align: right !important;
+        font-size: 0.92rem !important;
+        white-space: nowrap !important;
+    }
+
+    /* رفع قطعی مشکل لینک و چندخطی شدن شماره میز */
+    #changelist td.field-table_badge a,
+    #changelist th.field-order_number a {
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        outline: none !important;
+    }
+
+    .badge-table {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(212, 165, 116, 0.12) !important;
+        color: #fde8d0 !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        font-size: 0.88rem !important;
+        border: 1px solid rgba(212, 165, 116, 0.3) !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    .badge-table:hover {
+        background: rgba(212, 165, 116, 0.22) !important;
+        border-color: #d4a574 !important;
+    }
+
+    .badge-status {
+        display: inline-flex !important;
+        align-items: center !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        border: 1px solid transparent !important;
+        font-weight: 600 !important;
+        font-size: 0.84rem !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    .badge-pulse-ready {
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
+        font-weight: 700 !important;
+    }
+
+    @keyframes pulseGlow {
+        from { box-shadow: 0 0 6px rgba(16, 185, 129, 0.3); }
+        to { box-shadow: 0 0 16px rgba(16, 185, 129, 0.6); }
+    }
+
+    .badge-payment-paid {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        color: #10b981 !important;
+        background: rgba(16, 185, 129, 0.15) !important;
+        border: 1px solid #10b981 !important;
+        padding: 5px 11px !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    .badge-payment-unpaid {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        color: #ef4444 !important;
+        background: rgba(239, 68, 68, 0.15) !important;
+        border: 1px solid #ef4444 !important;
+        padding: 5px 11px !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    /* استایل نوار اقدامات (Actions) بالای جدول */
+    .actions {
+        background: #18120d !important;
+        border: 1px solid rgba(212, 165, 116, 0.25) !important;
+        border-radius: 10px !important;
+        padding: 10px 14px !important;
+        margin-bottom: 15px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+
+    .actions select {
+        background: #241a12 !important;
+        color: #f5eedc !important;
+        border: 1px solid rgba(212, 165, 116, 0.4) !important;
+        border-radius: 6px !important;
+        padding: 6px 12px !important;
+        font-size: 0.9rem !important;
+        height: 38px !important;
+    }
+
+    .actions .button {
+        background: linear-gradient(135deg, #d4a574 0%, #a26d3b 100%) !important;
+        color: #120c08 !important;
+        border: none !important;
+        font-weight: 800 !important;
+        border-radius: 6px !important;
+        padding: 8px 18px !important;
+        height: 38px !important;
+        cursor: pointer !important;
+        transition: opacity 0.2s ease !important;
+    }
+
+    .actions .button:hover {
+        opacity: 0.9 !important;
+    }
+
+    /* دکمه انتقال مستقیم به پنل گارسون */
+    .object-tools {
+        margin-bottom: 16px !important;
+    }
+
+    .btn-waiter-banner {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        border-radius: 8px !important;
+        padding: 9px 20px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+        text-decoration: none !important;
+        font-size: 0.92rem !important;
+        border: none !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    }
+
+    .btn-waiter-banner:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5) !important;
+    }
+
+    /* بوردر ردیف‌های جدول ادمین هماهنگ با وضعیت سفارش */
+    tr.order-row-pending td:first-child, tr.order-row-pending th:first-child {
+        border-right: 4px solid #f59e0b !important;
+    }
+    tr.order-row-preparing td:first-child, tr.order-row-preparing th:first-child {
+        border-right: 4px solid #f97316 !important;
+    }
+    tr.order-row-ready td:first-child, tr.order-row-ready th:first-child {
+        border-right: 4px solid #10b981 !important;
+    }
+    tr.order-row-delivered td:first-child, tr.order-row-delivered th:first-child {
+        border-right: 4px solid #3b82f6 !important;
+    }
+    tr.order-row-cancelled td:first-child, tr.order-row-cancelled th:first-child {
+        border-right: 4px solid #ef4444 !important;
+    }
+</style>
+{% endblock %}
+
+{% block object-tools-items %}
+    <li>
+        <a href="{% url 'menu:waiter_panel' %}" class="btn-waiter-banner">
+            <span>پنل سفارش‌گیر میزها</span>
+        </a>
+    </li>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#changelist tbody tr').forEach(function(row) {
+            var badge = row.querySelector('.badge-status[data-status]');
+            if (badge) {
+                var status = badge.getAttribute('data-status');
+                row.classList.add('order-row-' + status);
+                var color = badge.style.borderColor || badge.style.color;
+                if (color) {
+                    var firstCell = row.querySelector('th, td');
+                    if (firstCell) {
+                        firstCell.style.borderRight = '4px solid ' + color;
+                    }
+                }
+            }
+        });
+    });
+    </script>
+{% endblock %}

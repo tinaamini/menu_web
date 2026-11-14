@@ -1,0 +1,599 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:"کافه گاردو" }}{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}?v=2.0">
+<link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}?v=2.0">
+<link rel="shortcut icon" href="{% static 'images/favicon.ico' %}?v=2.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'admin/css/jalali_datepicker.css' %}?v=2.5">
+<script src="{% static 'admin/js/jalali_datepicker.js' %}?v=2.5" defer></script>
+<style>
+/* ============================================================
+   تم اختصاصی و یکپارچه کافه گاردو برای کل پنل ادمین
+   مطابق با رنگ‌بندی منوی سایت (رنگ قهوه، کارامل و طلایی گاردو)
+   ============================================================ */
+:root,
+html,
+body,
+[data-theme="dark"],
+[data-theme="light"] {
+    --primary: #3e2723 !important;
+    --primary-fg: #fdf6ec !important;
+    --secondary: #241812 !important;
+    --accent: #d4a574 !important;
+    --accent-light: #f5deb3 !important;
+    --body-bg: #1c1b1a !important;
+    --body-fg: #fdf6ec !important;
+    --body-quiet-color: #a89f91 !important;
+    --body-medium-color: #d4a574 !important;
+    --body-loud-color: #ffffff !important;
+    --header-bg: linear-gradient(135deg, #2b1810 0%, #180d08 100%) !important;
+    --header-color: #f5deb3 !important;
+    --header-branding-color: #d4a574 !important;
+    --header-link-color: #fdf6ec !important;
+    --breadcrumbs-bg: #261912 !important;
+    --breadcrumbs-fg: #d4a574 !important;
+    --breadcrumbs-link-fg: #fdf6ec !important;
+    --link-fg: #d4a574 !important;
+    --link-hover-color: #f5deb3 !important;
+    --link-selected-fg: #e0aa6a !important;
+    --border-color: rgba(212, 165, 116, 0.25) !important;
+    --hairline-color: rgba(212, 165, 116, 0.15) !important;
+    --darkened-bg: #161311 !important;
+    --selected-bg: #2a1d15 !important;
+    --selected-row: rgba(212, 165, 116, 0.12) !important;
+    --button-bg: #8c5b2f !important;
+    --button-hover-bg: #a06a38 !important;
+    --default-button-bg: linear-gradient(135deg, #d4a574 0%, #a26d3b 100%) !important;
+    --default-button-hover-bg: #e0b382 !important;
+}
+
+/* فونت، پس‌زمینه و جهت کل صفحات ادمین */
+html, body {
+    font-family: 'Vazirmatn', Tahoma, sans-serif !important;
+    background-color: #1c1b1a !important;
+    color: #fdf6ec !important;
+    direction: rtl !important;
+}
+
+/* نوار هدر بالای صفحه */
+#header {
+    background: linear-gradient(135deg, #2c1a12 0%, #160d08 100%) !important;
+    border-bottom: 2px solid rgba(212, 165, 116, 0.35) !important;
+    padding: 12px 24px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+#header #branding h1 {
+    font-family: 'Vazirmatn', Tahoma, sans-serif !important;
+    font-weight: 900 !important;
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+}
+
+#header #branding h1 a {
+    color: #d4a574 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+#header #branding h1 a:hover {
+    color: #f5deb3 !important;
+}
+
+#user-tools {
+    font-family: 'Vazirmatn', Tahoma, sans-serif !important;
+    font-size: 0.85rem !important;
+    color: #f5deb3 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+#user-tools a {
+    color: #d4a574 !important;
+    border-bottom: 1px dotted rgba(212, 165, 116, 0.4) !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease !important;
+}
+
+#user-tools a:hover {
+    color: #ffffff !important;
+    border-bottom-color: #ffffff !important;
+}
+
+/* کلیدهای میانبر در هدر ادمین */
+.header-quick-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.header-quick-btn {
+    background: rgba(212, 165, 116, 0.15) !important;
+    border: 1px solid rgba(212, 165, 116, 0.35) !important;
+    color: #f5deb3 !important;
+    padding: 5px 12px !important;
+    border-radius: 20px !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: all 0.2s ease !important;
+}
+
+.header-quick-btn:hover {
+    background: rgba(212, 165, 116, 0.3) !important;
+    color: #ffffff !important;
+    border-color: #d4a574 !important;
+}
+
+/* نوار مسیر ناوبری (Breadcrumbs) */
+.breadcrumbs {
+    background: #241812 !important;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.2) !important;
+    color: #a89f91 !important;
+    font-size: 0.85rem !important;
+    padding: 10px 24px !important;
+}
+
+.breadcrumbs a {
+    color: #d4a574 !important;
+    text-decoration: none !important;
+}
+
+.breadcrumbs a:hover {
+    color: #ffffff !important;
+}
+
+/* محتوا و ماژول‌های داشبورد */
+#content {
+    background: #1c1b1a !important;
+    padding: 24px !important;
+}
+
+.module {
+    background: #241a14 !important;
+    border: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    margin-bottom: 24px !important;
+    overflow: hidden !important;
+}
+
+fieldset.module,
+.module.aligned,
+.form-row {
+    overflow: visible !important;
+}
+
+.module caption,
+.module h2 {
+    background: linear-gradient(135deg, #2e1e16 0%, #1e130d 100%) !important;
+    color: #d4a574 !important;
+    font-weight: 800 !important;
+    font-size: 0.98rem !important;
+    padding: 12px 18px !important;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.25) !important;
+}
+
+.module table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+.module tr {
+    transition: background 0.15s ease !important;
+}
+
+.module tr:hover {
+    background: rgba(212, 165, 116, 0.08) !important;
+}
+
+.module th,
+.module td {
+    padding: 12px 18px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    color: #fdf6ec !important;
+    vertical-align: middle !important;
+}
+
+.module th a {
+    color: #fdf6ec !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+.module th a:hover {
+    color: #d4a574 !important;
+}
+
+/* دکمه‌های افزودن و تغییر */
+.addlink {
+    color: #34d399 !important;
+}
+
+.changelink {
+    color: #60a5fa !important;
+}
+
+.deletelink {
+    color: #f87171 !important;
+}
+
+/* جداول در تمام صفحات changelist */
+#changelist {
+    background: transparent !important;
+}
+
+#changelist table thead th {
+    background: #261912 !important;
+    color: #d4a574 !important;
+    border-bottom: 2px solid rgba(212, 165, 116, 0.35) !important;
+}
+
+#changelist tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+#changelist tbody tr:hover {
+    background: rgba(212, 165, 116, 0.08) !important;
+}
+
+/* سایدبار فیلتر کناری */
+#changelist-filter {
+    background: #22160f !important;
+    border-right: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 10px !important;
+}
+
+#changelist-filter h2 {
+    background: #2c1a12 !important;
+    color: #d4a574 !important;
+    font-weight: 800 !important;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+#changelist-filter h3 {
+    color: #f5deb3 !important;
+    font-weight: 700 !important;
+}
+
+#changelist-filter li.selected a {
+    color: #ffffff !important;
+    font-weight: 800 !important;
+}
+
+/* فیلدهای ورودی و فرم‌ها */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+textarea,
+select {
+    background: #261b14 !important;
+    color: #fdf6ec !important;
+    border: 1px solid rgba(212, 165, 116, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-family: inherit !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #d4a574 !important;
+    box-shadow: 0 0 10px rgba(212, 165, 116, 0.35) !important;
+    outline: none !important;
+}
+
+/* دکمه‌ها */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input {
+    background: #8c5b2f !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 9px 18px !important;
+    font-weight: 800 !important;
+    font-family: inherit !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover {
+    background: #a26d3b !important;
+    box-shadow: 0 4px 12px rgba(212, 165, 116, 0.3) !important;
+}
+
+.button.default,
+input[type="submit"].default,
+.submit-row input.default {
+    background: linear-gradient(135deg, #d4a574 0%, #a26d3b 100%) !important;
+    color: #120c08 !important;
+    font-weight: 900 !important;
+    box-shadow: 0 4px 14px rgba(212, 165, 116, 0.4) !important;
+}
+
+.button.default:hover,
+input[type="submit"].default:hover,
+.submit-row input.default:hover {
+    background: linear-gradient(135deg, #e5be93 0%, #b87c44 100%) !important;
+}
+
+/* ردیف دکمه‌های ذخیره پایین فرم‌ها */
+.submit-row {
+    background: #241812 !important;
+    border: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 10px !important;
+    padding: 14px !important;
+}
+
+/* صفحه ورود (Login) ادمین */
+body.login {
+    background: #140d09 !important;
+}
+
+body.login #container {
+    background: #22160f !important;
+    border: 1px solid rgba(212, 165, 116, 0.3) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.login #header {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+body.login #header h1 {
+    font-size: 1.4rem !important;
+    color: #d4a574 !important;
+}
+
+/* نوار جستجو در بالای جداول */
+#toolbar {
+    background: #241a14 !important;
+    border: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 16px !important;
+}
+
+/* پیام‌ها و اخطارها */
+.messagelist li.success {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border: 1px solid #10b981 !important;
+    color: #34d399 !important;
+    border-radius: 8px !important;
+}
+
+.messagelist li.error {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border: 1px solid #ef4444 !important;
+    color: #f87171 !important;
+    border-radius: 8px !important;
+}
+
+.messagelist li.warning {
+    background: rgba(245, 158, 11, 0.2) !important;
+    border: 1px solid #f59e0b !important;
+    color: #fbbf24 !important;
+    border-radius: 8px !important;
+}
+
+/* نوار اقدامات دسته‌جمعی (Actions toolbar) */
+.actions {
+    background: #18120d !important;
+    border: 1px solid rgba(212, 165, 116, 0.25) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+}
+
+.actions select {
+    background: #241a12 !important;
+    color: #f5eedc !important;
+    border: 1px solid rgba(212, 165, 116, 0.4) !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    font-size: 0.9rem !important;
+    height: 38px !important;
+    cursor: pointer !important;
+}
+
+.actions select:focus {
+    outline: none !important;
+    border-color: #d4a574 !important;
+    box-shadow: 0 0 0 2px rgba(212, 165, 116, 0.25) !important;
+}
+
+.actions .button,
+.actions input[type="submit"] {
+    background: linear-gradient(135deg, #d4a574 0%, #a26d3b 100%) !important;
+    color: #120c08 !important;
+    border: none !important;
+    font-weight: 800 !important;
+    border-radius: 6px !important;
+    padding: 8px 18px !important;
+    height: 38px !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s ease, transform 0.1s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.actions .button:hover,
+.actions input[type="submit"]:hover {
+    opacity: 0.92 !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ============================================================
+   استایل‌های کامپکت، منظم و مرتب جداول اینلاین ادمین (Tabular Inlines)
+   ============================================================ */
+.tabular {
+    overflow-x: auto !important;
+}
+
+.tabular table {
+    width: 100% !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+}
+
+.tabular th {
+    background: #2b1810 !important;
+    color: #d4a574 !important;
+    font-size: 0.80rem !important;
+    font-weight: 700 !important;
+    padding: 8px 10px !important;
+    white-space: nowrap !important;
+    border-bottom: 2px solid rgba(212, 165, 116, 0.3) !important;
+    text-align: right !important;
+    vertical-align: middle !important;
+}
+
+.tabular td {
+    padding: 6px 8px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid rgba(212, 165, 116, 0.12) !important;
+    background: transparent !important;
+    white-space: nowrap !important;
+}
+
+.tabular tr.form-row:hover td {
+    background: rgba(212, 165, 116, 0.05) !important;
+}
+
+/* رفع کامل تداخل عنوان اصلی با فیلدها و دکمه‌ها */
+.tabular td.original {
+    padding: 4px 8px !important;
+    max-width: 150px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    vertical-align: middle !important;
+    position: static !important;
+}
+
+.tabular td.original p {
+    font-size: 0.78rem !important;
+    color: #d4a574 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    max-width: 140px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+/* کنترل ابعاد اینپوت‌های جدول اینلاین برای نظم کامل */
+.tabular td input[type="text"],
+.tabular td input[type="number"],
+.tabular td select {
+    height: 28px !important;
+    font-size: 0.82rem !important;
+    padding: 2px 6px !important;
+    border-radius: 5px !important;
+    border: 1px solid rgba(212, 165, 116, 0.3) !important;
+    background: #1c1511 !important;
+    color: #fdf6ec !important;
+    box-sizing: border-box !important;
+}
+
+.tabular td input[type="text"]:focus,
+.tabular td input[type="number"]:focus,
+.tabular td select:focus {
+    border-color: #d4a574 !important;
+    box-shadow: 0 0 0 2px rgba(212, 165, 116, 0.25) !important;
+    outline: none !important;
+}
+
+.tabular td.field-name input,
+.tabular td.field-name_en input {
+    width: 110px !important;
+}
+
+.tabular td.field-subcategory select {
+    max-width: 125px !important;
+}
+
+.tabular td.field-price input {
+    width: 85px !important;
+    text-align: center !important;
+}
+
+.tabular td.field-discount_percent input {
+    width: 50px !important;
+    text-align: center !important;
+}
+
+.tabular td.field-order input {
+    width: 44px !important;
+    text-align: center !important;
+}
+
+.tabular td.field-description input {
+    width: 220px !important;
+}
+
+.tabular td textarea {
+    height: 32px !important;
+    min-height: 28px !important;
+    max-height: 60px !important;
+    width: 220px !important;
+    resize: vertical !important;
+}
+
+.tabular td.field-is_available {
+    text-align: center !important;
+}
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <span style="font-weight: 800; color: #d4a574; letter-spacing: -0.5px;">کافه گاردو | پنل مدیریت</span>
+    </a>
+</div>
+{% endblock %}
+
+{% block usertools %}
+<div class="header-quick-links">
+    <a href="{% url 'menu:home' %}" target="_blank" class="header-quick-btn" title="مشاهده منوی کافه برای مشتریان">
+        <span>مشاهده منوی کافه</span>
+    </a>
+</div>
+{{ block.super }}
+{% endblock %}

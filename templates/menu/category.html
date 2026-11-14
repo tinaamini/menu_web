@@ -1,0 +1,404 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name_en|default:category.name }} | کافه گاردو{% endblock %}
+
+{% block content %}
+<div class="cat-detail-viewport theme-{{ theme.code }}" data-theme="{{ theme.code }}" style="--theme-accent: {{ theme.accent }}; --theme-accent-light: {{ theme.accent_light }}; --theme-accent-glow: {{ theme.accent_glow }};">
+
+  <!-- ============ بخش هدر لوکس بالای صفحه با دسته‌بندی‌ها و پس‌زمینه اسلایدها ============ -->
+  <header class="cat-header-experience" style="background: {{ theme.hero_bg }};">
+    <div class="header-ambient-glow"></div>
+
+    <!-- نوار ابزار و ناوبری بالای هدر (دکمه بازگشت شناور دایره‌ای روی تصویر بنر) -->
+    <div class="cat-top-bar">
+      <div class="cat-top-bar-inner">
+        <!-- دکمه بازگشت به لندینگ ۳ بعدی (دایره‌ای شیشه‌ای مدرن) -->
+        <a href="{% url 'menu:home' %}?scroll={{ theme.scroll_target }}" class="cat-return-btn" title="بازگشت به تجربه سه‌بعدی" aria-label="بازگشت به تجربه سه‌بعدی">
+          <svg class="ret-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- المان بصری واقعی اسلاید در مرکز هدر به همراه عناصر شناور دور آن -->
+    <div class="cat-header-hero {% if theme.banner_image %}has-custom-banner{% endif %}">
+      {% if theme.banner_image %}
+      <!-- بنر پانورامای اختصاصی هدر با انطباق واکنش‌گرا (Responsive Picture) -->
+      <div class="hero-custom-banner-wrap">
+        <picture class="hero-custom-banner-picture">
+          {% if theme.banner_mobile %}
+          <source media="(max-width: 768px)" srcset="{% static theme.banner_mobile %}?v=3.0">
+          {% endif %}
+          <img src="{% static theme.banner_image %}?v=3.0" alt="{{ category.name_en|default:category.name }}" class="hero-custom-banner-img" loading="eager" decoding="async">
+        </picture>
+      </div>
+      {% else %}
+      <div class="container">
+        <div class="hero-center-visual">
+          <div class="hero-img-halo"></div>
+          <img src="{% static theme.image %}" alt="{{ category.name_en|default:category.name }}" class="hero-featured-img">
+
+          {% if category.id == 3 %}
+          <!-- گیاهان معطر دور فنجان دمنوش: میخک ستاره‌ای، لیمو و برگ‌ها -->
+          <div class="hero-floating-elements herbs-cluster" aria-hidden="true">
+            <div class="floating-prop prop-lemon" style="--base-rot: -22deg;">
+              <img src="{% static 'images/herb_lemon.webp' %}" alt="Lemon">
+            </div>
+            <div class="floating-prop prop-anise-large" style="--base-rot: 32deg;">
+              <img src="{% static 'images/herb_anise_1.webp' %}" alt="Star Anise">
+            </div>
+            <div class="floating-prop prop-anise-small" style="--base-rot: -14deg;">
+              <img src="{% static 'images/herb_anise_3.webp' %}" alt="Star Anise">
+            </div>
+            <div class="floating-prop prop-leaf-1" style="--base-rot: 42deg;">
+              <img src="{% static 'images/herb_leaf_1.webp' %}" alt="Mint Leaf">
+            </div>
+            <div class="floating-prop prop-leaf-2" style="--base-rot: -36deg;">
+              <img src="{% static 'images/herb_leaf_2.webp' %}" alt="Tea Leaf">
+            </div>
+          </div>
+          {% elif category.id == 2 %}
+          <!-- تکه‌های یخ بلوری دور لیوان قهوه سرد -->
+          <div class="hero-floating-elements ice-cluster" aria-hidden="true">
+            <div class="floating-prop prop-ice-0" style="--base-rot: -18deg;">
+              <img src="{% static 'images/ice_0.webp' %}" alt="Ice">
+            </div>
+            <div class="floating-prop prop-ice-1" style="--base-rot: 26deg;">
+              <img src="{% static 'images/ice_1.webp' %}" alt="Ice">
+            </div>
+            <div class="floating-prop prop-ice-2" style="--base-rot: -32deg;">
+              <img src="{% static 'images/ice_2.webp' %}" alt="Ice">
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+  </header>
+
+  <!-- ============ کانتینر پایین هدر با انحنای بالا-چپ و بالا-راست که زیرمجموعه‌ها داخلش قرار دارند ============ -->
+  <div class="cat-sheet-container" id="catSheetContainer">
+    <div class="container">
+
+      <!-- نوار انتخاب دسته‌بندی‌ها (منوبار دسکتاپ و موبایل - ریسپانسیو و راست‌چین) -->
+      <nav class="cat-nav-strip" id="catNavStrip" aria-label="دسته‌بندی‌های منو">
+        <div class="cat-nav-track" id="catNavTrack">
+          {% for cwt in categories_with_themes %}
+          <a href="{% url 'menu:category' cwt.category.id %}" 
+             class="cat-nav-pill {% if cwt.is_current %}is-active{% endif %}"
+             data-cat-id="{{ cwt.category.id }}"
+             {% if cwt.is_current %}aria-current="page"{% endif %}>
+            <span class="cat-pill-name">{{ cwt.category.name_en|default:cwt.category.name }}</span>
+          </a>
+          {% endfor %}
+        </div>
+      </nav>
+
+      <!-- تایتل برند Gardoo زیر منوبار (راست‌چین) -->
+      <div class="cat-brand-header">
+        <h2 class="cat-brand-title">Gardoo</h2>
+      </div>
+
+      <!-- عنوان دسته‌بندی جاری زیر منوبار (کاملاً راست‌چین و شکیل) -->
+      <div class="cat-headline-row">
+        <h1 class="cat-main-headline">{{ category.name_en|default:category.name }}</h1>
+      </div>
+
+      <!-- محتوای کارت‌های آیتم‌ها داخل کانتینر -->
+      <div class="cat-menu-body" id="catMenuBody">
+
+        {% if category.has_discount %}
+        <!-- بنر اعلان تخفیف گروهی روی تمام آیتم‌های دسته‌بندی -->
+        <div class="cat-global-discount-banner">
+          <div class="discount-banner-sparkle">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22" style="color: var(--theme-accent);">
+              <path d="M12 2L14.4 8.6L21.5 9.3L16.2 14.1L17.8 21.1L12 17.5L6.2 21.1L7.8 14.1L2.5 9.3L9.6 8.6L12 2Z"/>
+            </svg>
+          </div>
+          <div class="discount-banner-info">
+            <h4 class="discount-banner-title">جشنواره تخفیف {{ category.discount_percent }}٪ گاردو</h4>
+            <p class="discount-banner-desc">این تخفیف به صورت خودکار روی تمامی آیتم‌های {{ category.name }} اعمال شده است.</p>
+          </div>
+          <div class="discount-banner-badge">{{ category.discount_percent }}٪ OFF</div>
+        </div>
+        {% endif %}
+
+        {% if subcategories %}
+        <!-- نمایش پیوسته آیتم‌ها بر اساس زیرمجموعه (قلیان و در ادامه دورچین) -->
+        {% for sub in subcategories %}
+        <div class="subcat-group-wrapper" id="subcat-{{ sub.id }}" data-subcat-id="{{ sub.id }}">
+          {% if not forloop.first or sub.name != category.name %}
+          <div class="subcat-group-header">
+            <div class="header-divider-line"></div>
+            <div class="header-title-pack">
+              <h3 class="group-title">{{ sub.name }}</h3>
+              {% if sub.name_en %}
+              <span class="group-en-title">{{ sub.name_en }}</span>
+              {% endif %}
+            </div>
+            <div class="header-divider-line"></div>
+          </div>
+          {% endif %}
+          {% if sub.description %}
+          <p class="group-intro-desc">{{ sub.description }}</p>
+          {% endif %}
+
+          <div class="luxury-cards-grid">
+            {% for item in sub.items.all %}
+              {% if item.is_available %}
+              <article class="lux-card {% if item.is_discounted %}has-discount{% endif %}"
+                       data-item-id="{{ item.id }}"
+                       data-item-name="{{ item.name }}"
+                       data-item-name-en="{{ item.name_en }}"
+                       data-item-desc="{{ item.description }}"
+                       data-item-price="{{ item.price_formatted }}"
+                       data-item-final-price="{{ item.final_price_formatted }}"
+                       data-item-discount="{{ item.effective_discount_percent }}"
+                       data-item-is-discounted="{{ item.is_discounted|yesno:'true,false' }}"
+                       data-item-image="{% if item.image %}{{ item.image.url }}{% endif %}"
+                       data-sub-name="{% if sub.name_en %}{{ sub.name_en }}{% else %}{{ category.name_en|default:sub.name }}{% endif %}">
+                
+                <div class="lux-card-glow"></div>
+
+                {% if item.is_discounted %}
+                <div class="item-discount-pill">
+                  <span>{{ item.effective_discount_percent }}٪</span>
+                </div>
+                {% endif %}
+
+                <div class="card-info-area">
+                  <div class="card-top-row">
+                    <h3 class="card-item-title">{{ item.name_en|default:item.name }}</h3>
+                    {% if item.name_en and item.name and item.name != item.name_en %}
+                    <span class="card-item-fa-sub">{{ item.name }}</span>
+                    {% endif %}
+                  </div>
+
+                  {% if item.description %}
+                  <p class="card-item-desc">{{ item.description }}</p>
+                  {% endif %}
+
+                  <div class="card-bottom-row">
+                    <div class="card-price-wrap {% if item.is_discounted %}is-discounted{% endif %}">
+                      {% if item.is_discounted %}
+                      <span class="price-val-old">{{ item.price_formatted }}</span>
+                      {% endif %}
+                      <span class="price-val">{{ item.final_price_formatted }}</span>
+                      <span class="price-currency-t">T</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-visual-area">
+                  {% if item.image %}
+                  <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
+                  {% else %}
+                  <div class="card-icon-art">
+                    <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                  </div>
+                  {% endif %}
+                </div>
+              </article>
+              {% endif %}
+            {% empty %}
+              <div style="grid-column: 1/-1; text-align: center; padding: 25px 0; color: rgba(255, 255, 255, 0.45); font-size: 0.92rem;">
+                آیتمی برای بخش {{ sub.name }} ثبت نشده است. می‌توانید از پنل ادمین اضافه کنید.
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+
+        {% if unassigned_items %}
+        <div class="subcat-group-wrapper" id="subcat-other" data-subcat-id="other">
+          <div class="subcat-group-header">
+            <div class="header-divider-line"></div>
+            <div class="header-title-pack">
+              <h3 class="group-title">سایر آیتم‌ها</h3>
+              <span class="group-en-title">OTHER SPECIALS</span>
+            </div>
+            <div class="header-divider-line"></div>
+          </div>
+          <div class="luxury-cards-grid">
+            {% for item in unassigned_items %}
+            <article class="lux-card {% if item.is_discounted %}has-discount{% endif %}"
+                     data-item-id="{{ item.id }}"
+                     data-item-name="{{ item.name }}"
+                     data-item-name-en="{{ item.name_en }}"
+                     data-item-desc="{{ item.description }}"
+                     data-item-price="{{ item.price_formatted }}"
+                     data-item-final-price="{{ item.final_price_formatted }}"
+                     data-item-discount="{{ item.effective_discount_percent }}"
+                     data-item-is-discounted="{{ item.is_discounted|yesno:'true,false' }}"
+                     data-item-image="{% if item.image %}{{ item.image.url }}{% endif %}"
+                     data-sub-name="{{ category.name_en|default:category.name }}">
+              <div class="lux-card-glow"></div>
+              {% if item.is_discounted %}
+              <div class="item-discount-pill">
+                <span>{{ item.effective_discount_percent }}٪</span>
+              </div>
+              {% endif %}
+
+              <div class="card-info-area">
+                <div class="card-top-row">
+                  <h3 class="card-item-title">{{ item.name_en|default:item.name }}</h3>
+                  {% if item.name_en and item.name and item.name != item.name_en %}
+                  <span class="card-item-fa-sub">{{ item.name }}</span>
+                  {% endif %}
+                </div>
+
+                {% if item.description %}
+                <p class="card-item-desc">{{ item.description }}</p>
+                {% endif %}
+
+                <div class="card-bottom-row">
+                  <div class="card-price-wrap {% if item.is_discounted %}is-discounted{% endif %}">
+                    {% if item.is_discounted %}
+                    <span class="price-val-old">{{ item.price_formatted }}</span>
+                    {% endif %}
+                    <span class="price-val">{{ item.final_price_formatted }}</span>
+                    <span class="price-currency-t">T</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-visual-area">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
+                {% else %}
+                <div class="card-icon-art">
+                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                </div>
+                {% endif %}
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        {% elif items %}
+        <div class="subcat-group-wrapper">
+          <div class="luxury-cards-grid">
+            {% for item in items %}
+            <article class="lux-card {% if item.is_discounted %}has-discount{% endif %}"
+                     data-item-id="{{ item.id }}"
+                     data-item-name="{{ item.name }}"
+                     data-item-name-en="{{ item.name_en }}"
+                     data-item-desc="{{ item.description }}"
+                     data-item-price="{{ item.price_formatted }}"
+                     data-item-final-price="{{ item.final_price_formatted }}"
+                     data-item-discount="{{ item.effective_discount_percent }}"
+                     data-item-is-discounted="{{ item.is_discounted|yesno:'true,false' }}"
+                     data-item-image="{% if item.image %}{{ item.image.url }}{% endif %}"
+                     data-sub-name="{{ category.name_en|default:category.name }}">
+              
+              <div class="lux-card-glow"></div>
+
+              {% if item.is_discounted %}
+              <div class="item-discount-pill">
+                <span>{{ item.effective_discount_percent }}٪</span>
+              </div>
+              {% endif %}
+
+              <div class="card-info-area">
+                <div class="card-top-row">
+                  <h3 class="card-item-title">{{ item.name_en|default:item.name }}</h3>
+                  {% if item.name_en and item.name and item.name != item.name_en %}
+                  <span class="card-item-fa-sub">{{ item.name }}</span>
+                  {% endif %}
+                </div>
+
+                {% if item.description %}
+                <p class="card-item-desc">{{ item.description }}</p>
+                {% endif %}
+
+                <div class="card-bottom-row">
+                  <div class="card-price-wrap {% if item.is_discounted %}is-discounted{% endif %}">
+                    {% if item.is_discounted %}
+                    <span class="price-val-old">{{ item.price_formatted }}</span>
+                    {% endif %}
+                    <span class="price-val">{{ item.final_price_formatted }}</span>
+                    <span class="price-currency-t">T</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-visual-area">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
+                {% else %}
+                <div class="card-icon-art">
+                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                </div>
+                {% endif %}
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+        {% else %}
+        <div class="empty-items-notice" style="text-align: center; padding: 65px 20px; color: rgba(255, 255, 255, 0.60);">
+          <div style="margin-bottom: 14px; opacity: 0.75;">
+            <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 14px rgba(224, 122, 63, 0.35));">
+          </div>
+          <p style="font-size: 1.2rem; font-weight: 600; color: #FFF; margin-bottom: 8px;">آیتم‌های این دسته‌بندی به زودی اضافه خواهند شد</p>
+          <p style="font-size: 0.90rem; color: rgba(255, 255, 255, 0.45);">می‌توانید از طریق پنل ادمین جنگو، آیتم‌های جدید را همراه با قیمت، عکس و توضیحات اضافه کنید.</p>
+        </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ پاپ‌آپ مودال شیشه‌ای جزئیات آیتم ============ -->
+  <div class="lux-modal-backdrop" id="itemDetailModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="lux-modal-panel">
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="بستن پنجره">
+        <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div class="modal-top-tags-row">
+        <div class="modal-category-tag" id="modalCategoryTag">
+          <span class="modal-cat-name" id="modalSubName">{{ category.name_en|default:category.name }}</span>
+        </div>
+        <div class="modal-discount-pill" id="modalDiscountPill" style="display: none;">
+          <span id="modalDiscountText">۰٪ تخفیف</span>
+        </div>
+      </div>
+
+      <!-- تصویر آیتم در مودال جزئیات -->
+      <div class="modal-photo-wrap" id="modalPhotoWrap" style="display: none;">
+        <img src="" alt="" class="modal-photo-img" id="modalItemPhoto">
+      </div>
+
+      <h2 class="modal-item-title" id="modalItemTitle">نام آیتم</h2>
+      <p class="modal-item-en" id="modalItemEn">Item Name English</p>
+
+      <div class="modal-divider"></div>
+
+      <div class="modal-desc-box">
+        <h4 class="modal-section-label">توضیحات و ترکیبات اختصاصی:</h4>
+        <p class="modal-desc-text" id="modalItemDesc">توضیحات آیتم...</p>
+      </div>
+
+      <div class="modal-footer-row">
+        <div class="modal-price-box" id="modalPriceBox">
+          <span class="modal-price-label">قیمت:</span>
+          <span class="modal-price-old" id="modalItemPriceOld" style="display: none;">۰</span>
+          <span class="modal-price-val" id="modalItemPrice">۰</span>
+          <span class="modal-price-unit">تومان</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

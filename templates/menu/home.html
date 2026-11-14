@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}کافه گاردو - Coffee Moments Crafted{% endblock %}
+
+{% block content %}
+
+<!-- بنر موجی پیوسته کرم: بدنه یکدست کرم در چپ + انحنای موجی و متن هات کافی در راست -->
+<div class="hot-coffee-banner" id="hotCoffeeBanner">
+  <div class="banner-cream-body"></div>
+  <div class="banner-curve-cap">
+    <img src="{% static 'images/curve_banner.svg' %}?v=6.0" alt="Wave Banner" class="hot-coffee-img">
+    <div class="hot-coffee-content" id="hotCoffeeContent">
+      <span class="hot-text-word">HOT</span>
+      <span class="hot-text-word">COFFEE</span>
+    </div>
+  </div>
+</div>
+
+<!-- فنجان و پاشش قهوه گاردو که از سمت راست وارد می‌شود -->
+<div class="hot-cup-banner" id="hotCupBanner">
+  <img src="{% static 'images/hot_coffee_cup.webp' %}?v=3.0" alt="Gardoo Hot Coffee Cup" class="hot-cup-img">
+</div>
+
+<!-- کنترل ناوبری شناور سراسری تمام اسلایدها (دکمه < > و دکمه + در وسط پایین صفحه با انیمیشن رنگ تطبیقی) -->
+<nav class="slide-nav-dock" id="slideNavDock" aria-label="ناوبری اسلایدهای گاردو">
+  <div class="nav-arrows-pill">
+    <svg class="nav-pill-svg" viewBox="0 0 92 46" preserveAspectRatio="none" aria-hidden="true">
+      <path class="nav-pill-path" d="M 23,1 C 32,1 36,10 46,10 C 56,10 60,1 69,1 A 22 22 0 0 1 69,45 C 60,45 56,36 46,36 C 36,36 32,45 23,45 A 22 22 0 0 1 23,1 Z" />
+    </svg>
+    <button type="button" class="nav-arrow-btn nav-arrow-prev" id="navPrevBtn" aria-label="اسلاید قبلی" title="اسلاید قبلی">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 14L8 10L12 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <button type="button" class="nav-arrow-btn nav-arrow-next" id="navNextBtn" aria-label="اسلاید بعدی" title="اسلاید بعدی">
+      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 14L12 10L8 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  <a href="{% url 'menu:category' 1 %}" class="nav-plus-btn" id="navPlusBtn" aria-label="مشاهده منو و جزئیات دسته‌بندی" title="مشاهده منو و جزئیات">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 6V18M6 12H18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+  </a>
+</nav>
+
+<!-- متن سه‌بعدی یخی ICE COFFEE که در اسکرول ۵۲۶ از پشت لیوان ظاهر می‌شود -->
+<div class="ice-text-wrap" id="iceTextWrap">
+  <img src="{% static 'images/ice_coffee_text.webp' %}?v=2.0" alt="ICE COFFEE" class="ice-text-img">
+</div>
+
+<!-- تکه‌های یخ شفاف که از پشت لیوان قهوه سرد در اسکرول ۴۹۷ خارج می‌شوند (۳ عدد: ۲ تا بالا-چپ، ۱ راست-پایین) -->
+<div class="ice-cubes-layer" id="iceCubesLayer">
+  <div class="ice-cube" data-ice="0"><img src="{% static 'images/ice_0.webp' %}?v=5.0" alt="Ice"></div>
+  <div class="ice-cube" data-ice="1"><img src="{% static 'images/ice_1.webp' %}?v=5.0" alt="Ice"></div>
+  <div class="ice-cube" data-ice="2"><img src="{% static 'images/ice_2.webp' %}?v=5.0" alt="Ice"></div>
+</div>
+
+<!-- قهوه سرد (Cold Coffee) که در اسکرول ۴۴۲ در مرکز صفحه ظاهر می‌شود -->
+<div class="cold-coffee-wrap" id="coldCoffeeWrap">
+  <img src="{% static 'images/cold_coffee_cup.webp' %}?v=3.0" alt="Gardoo Cold Coffee" class="cold-coffee-img">
+</div>
+
+<!-- ============ فصل دمنوش و چای گاردو (شروع در اسکرول ۷۴۴) ============ -->
+<!-- طاق سبز معماری (مربع با بالای نیم‌دایره) که از پایین صفحه بالا می‌آید، زیر دمنوش قرار می‌گیرد، و با خروج دمنوش کل صفحه را می‌پوشاند -->
+<div class="tea-arch-backdrop" id="teaArchBackdrop">
+  <div class="tea-arch-inner" id="teaArchInner"></div>
+  <div class="tea-arch-dark-overlay" id="teaArchDarkOverlay"></div>
+</div>
+
+<!-- لایه گیاهان معطر دمنوش (لیمو، بادیان ستاره‌ای، نعناع) شناور از گوشه‌ها -->
+<div class="tea-herbs-layer" id="teaHerbsLayer">
+  <div class="tea-herb herb-lemon" id="herbLemon"><img src="{% static 'images/herb_lemon.webp' %}?v=2.0" alt="Lemon"></div>
+  <div class="tea-herb herb-leaf-1" id="herbLeaf1"><img src="{% static 'images/herb_leaf_1.webp' %}?v=2.0" alt="Mint Leaf"></div>
+  <div class="tea-herb herb-leaf-2" id="herbLeaf2"><img src="{% static 'images/herb_leaf_2.webp' %}?v=2.0" alt="Tea Leaf"></div>
+  <div class="tea-herb herb-anise" id="herbAnise"><img src="{% static 'images/herb_anise_3.webp' %}?v=3.0" alt="Star Anise"></div>
+  <div class="tea-herb herb-anise-large" id="herbAniseLarge"><img src="{% static 'images/herb_anise_1.webp' %}?v=3.0" alt="Large Star Anise"></div>
+</div>
+
+<!-- فنجان دمنوش با نعلبکی سبز، بادیان، لیمو و نعناع (ورود از جنوب غربی به مرکز در اسکرول ۷۴۴) -->
+<div class="tea-cup-wrap" id="teaCupWrap">
+  <img src="{% static 'images/tea_cup_herbal_hd.webp' %}?v=8.0" alt="Gardoo Herbal Tea Cup" class="tea-cup-img">
+</div>
+
+<!-- ============ فصل ۴: صحنه ادیتوریال موهیتو گاردو (سایه برگ‌های نخل، لیوان شیک، لیموها و نعناع) ============ -->
+<!-- سایه طبیعی برگ‌های نخل استوایی روی دیوار سبز ماتچایی -->
+<div class="mojito-leaf-shadow" id="mojitoLeafShadow">
+  <img src="{% static 'images/palm_leaf_shadow.webp' %}?v=4.0" alt="Palm Leaf Shadow" class="leaf-shadow-img">
+</div>
+
+<!-- تایپوگرافی ادیتوریال موکتل به رنگ سبز لیمویی پشت لیوان (فصل ۴) -->
+<div class="mocktail-bg-text" id="mocktailBgText">
+  <span class="mocktail-sub-top">GOOD VIBES</span>
+  <h2 class="mocktail-main-title">MOCKTAIL</h2>
+  <span class="mocktail-sub-bot">LE GOÛT DE L'ÉTÉ</span>
+</div>
+
+<!-- کانتینر استیج موهیتو (قاب یکپارچه، شیک و ثابت: لیوان به همراه لیموهای کامل و نعناع تازه) -->
+<div class="mocktail-wrap" id="mocktailWrap">
+  <img src="{% static 'images/mocktail_glass_hd.webp' %}?v=25.0" alt="Gardoo Signature Luxury Mojito" class="mocktail-img">
+</div>
+
+<!-- ============ فصل ۵: استیج انفجاری سری قلیان لوکس و دود غلیظ گاردو ============ -->
+<div class="shisha-stage" id="shishaStage">
+  <!-- تابلو نئونی عمودی HOOKAH به رنگ آبی سرامیکی با درخشش نور نئون -->
+  <div class="shisha-neon-sign" id="shishaNeonSign" aria-label="Hookah Neon Sign">
+    <div class="shisha-neon-frame">
+      <div class="neon-tube-letters">
+        <span class="neon-char">H</span>
+        <span class="neon-char">O</span>
+        <span class="neon-char">O</span>
+        <span class="neon-char">K</span>
+        <span class="neon-char">A</span>
+        <span class="neon-char">H</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- لایه دود طبیعی استودیویی با حرکت سیال چندلایه -->
+  <div class="shisha-smoke-bg" id="shishaSmokeBg">
+    <img src="{% static 'images/shisha_smoke_luxury.webp' %}?v=186.0" alt="Atmospheric Luxury Shisha Smoke" class="shisha-smoke-img shisha-smoke-img--base" id="shishaSmokeBackdrop">
+    <img src="{% static 'images/shisha_smoke_ribbon.webp' %}?v=186.0" alt="Atmospheric Ribbon Smoke" class="shisha-smoke-img shisha-smoke-img--ribbon" id="shishaSmokeRibbon">
+  </div>
+
+  <!-- کانتینر مرکزی قطعات انفجاری قلیان (شیفت یافته به سمت راست) -->
+  <div class="shisha-exploded-stack" id="shishaExplodedStack">
+    <!-- جزء ۱: ذغال‌های گداخته مکعبی (ورود از بالا با اسکرول) -->
+    <div class="shisha-part shisha-part--coals" id="shishaPartCoals">
+      <img src="{% static 'images/shisha_part_coals.webp' %}?v=161.0" alt="Glowing Shisha Coals" class="shisha-img">
+    </div>
+
+    <!-- جزء ۲: کلاهک فلزی HMD لوتوس (ورود از سمت راست با اسکرول) -->
+    <div class="shisha-part shisha-part--hmd" id="shishaPartHmd">
+      <img src="{% static 'images/shisha_part_hmd.webp' %}?v=161.0" alt="Heat Management Device HMD" class="shisha-img">
+    </div>
+
+    <!-- جزء ۳: تنباکوی معسل آب‌دار طعم‌دار (ورود از سمت چپ با اسکرول) -->
+    <div class="shisha-part shisha-part--tobacco" id="shishaPartTobacco">
+      <img src="{% static 'images/shisha_part_tobacco.webp' %}?v=161.0" alt="Shisha Flavor Molasses Tobacco" class="shisha-img">
+    </div>
+
+    <!-- جزء ۴: سری سرامیکی، دسته چوبی و حلقه دود (ورود از پایین با اسکرول) -->
+    <div class="shisha-part shisha-part--bowl" id="shishaPartBowl">
+      <img src="{% static 'images/shisha_part_bowl.webp' %}?v=161.0" alt="Ceramic Shisha Phunnel Bowl with Smoke Ring" class="shisha-img">
+    </div>
+  </div>
+</div>
+
+<!-- ============ بخش هیرو قهوه و نشان گاردو ============ -->
+<section class="coffee-hero" id="coffee-hero">
+  <div class="coffee-hero__sticky">
+
+    <!-- پس‌زمینه با ذرات بخار -->
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
+    <!-- نشان سه بعدی طلایی گاردو (محو شدن اولیه با اسکرول) -->
+    <div class="hero-scroll-logo" id="heroScrollLogo">
+      <img src="{% static 'images/gardoo_3d_emblem.webp' %}?v=3.0" alt="نشان سه بعدی گاردو - Gardoo 3D Emblem" class="hero-gold-logo-img">
+    </div>
+
+    <!-- کانواس دانه‌های قهوه -->
+    <canvas id="heroBeansCanvas" class="hero-beans-canvas" data-bean-prefix="{% static 'images/bean_' %}"></canvas>
+
+    <!-- راهنمای متحرک اسکرول به پایین (۳ فلش آبشاری موجی طلایی شبیه لودینگ) -->
+    <div class="hero-scroll-indicator" id="heroScrollIndicator" aria-label="اسکرول به پایین">
+      <div class="scroll-chevrons">
+        <svg class="scroll-chevron scroll-chevron--1" viewBox="0 0 26 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2L13 11L24 2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="scroll-chevron scroll-chevron--2" viewBox="0 0 26 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2L13 11L24 2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg class="scroll-chevron scroll-chevron--3" viewBox="0 0 26 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 2L13 11L24 2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- بخش محتوای ادامه صفحه (محدود شده دقیقاً تا انتهای فصل ۵ قلیان) -->
+<div class="page-content" id="pageContent" style="position: relative; z-index: 5; min-height: 0; padding: 0; margin: 0;"></div>
+
+{% endblock %}
