@@ -2350,22 +2350,20 @@ body:has(.coffee-hero) .header {
   display: inline-block;
 }
 
-/* ============ تایتل برند Gardoo زیر منوبار (راست‌چین) ============ */
+/* ============ تایتل برند Gardoo بالای منوبار ============ */
 .cat-brand-header {
-  text-align: right;
-  margin: 10px 0 2px 0;
-  direction: rtl;
+  text-align: center;
+  margin: 4px 0 16px 0;
+  direction: ltr;
 }
 
 .cat-brand-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.55rem;
-  font-weight: 700;
+  font-size: 1.45rem;
+  font-weight: 600;
   color: #E6DFD5;
   letter-spacing: 0.5px;
   margin: 0;
-  text-align: right;
-  direction: ltr;
   display: inline-block;
 }
 
@@ -2443,11 +2441,12 @@ body:has(.coffee-hero) .header {
   }
 
   .cat-brand-header {
-    margin: 14px 0 4px 0;
+    text-align: center;
+    margin: 6px 0 18px 0;
   }
 
   .cat-brand-title {
-    font-size: 1.85rem;
+    font-size: 1.65rem;
   }
 
   .cat-headline-row {
