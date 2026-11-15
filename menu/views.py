@@ -215,7 +215,7 @@ def user_can_create_order(user):
     return user.has_perm('menu.add_order') or user.groups.filter(name__icontains='گارسون').exists()
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_panel(request):
     """پنل لمسی و سریع ثبت و مشاهده سفارش‌های میز برای گارسون‌ها و ادمین"""
     if not user_can_access_waiter(request.user):
@@ -362,7 +362,7 @@ def waiter_panel(request):
     return render(request, 'menu/waiter_panel.html', context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_order_edit(request, order_id):
     """ویرایش سفارش ثبت‌شده: تغییر اقلام، شماره میز، وضعیت آماده‌سازی، وضعیت پرداخت و روش تسویه"""
     if not user_can_access_waiter(request.user):
@@ -508,7 +508,7 @@ def waiter_order_edit(request, order_id):
     return render(request, 'menu/waiter_panel.html', context)
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_order_payment_update(request, order_id):
     """تسویه سریع فاکتور میز با کارتخوان یا نقدی مستقیماً از پنل"""
     if not user_can_access_waiter(request.user):
@@ -532,7 +532,7 @@ def waiter_order_payment_update(request, order_id):
     return redirect(f"{reverse('menu:waiter_panel')}?tab=orders")
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_order_status_update(request, order_id):
     """تغییر سریع وضعیت سفارش (مثلاً تحویل داده شد یا حاضر شد)"""
     if not user_can_access_waiter(request.user):
@@ -560,7 +560,7 @@ def waiter_order_status_update(request, order_id):
     return redirect(f"{reverse('menu:waiter_panel')}?tab=orders")
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_order_delete(request, order_id):
     """لغو یا حذف سفارش میز"""
     if not user_can_access_waiter(request.user):
@@ -579,7 +579,7 @@ def waiter_order_delete(request, order_id):
     return redirect(f"{reverse('menu:waiter_panel')}?tab=orders")
 
 
-@login_required(login_url='/admin/login/')
+@login_required
 def waiter_notifications_api(request):
     """اندپوینت API جهت بررسی لحظه‌ای وضعیت سفارش‌ها و ارسال نوتیفیکیشن آماده‌سازی و تحویل به گارسون"""
     if not user_can_access_waiter(request.user):

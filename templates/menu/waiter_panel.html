@@ -1320,7 +1320,7 @@
             <div class="user-badge">
                 <span>{{ request.user.get_full_name|default:request.user.username }}</span>
             </div>
-            <a href="/admin/menu/order/" class="btn-nav-link" title="پنل مدیریت">
+            <a href="{% url 'admin:index' %}" class="btn-nav-link" title="پنل مدیریت">
                 <span>پنل ادمین</span>
             </a>
             <a href="{% url 'menu:home' %}" target="_blank" class="btn-nav-link" title="مشاهده منو">

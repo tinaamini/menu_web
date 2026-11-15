@@ -64,12 +64,19 @@ function initCoffeeHero() {
 
   // توقف قطعی اسکرول در انتهای فصل ۵ (استقرار کامل قلیان لوکس و تابلوی نئونی)
   const MAX_PAGE_SCROLL = 1460;
+
+  // ضریب افزایش مسافت اسکرول و آرام‌تر کردن سرعت تعامل فقط در گوشی (موبایل)
+  function getScrollFactor() {
+    return window.innerWidth <= 768 ? 1.85 : 1.0;
+  }
+
   function adjustPageEnd() {
     const pageContent = document.getElementById('pageContent');
     const hero = document.getElementById('coffee-hero');
     if (pageContent && hero) {
       const heroHeight = hero.offsetHeight || (window.innerHeight + 238);
-      const neededHeight = Math.max(0, MAX_PAGE_SCROLL + window.innerHeight - heroHeight);
+      const totalMaxScroll = MAX_PAGE_SCROLL * getScrollFactor();
+      const neededHeight = Math.max(0, totalMaxScroll + window.innerHeight - heroHeight);
       pageContent.style.minHeight = '0px';
       pageContent.style.height = `${neededHeight}px`;
       pageContent.style.padding = '0';
@@ -79,10 +86,17 @@ function initCoffeeHero() {
   adjustPageEnd();
   window.addEventListener('resize', adjustPageEnd);
 
-  // کلیک روی فلش‌های راهنما جهت اسکرول نرم به بخش بعدی
+  // کلیک روی فلش‌های راهنما جهت اسکرول نرم به بخش بعدی (آرام‌تر در گوشی)
   if (heroScrollIndicator) {
     heroScrollIndicator.addEventListener('click', () => {
-      window.scrollTo({ top: 320, behavior: 'smooth' });
+      const isMobile = window.innerWidth <= 768;
+      const factor = isMobile ? 1.85 : 1.0;
+      const duration = isMobile ? 1100 : 650;
+      if (typeof window.smoothScrollToSlide === 'function') {
+        window.smoothScrollToSlide(320 * factor, duration);
+      } else {
+        window.scrollTo({ top: 320 * factor, behavior: 'smooth' });
+      }
     });
   }
 
@@ -194,21 +208,48 @@ function initCoffeeHero() {
   let currentProgress = 0;
 
   function onScroll() {
-    const scrollY        = window.scrollY || window.pageYOffset || 0;
+    const actualScrollY  = window.scrollY || window.pageYOffset || 0;
+    const isMobile       = window.innerWidth <= 768;
+    const factor         = isMobile ? 1.85 : 1.0;
+    const virtualSy      = actualScrollY / factor;
 
     // دانه‌ها از ۰ تا ۲۸۳ پیکسل حرکت کرده و در ۲۸۳ روی ۰.۶۴۸ فریز کامل می‌مانند
-    const normBeanScroll = Math.min(1, Math.max(0, scrollY / BEAN_FREEZE_SCROLL));
+    const normBeanScroll = Math.min(1, Math.max(0, virtualSy / BEAN_FREEZE_SCROLL));
     targetProgress       = normBeanScroll * FREEZE_P;
   }
 
   // حلقه رندر روان ۶۰ فریم بر ثانیه
   let startTime = performance.now();
+  let animSy = 0;
+  let hasInitAnimSy = false;
 
   function renderLoop() {
-    currentProgress += (targetProgress - currentProgress) * 0.14;
+    const isMobile = window.innerWidth <= 768;
+    const factor = isMobile ? 1.85 : 1.0;
+    const actualSy = window.scrollY || window.pageYOffset || 0;
+    const targetSy = actualSy / factor;
+
+    if (!hasInitAnimSy) {
+      animSy = targetSy;
+      hasInitAnimSy = true;
+    }
+
+    // سرعت اسکرول و انتقال انیمیشن‌ها در گوشی بسیار آرام‌تر و پیوسته‌تر (Lerp ملایم‌تر)
+    const lerpSpeed = isMobile ? 0.065 : 0.18;
+    animSy += (targetSy - animSy) * lerpSpeed;
+    if (Math.abs(targetSy - animSy) < 0.04) {
+      animSy = targetSy;
+    }
+    const sy = animSy;
+
+    // فیزیک ملایم‌تر و آرام‌تر سقوط دانه‌های قهوه در گوشی
+    const beanLerp = isMobile ? 0.065 : 0.14;
+    currentProgress += (targetProgress - currentProgress) * beanLerp;
     const p = Math.min(FREEZE_P, currentProgress);
-    const now = performance.now() - startTime;
-    const sy = window.scrollY || window.pageYOffset || 0;
+
+    // سرعت آرام‌تر انیمیشن‌های متناوب و شناور در گوشی (حدود نصف سرعت دسکتاپ)
+    const timeScale = isMobile ? 0.55 : 1.0;
+    const now = (performance.now() - startTime) * timeScale;
 
     // انیمیشن موج پیوسته کرم: ورود از چپ برای Hot Coffee (انحنا دار)، ادامه حرکت به راست برای رنگ‌آمیزی کامل صفحه، و میزبانی Ice Coffee (صاف و یکدست)
     let hotPct = 0;
@@ -955,23 +996,15 @@ function initCoffeeHero() {
       }
     }
 
-    // راهنمای متحرک اسکرول به پایین (۳ فلش طلایی آبشاری): در بالای صفحه نمایان و با اسکرول به نرمی محو می‌شود
+    // راهنمای متحرک اسکرول به پایین (مخفی شده به درخواست کاربر)
     if (heroScrollIndicator) {
-      if (sy <= 15) {
-        heroScrollIndicator.style.opacity = '1';
-        heroScrollIndicator.style.pointerEvents = 'auto';
-      } else if (sy > 15 && sy < 110) {
-        const indAlpha = Math.max(0, 1 - (sy - 15) / 80);
-        heroScrollIndicator.style.opacity = indAlpha.toFixed(3);
-        heroScrollIndicator.style.pointerEvents = indAlpha < 0.2 ? 'none' : 'auto';
-      } else {
-        heroScrollIndicator.style.opacity = '0';
-        heroScrollIndicator.style.pointerEvents = 'none';
-      }
+      heroScrollIndicator.style.display = 'none';
+      heroScrollIndicator.style.opacity = '0';
+      heroScrollIndicator.style.pointerEvents = 'none';
     }
 
     if (window.updateSlideNavDock) {
-      window.updateSlideNavDock();
+      window.updateSlideNavDock(sy);
     }
 
     requestAnimationFrame(renderLoop);
@@ -984,6 +1017,7 @@ function initCoffeeHero() {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', () => {
     resizeCanvas();
+    adjustPageEnd();
     onScroll();
   });
 }
@@ -1005,18 +1039,23 @@ function initParticles(canvas) {
   }
 
   function createParticles() {
-    particles = Array.from({ length: 55 }, () => ({
+    const isMobile = window.innerWidth <= 768;
+    const count = isMobile ? 32 : 55;
+    const speedMult = isMobile ? 0.55 : 1.0;
+    particles = Array.from({ length: count }, () => ({
       x:     Math.random() * w,
       y:     Math.random() * h,
       r:     Math.random() * 1.8 + 0.3,
       alpha: Math.random() * 0.6 + 0.1,
-      speed: Math.random() * 0.4 + 0.1,
-      drift: (Math.random() - 0.5) * 0.3,
+      speed: (Math.random() * 0.4 + 0.1) * speedMult,
+      drift: (Math.random() - 0.5) * 0.3 * speedMult,
     }));
   }
 
   function draw() {
     ctx.clearRect(0, 0, w, h);
+    const isMobile = window.innerWidth <= 768;
+    const alphaDecay = isMobile ? 0.00045 : 0.0008;
     particles.forEach(p => {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -1025,7 +1064,7 @@ function initParticles(canvas) {
 
       p.y     -= p.speed;
       p.x     += p.drift;
-      p.alpha -= 0.0008;
+      p.alpha -= alphaDecay;
 
       if (p.y < -5 || p.alpha <= 0) {
         p.x     = Math.random() * w;
@@ -1047,6 +1086,7 @@ function initParticles(canvas) {
 function initCardAnimations() {
   const cards = document.querySelectorAll('.item-card');
   const titles = document.querySelectorAll('.section-title, .categories-tabs');
+  const isMobile = window.innerWidth <= 768;
 
   // انیمیشن تایتل‌ها و تب‌ها
   const titleObserver = new IntersectionObserver((entries) => {
@@ -1062,16 +1102,17 @@ function initCardAnimations() {
   titles.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(24px)';
-    el.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)';
+    const dur = isMobile ? '1.1s' : '0.7s';
+    el.style.transition = `opacity ${dur} cubic-bezier(0.16, 1, 0.3, 1), transform ${dur} cubic-bezier(0.16, 1, 0.3, 1)`;
     titleObserver.observe(el);
   });
 
-  // انیمیشن آبشاری کارت‌ها با تأخیر استَگِر
+  // انیمیشن آبشاری کارت‌ها با تأخیر استَگِر (آرام‌تر در گوشی)
   const cardObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const index = Array.from(cards).indexOf(entry.target);
-        const delay = (index % 4) * 85;
+        const delay = (index % 4) * (isMobile ? 125 : 85);
         setTimeout(() => {
           entry.target.classList.add('animated-in');
         }, delay);
@@ -1200,8 +1241,10 @@ function initSlideNavDock() {
 
   let currentThemeIdx = -1;
   let lastDockScrollY = -9999;
-  function updateDockState() {
-    const sy = window.scrollY || window.pageYOffset || 0;
+  function updateDockState(customSy) {
+    const isMobile = window.innerWidth <= 768;
+    const factor = isMobile ? 1.85 : 1.0;
+    const sy = (typeof customSy === 'number') ? customSy : ((window.scrollY || window.pageYOffset || 0) / factor);
     if (Math.abs(sy - lastDockScrollY) < 1) return;
     lastDockScrollY = sy;
     const idx = getSlideIndex(sy);
@@ -1237,25 +1280,32 @@ function initSlideNavDock() {
   if (prevBtn) {
     prevBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const sy = window.scrollY || window.pageYOffset || 0;
+      const isMobile = window.innerWidth <= 768;
+      const factor = isMobile ? 1.85 : 1.0;
+      const sy = (window.scrollY || window.pageYOffset || 0) / factor;
       const idx = getSlideIndex(sy);
       const targetIdx = Math.max(0, idx - 1);
-      smoothScrollTo(slides[targetIdx].scrollY);
+      const duration = isMobile ? 1100 : 650;
+      smoothScrollTo(slides[targetIdx].scrollY * factor, duration);
     });
   }
 
   if (nextBtn) {
     nextBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      const sy = window.scrollY || window.pageYOffset || 0;
+      const isMobile = window.innerWidth <= 768;
+      const factor = isMobile ? 1.85 : 1.0;
+      const sy = (window.scrollY || window.pageYOffset || 0) / factor;
       const idx = getSlideIndex(sy);
       const targetIdx = Math.min(slides.length - 1, idx + 1);
-      smoothScrollTo(slides[targetIdx].scrollY);
+      const duration = isMobile ? 1100 : 650;
+      smoothScrollTo(slides[targetIdx].scrollY * factor, duration);
     });
   }
 
+  window.smoothScrollToSlide = smoothScrollTo;
   window.updateSlideNavDock = updateDockState;
-  window.addEventListener('scroll', updateDockState, { passive: true });
+  window.addEventListener('scroll', () => updateDockState(), { passive: true });
   updateDockState();
 
   // بررسی پارامترهای URL برای اسکرول مستقیم به اسلاید در زمان بازگشت از صفحه Detail
@@ -1263,18 +1313,21 @@ function initSlideNavDock() {
     const urlParams = new URLSearchParams(window.location.search);
     const scrollTarget = urlParams.get('scroll');
     const slideTarget = urlParams.get('slide');
+    const isMobile = window.innerWidth <= 768;
+    const factor = isMobile ? 1.85 : 1.0;
+    const duration = isMobile ? 1100 : 550;
     if (scrollTarget !== null) {
       const sy = parseInt(scrollTarget, 10);
       if (!isNaN(sy) && sy >= 0) {
         setTimeout(() => {
-          smoothScrollTo(sy, 550);
+          smoothScrollTo(sy * factor, duration);
         }, 150);
       }
     } else if (slideTarget !== null) {
       const sIdx = parseInt(slideTarget, 10);
       if (!isNaN(sIdx) && slides[sIdx]) {
         setTimeout(() => {
-          smoothScrollTo(slides[sIdx].scrollY, 550);
+          smoothScrollTo(slides[sIdx].scrollY * factor, duration);
         }, 150);
       }
     }
@@ -1415,9 +1468,12 @@ function initCategoryDetailPage() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const sy = window.scrollY || window.pageYOffset || 0;
+          const isMobile = window.innerWidth <= 768;
           if (sy <= 600) {
-            bannerVisual.style.transform = `translateY(${(sy * 0.22).toFixed(1)}px)`;
-            bannerVisual.style.opacity = Math.max(0.15, 1 - sy * 0.0022).toFixed(3);
+            const speed = isMobile ? 0.12 : 0.22;
+            const decay = isMobile ? 0.0014 : 0.0022;
+            bannerVisual.style.transform = `translateY(${(sy * speed).toFixed(1)}px)`;
+            bannerVisual.style.opacity = Math.max(0.15, 1 - sy * decay).toFixed(3);
           }
           ticking = false;
         });

@@ -1,0 +1,7 @@
+{
+  "app": "gardo-site",
+  "platform": "django",
+  "django": {
+    "pythonVersion": "3.12"
+  }
+}

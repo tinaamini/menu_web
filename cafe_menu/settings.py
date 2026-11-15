@@ -102,3 +102,15 @@ if SECURE_SSL_REDIRECT:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+# ==============================================================================
+# مسیر اختصاصی و امن پنل مدیریت ادمین (جلوگیری از اسکن و حملات Brute-Force روی admin/)
+# قابل تغییر از طریق متغیر محیطی DJANGO_ADMIN_URL یا پیش‌فرض gardoo-panel/
+# ==============================================================================
+ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'gardoo-panel/')
+if not ADMIN_URL.endswith('/'):
+    ADMIN_URL += '/'
+if ADMIN_URL.startswith('/'):
+    ADMIN_URL = ADMIN_URL[1:]
+
+LOGIN_URL = 'admin:login'
+
