@@ -2,6 +2,8 @@
 Django settings for cafe_menu project.
 """
 
+import os
+import shutil
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,10 +54,54 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cafe_menu.wsgi.application'
 
+# ==============================================================================
+# پیکربندی هوشمند و خودکار دیتابیس SQLite برای محیط سرور (لیارا) و لوکال
+# رفع قطعی خطای: OperationalError: attempt to write a readonly database
+# ==============================================================================
+import shutil
+
+DATA_DIR = BASE_DIR / 'data'
+TMP_DIR = Path('/tmp')
+ORIG_DB = BASE_DIR / 'db.sqlite3'
+
+# اولویت ۱: دیسک ماندگار متصل‌شده در لیارا (پوشه data)
+if DATA_DIR.exists() and os.access(DATA_DIR, os.W_OK):
+    DB_PATH = DATA_DIR / 'db.sqlite3'
+    if not DB_PATH.exists() and ORIG_DB.exists():
+        try:
+            shutil.copy2(ORIG_DB, DB_PATH)
+        except Exception:
+            pass
+    MEDIA_ROOT = DATA_DIR / 'media'
+    try:
+        MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
+# اولویت ۲: محیط محلی (Local) یا سرور استاندارد با دسترسی کامل نوشتن
+elif os.access(BASE_DIR, os.W_OK) and (not ORIG_DB.exists() or os.access(ORIG_DB, os.W_OK)):
+    DB_PATH = ORIG_DB
+    MEDIA_ROOT = BASE_DIR / 'media'
+# اولویت ۳: سرور ابری با فایل‌سیستم Read-Only (مانند کانتینر پیش‌فرض لیارا تا قبل از اتصال دیسک)
+elif TMP_DIR.exists() and os.access(TMP_DIR, os.W_OK):
+    DB_PATH = TMP_DIR / 'db.sqlite3'
+    if not DB_PATH.exists() and ORIG_DB.exists():
+        try:
+            shutil.copy2(ORIG_DB, DB_PATH)
+        except Exception:
+            pass
+    MEDIA_ROOT = TMP_DIR / 'media'
+    try:
+        MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        pass
+else:
+    DB_PATH = ORIG_DB
+    MEDIA_ROOT = BASE_DIR / 'media'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DB_PATH,
     }
 }
 
@@ -79,7 +125,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT در بخش بالا به صورت هوشمند و متناسب با دیسک/سرور تعریف شده است
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
