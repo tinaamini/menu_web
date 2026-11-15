@@ -63,6 +63,7 @@ import shutil
 DATA_DIR = BASE_DIR / 'data'
 TMP_DIR = Path('/tmp')
 ORIG_DB = BASE_DIR / 'db.sqlite3'
+ORIG_MEDIA = BASE_DIR / 'media'
 
 # اولویت ۱: دیسک ماندگار متصل‌شده در لیارا (پوشه data)
 if DATA_DIR.exists() and os.access(DATA_DIR, os.W_OK):
@@ -75,6 +76,8 @@ if DATA_DIR.exists() and os.access(DATA_DIR, os.W_OK):
     MEDIA_ROOT = DATA_DIR / 'media'
     try:
         MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+        if ORIG_MEDIA.exists():
+            shutil.copytree(ORIG_MEDIA, MEDIA_ROOT, dirs_exist_ok=True)
     except Exception:
         pass
 # اولویت ۲: محیط محلی (Local) یا سرور استاندارد با دسترسی کامل نوشتن
@@ -92,6 +95,8 @@ elif TMP_DIR.exists() and os.access(TMP_DIR, os.W_OK):
     MEDIA_ROOT = TMP_DIR / 'media'
     try:
         MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
+        if ORIG_MEDIA.exists():
+            shutil.copytree(ORIG_MEDIA, MEDIA_ROOT, dirs_exist_ok=True)
     except Exception:
         pass
 else:
