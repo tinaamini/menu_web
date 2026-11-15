@@ -102,6 +102,14 @@ if SECURE_SSL_REDIRECT:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://gardoo.site',
+    'https://www.gardoo.site',
+    'https://gardo-site.liara.run',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
+
 # ==============================================================================
 # مسیر اختصاصی و امن پنل مدیریت ادمین (جلوگیری از اسکن و حملات Brute-Force روی admin/)
 # قابل تغییر از طریق متغیر محیطی DJANGO_ADMIN_URL یا پیش‌فرض gardoo-panel/
