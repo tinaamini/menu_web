@@ -9,8 +9,6 @@ urlpatterns = [
     path('menu/category/<int:pk>/', views.category_detail),
     # اندپوینت‌های سبد خرید آنلاین، فاکتور، پیگیری سفارش‌ها و نسخه
     path('api/order/submit/', views.submit_order_api, name='api_submit_order'),
-    path('api/orders/my/', views.get_my_orders_api, name='api_my_orders'),
-    path('api/version/', views.get_app_version_api, name='api_version'),
     # کدهای مربوط به پرسنل و پنل سفارش‌گیر (گارسون، آشپزخانه و صندوق)
     path('waiter/', views.waiter_panel, name='waiter_panel'),
     path('waiter/order/<int:order_id>/edit/', views.waiter_order_edit, name='waiter_order_edit'),
