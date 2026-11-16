@@ -339,283 +339,283 @@ class MenuItemAdmin(admin.ModelAdmin):
 # برای سوپرادمین جهت ثبت و نمایش منو، محصولات و زیرمجموعه‌ها در سایت باشد.
 # ============================================================
 
-# class OrderItemInline(admin.TabularInline):
-#     """اقلام داخل فاکتور سفارش میز"""
-#     model = OrderItem
-#     extra = 1
-#     fields = ['item', 'quantity', 'unit_price', 'notes', 'get_subtotal_display']
-#     readonly_fields = ['get_subtotal_display']
-# 
-#     @admin.display(description='جمع این قلم')
-#     def get_subtotal_display(self, obj):
-#         if not obj or not obj.id:
-#             return '—'
-#         return format_html('<b>{} تومان</b>', obj.subtotal_formatted())
+class OrderItemInline(admin.TabularInline):
+    """اقلام داخل فاکتور سفارش میز"""
+    model = OrderItem
+    extra = 0
+    fields = ['item', 'quantity', 'unit_price', 'notes', 'get_subtotal_display']
+    readonly_fields = ['get_subtotal_display']
+
+    @admin.display(description='جمع این قلم')
+    def get_subtotal_display(self, obj):
+        if not obj or not obj.id:
+            return '—'
+        return format_html('<b>{} تومان</b>', obj.subtotal_formatted())
 
 
-# @admin.register(CafeTable)
-# class CafeTableAdmin(admin.ModelAdmin):
-#     """مدیریت کامل میزهای کافه توسط ادمین اصلی (افزودن، ویرایش، حذف و تغییر ظرفیت و بخش)"""
-#     list_display = ['name', 'section', 'capacity', 'order', 'is_active', 'active_orders_count']
-#     list_display_links = ['name']
-#     list_editable = ['order', 'is_active']
-#     list_filter = ['section', 'is_active']
-#     search_fields = ['name', 'section']
-#     ordering = ['order', 'name']
-#     fields = ['name', 'section', 'capacity', 'order', 'is_active']
-# 
-#     @admin.display(description='سفارش‌های فعال')
-#     def active_orders_count(self, obj):
-#         count = obj.orders.filter(status__in=['pending', 'preparing', 'ready']).count()
-#         if count > 0:
-#             return format_html(
-#                 '<b style="color: #f59e0b; background: rgba(245, 158, 11, 0.15); padding: 3px 8px; border-radius: 6px;">{} سفارش فعال</b>',
-#                 count
-#             )
-#         return '—'
-# 
-#     def has_module_permission(self, request):
-#         """فقط ادمین اصلی (سوپریوزر) بخش مدیریت میزها را در منوی ادمین مشاهده می‌کند"""
-#         return request.user.is_superuser
-# 
-#     def has_add_permission(self, request):
-#         """فقط ادمین اصلی مجاز به افزودن میز جدید است"""
-#         return request.user.is_superuser
-# 
-#     def has_change_permission(self, request, obj=None):
-#         """فقط ادمین اصلی مجاز به ویرایش میزها است"""
-#         return request.user.is_superuser
-# 
-#     def has_delete_permission(self, request, obj=None):
-#         """فقط ادمین اصلی مجاز به حذف کامل میز است"""
-#         return request.user.is_superuser
-# 
-#     def has_view_permission(self, request, obj=None):
-#         """فقط ادمین اصلی مجاز به مشاهده پنل مدیریت میزها است"""
-#         return request.user.is_superuser
-# 
-# 
-# @admin.register(Order)
-# class OrderAdmin(admin.ModelAdmin):
-#     """مدیریت سفارش‌های میزها، آماده‌سازی در بار/آشپزخانه و تسویه در صندوق"""
-#     list_display = [
-#         'order_number',
-#         'table_badge',
-#         'status_badge',
-#         'payment_badge',
-#         'items_summary',
-#         'total_price_display',
-#         'waiter_display',
-#         'created_time',
-#     ]
-#     list_display_links = ['order_number', 'table_badge']
-#     list_filter = ['status', 'payment_status', 'payment_method', 'created_at']
-#     search_fields = ['table_number', 'notes', 'items__item__name', 'waiter__username']
-#     list_per_page = 25
-#     inlines = [OrderItemInline]
-# 
-#     def get_list_filter(self, request):
-#         """تنظیم فیلترها بر اساس نقش و پرمیشن‌های کاربر: گارسون دسترسی به فیلترهای روش پرداخت و تسویه ندارد"""
-#         if request.user.is_superuser:
-#             return ['status', 'payment_status', 'payment_method', 'waiter', 'table', 'created_at']
-# 
-#         is_cashier = request.user.groups.filter(name__icontains='صندوق').exists()
-#         is_kitchen = request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()
-# 
-#         if is_cashier and not is_kitchen:
-#             return ['payment_status', 'payment_method', 'status', 'created_at']
-# 
-#         if is_kitchen and not is_cashier:
-#             return ['status', 'created_at']
-# 
-#         # برای گارسون سالن: فقط فیلتر وضعیت سفارش (آماده‌سازی/تحویل)، میز و تاریخ
-#         # فیلترهای روش پرداخت و تسویه که به صندوق مربوطند از دید گارسون حذف می‌شوند
-#         return ['status', 'table', 'created_at']
-#     fields = [
-#         'table', 'table_number', 'status',
-#         'payment_status', 'payment_method',
-#         'waiter', 'notes',
-#         'total_price_display',
-#     ]
-#     readonly_fields = ['total_price_display']
-#     actions = [
-#         'mark_as_preparing',
-#         'mark_as_ready',
-#         'mark_as_delivered',
-#         'mark_as_paid_pos',
-#         'mark_as_paid_cash',
-#     ]
-# 
-#     def get_actions(self, request):
-#         actions = super().get_actions(request)
-#         # برای گارسون (و پرسنل عادی که صندوق‌دار یا آشپزخانه نیستند)، کل نوار اقدامات حذف می‌شود
-#         # تا گارسون هیچ امکانی برای تغییر دسته‌جمعی وضعیت آماده‌سازی، تسویه یا حذف سفارش نداشته باشد
-#         if not request.user.is_superuser:
-#             is_cashier = request.user.groups.filter(name__icontains='صندوق').exists()
-#             is_kitchen = request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()
-# 
-#             if not (is_cashier or is_kitchen):
-#                 return {}
-# 
-#             if is_cashier and not is_kitchen:
-#                 actions.pop('mark_as_preparing', None)
-#                 actions.pop('mark_as_ready', None)
-# 
-#             if is_kitchen and not is_cashier:
-#                 actions.pop('mark_as_paid_pos', None)
-#                 actions.pop('mark_as_paid_cash', None)
-#                 actions.pop('mark_as_delivered', None)
-# 
-#             actions.pop('delete_selected', None)
-# 
-#         return actions
-# 
-#     def save_model(self, request, obj, form, change):
-#         # اگر گارسون مشخص نشده بود، کاربری که سفارش را ثبت می‌کند به عنوان گارسون ذخیره می‌شود
-#         if not obj.waiter and request.user.is_authenticated:
-#             obj.waiter = request.user
-#         super().save_model(request, obj, form, change)
-# 
-#     def get_readonly_fields(self, request, obj=None):
-#         readonly = list(super().get_readonly_fields(request, obj))
-#         # اگر کاربر در گروه آشپزخانه بود، نباید به وضعیت پرداخت دسترسی داشته باشد
-#         if request.user.groups.filter(name='آشپزخانه و بار').exists() and not request.user.is_superuser:
-#             readonly.extend(['payment_status', 'payment_method'])
-#         # اگر کاربر گارسون بود، نباید سرخود تسویه حساب کند (صندوق باید تسویه کند)
-#         if request.user.groups.filter(name='گارسون / سالن‌دار').exists() and not request.user.is_superuser:
-#             readonly.extend(['payment_status', 'payment_method'])
-#         return readonly
-# 
-#     def has_add_permission(self, request):
-#         if request.user.is_superuser:
-#             return True
-#         # پرسنل آشپزخانه و بار اجازه افزودن سفارش جدید ندارند
-#         if request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists():
-#             return False
-#         # صندوق‌دار به تنهایی اجازه افزودن سفارش ندارد
-#         if request.user.groups.filter(name__icontains='صندوق').exists() and not request.user.groups.filter(name__icontains='گارسون').exists():
-#             return False
-#         return super().has_add_permission(request)
-# 
+@admin.register(CafeTable)
+class CafeTableAdmin(admin.ModelAdmin):
+    """مدیریت کامل میزهای کافه توسط ادمین اصلی (افزودن، ویرایش، حذف و تغییر ظرفیت و بخش)"""
+    list_display = ['name', 'section', 'capacity', 'order', 'is_active', 'active_orders_count']
+    list_display_links = ['name']
+    list_editable = ['order', 'is_active']
+    list_filter = ['section', 'is_active']
+    search_fields = ['name', 'section']
+    ordering = ['order', 'name']
+    fields = ['name', 'section', 'capacity', 'order', 'is_active']
+
+    @admin.display(description='سفارش‌های فعال')
+    def active_orders_count(self, obj):
+        count = obj.orders.filter(status__in=['pending', 'preparing', 'ready']).count()
+        if count > 0:
+            return format_html(
+                '<b style="color: #f59e0b; background: rgba(245, 158, 11, 0.15); padding: 3px 8px; border-radius: 6px;">{} سفارش فعال</b>',
+                count
+            )
+        return '—'
+
+    def has_module_permission(self, request):
+        """فقط ادمین اصلی (سوپریوزر) بخش مدیریت میزها را در منوی ادمین مشاهده می‌کند"""
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        """فقط ادمین اصلی مجاز به افزودن میز جدید است"""
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        """فقط ادمین اصلی مجاز به ویرایش میزها است"""
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        """فقط ادمین اصلی مجاز به حذف کامل میز است"""
+        return request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        """فقط ادمین اصلی مجاز به مشاهده پنل مدیریت میزها است"""
+        return request.user.is_superuser
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    """مدیریت سفارش‌های میزها، آماده‌سازی در بار/آشپزخانه و تسویه در صندوق"""
+    list_display = [
+        'order_number',
+        'table_badge',
+        'status_badge',
+        'payment_badge',
+        'items_summary',
+        'total_price_display',
+        'waiter_display',
+        'created_time',
+    ]
+    list_display_links = ['order_number', 'table_badge']
+    list_filter = ['status', 'payment_status', 'payment_method', 'created_at']
+    search_fields = ['table_number', 'notes', 'items__item__name', 'waiter__username']
+    list_per_page = 25
+    inlines = [OrderItemInline]
+
+    def get_list_filter(self, request):
+        """تنظیم فیلترها بر اساس نقش و پرمیشن‌های کاربر: گارسون دسترسی به فیلترهای روش پرداخت و تسویه ندارد"""
+        if request.user.is_superuser:
+            return ['status', 'payment_status', 'payment_method', 'waiter', 'table', 'created_at']
+
+        is_cashier = request.user.groups.filter(name__icontains='صندوق').exists()
+        is_kitchen = request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()
+
+        if is_cashier and not is_kitchen:
+            return ['payment_status', 'payment_method', 'status', 'created_at']
+
+        if is_kitchen and not is_cashier:
+            return ['status', 'created_at']
+
+        # برای گارسون سالن: فقط فیلتر وضعیت سفارش (آماده‌سازی/تحویل)، میز و تاریخ
+        # فیلترهای روش پرداخت و تسویه که به صندوق مربوطند از دید گارسون حذف می‌شوند
+        return ['status', 'table', 'created_at']
+    fields = [
+        'table', 'table_number', 'status',
+        'payment_status', 'payment_method',
+        'waiter', 'notes',
+        'total_price_display',
+    ]
+    readonly_fields = ['total_price_display']
+    actions = [
+        'mark_as_preparing',
+        'mark_as_ready',
+        'mark_as_delivered',
+        'mark_as_paid_pos',
+        'mark_as_paid_cash',
+    ]
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        # برای گارسون (و پرسنل عادی که صندوق‌دار یا آشپزخانه نیستند)، کل نوار اقدامات حذف می‌شود
+        # تا گارسون هیچ امکانی برای تغییر دسته‌جمعی وضعیت آماده‌سازی، تسویه یا حذف سفارش نداشته باشد
+        if not request.user.is_superuser:
+            is_cashier = request.user.groups.filter(name__icontains='صندوق').exists()
+            is_kitchen = request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()
+
+            if not (is_cashier or is_kitchen):
+                return {}
+
+            if is_cashier and not is_kitchen:
+                actions.pop('mark_as_preparing', None)
+                actions.pop('mark_as_ready', None)
+
+            if is_kitchen and not is_cashier:
+                actions.pop('mark_as_paid_pos', None)
+                actions.pop('mark_as_paid_cash', None)
+                actions.pop('mark_as_delivered', None)
+
+            actions.pop('delete_selected', None)
+
+        return actions
+
+    def save_model(self, request, obj, form, change):
+        # اگر گارسون مشخص نشده بود، کاربری که سفارش را ثبت می‌کند به عنوان گارسون ذخیره می‌شود
+        if not obj.waiter and request.user.is_authenticated:
+            obj.waiter = request.user
+        super().save_model(request, obj, form, change)
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(super().get_readonly_fields(request, obj))
+        # اگر کاربر در گروه آشپزخانه بود، نباید به وضعیت پرداخت دسترسی داشته باشد
+        if request.user.groups.filter(name='آشپزخانه و بار').exists() and not request.user.is_superuser:
+            readonly.extend(['payment_status', 'payment_method'])
+        # اگر کاربر گارسون بود، نباید سرخود تسویه حساب کند (صندوق باید تسویه کند)
+        if request.user.groups.filter(name='گارسون / سالن‌دار').exists() and not request.user.is_superuser:
+            readonly.extend(['payment_status', 'payment_method'])
+        return readonly
+
+    def has_add_permission(self, request):
+        if request.user.is_superuser:
+            return True
+        # پرسنل آشپزخانه و بار اجازه افزودن سفارش جدید ندارند
+        if request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists():
+            return False
+        # صندوق‌دار به تنهایی اجازه افزودن سفارش ندارد
+        if request.user.groups.filter(name__icontains='صندوق').exists() and not request.user.groups.filter(name__icontains='گارسون').exists():
+            return False
+        return super().has_add_permission(request)
+
 #     def add_view(self, request, form_url='', extra_context=None):
-#         """هدایت یکپارچه به پنل سفارش‌گیر جهت ثبت سریع سفارش میز با تیک زدن و جمع زنده قیمت"""
+        """هدایت یکپارچه به پنل سفارش‌گیر جهت ثبت سریع سفارش میز با تیک زدن و جمع زنده قیمت"""
 #         return redirect('menu:waiter_panel')
-# 
+
 #     def change_view(self, request, object_id, form_url='', extra_context=None):
-#         """هدایت یکپارچه به پنل ویرایش سفارش تا همه اقلام، قیمت، وضعیت میز و تسویه کاملاً هماهنگ باشند"""
+        """هدایت یکپارچه به پنل ویرایش سفارش تا همه اقلام، قیمت، وضعیت میز و تسویه کاملاً هماهنگ باشند"""
 #         return redirect('menu:waiter_order_edit', order_id=object_id)
-# 
-#     @admin.display(description='شماره سفارش', ordering='id')
-#     def order_number(self, obj):
-#         return format_html('<span style="font-weight: 800; color: #d4a574; font-size: 0.95rem; white-space: nowrap;">#{}</span>', obj.id)
-# 
-#     @admin.display(description='شماره میز', ordering='table_number')
-#     def table_badge(self, obj):
-#         name = obj.table.name if obj.table else obj.table_number
-#         return format_html(
-#             '<span class="badge-table">{}</span>',
-#             name or '—'
-#         )
-# 
-#     @admin.display(description='وضعیت آماده‌سازی', ordering='status')
-#     def status_badge(self, obj):
-#         badge_styles = {
-#             'pending': ('#f59e0b', 'rgba(245, 158, 11, 0.12)', 'در صف انتظار'),
-#             'preparing': ('#f97316', 'rgba(249, 115, 22, 0.15)', 'در حال آماده‌سازی'),
-#             'ready': ('#10b981', 'rgba(16, 185, 129, 0.18)', 'حاضر شد'),
-#             'delivered': ('#3b82f6', 'rgba(59, 130, 246, 0.14)', 'تحویل سر میز'),
-#             'cancelled': ('#ef4444', 'rgba(239, 68, 68, 0.14)', 'لغو شده'),
-#         }
-#         color, bg, text = badge_styles.get(obj.status, ('#888', 'transparent', obj.get_status_display()))
-#         extra_class = f' badge-status-{obj.status}'
-#         if obj.status == 'ready':
-#             extra_class += ' badge-pulse-ready'
-#         return format_html(
-#             '<span class="badge-status{}" data-status="{}" style="color: {}; background: {}; border: 1.5px solid {};">{}</span>',
-#             extra_class, obj.status, color, bg, color, text
-#         )
-# 
-#     @admin.display(description='وضعیت تسویه', ordering='payment_status')
-#     def payment_badge(self, obj):
-#         if obj.payment_status == 'paid':
-#             method_desc = f" ({obj.get_payment_method_display()})" if obj.payment_method != 'unspecified' else ""
-#             return format_html(
-#                 '<span class="badge-payment-paid">تسویه شد{}</span>',
-#                 method_desc
-#             )
-#         return mark_safe('<span class="badge-payment-unpaid">تسویه نشده</span>')
-# 
-#     @admin.display(description='اقلام سفارش')
-#     def items_summary(self, obj):
-#         items = list(obj.items.all()[:4])
-#         if not items:
-#             return mark_safe('<span style="color: #888;">بدون قلم</span>')
-#         summary = "، ".join([f"{it.quantity}× {it.item.name}" for it in items])
-#         more = f" و {obj.items.count() - 4} قلم دیگر" if obj.items.count() > 4 else ""
-#         return format_html('<span style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">{}{}</span>', summary, more)
-# 
-#     @admin.display(description='مبلغ فاکتور')
-#     def total_price_display(self, obj):
-#         if not obj or not obj.id:
-#             return '—'
-#         return format_html(
-#             '<b style="color: #10b981; font-size: 0.98rem; white-space: nowrap;">{} تومان</b>',
-#             obj.total_price_formatted()
-#         )
-# 
-#     @admin.display(description='گارسون')
-#     def waiter_display(self, obj):
-#         if obj.waiter:
-#             full_name = obj.waiter.get_full_name() or obj.waiter.username
-#             return format_html('<span style="white-space: nowrap;">{}</span>', full_name)
-#         return '—'
-# 
-#     @admin.display(description='زمان ثبت', ordering='created_at')
-#     def created_time(self, obj):
-#         return format_html('<span style="white-space: nowrap; font-size: 0.88rem; color: #aaa;">{}</span>', obj.created_at.strftime('%H:%M'))
-# 
-#     # ---- اکشن‌های سریع بالای جدول ----
-#     @admin.action(description='تغییر وضعیت به: در حال آماده‌سازی')
-#     def mark_as_preparing(self, request, queryset):
-#         if not (request.user.is_superuser or request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()):
-#             self.message_user(request, "گارسون اجازه تغییر وضعیت آماده‌سازی را ندارد.", level=messages.ERROR)
-#             return
-#         updated = queryset.update(status='preparing')
-#         self.message_user(request, f"{updated} سفارش به وضعیت «در حال آماده‌سازی» تغییر یافت.")
-# 
-#     @admin.action(description='تغییر وضعیت به: حاضر شد (آماده تحویل به گارسون)')
-#     def mark_as_ready(self, request, queryset):
-#         if not (request.user.is_superuser or request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()):
-#             self.message_user(request, "گارسون اجازه تغییر وضعیت آماده‌سازی را ندارد.", level=messages.ERROR)
-#             return
-#         updated = queryset.update(status='ready')
-#         self.message_user(request, f"{updated} سفارش به وضعیت «حاضر شد» تغییر یافت.")
-# 
-#     @admin.action(description='تغییر وضعیت به: تحویل سر میز')
-#     def mark_as_delivered(self, request, queryset):
-#         if not (request.user.is_superuser or request.user.groups.filter(name__icontains='گارسون').exists()):
-#             self.message_user(request, "پرسنل آشپزخانه اجازه ثبت تحویل سر میز را ندارند. این اقدام مختص گارسون است.", level=messages.ERROR)
-#             return
-#         updated = queryset.update(status='delivered')
-#         self.message_user(request, f"{updated} سفارش به وضعیت «تحویل سر میز» تغییر یافت.")
-# 
-#     @admin.action(description='تسویه فاکتور با کارتخوان (POS)')
-#     def mark_as_paid_pos(self, request, queryset):
-#         if not (request.user.is_superuser or request.user.groups.filter(name__icontains='صندوق').exists()):
-#             self.message_user(request, "گارسون دسترسی به تسویه حساب ندارد.", level=messages.ERROR)
-#             return
-#         updated = queryset.update(payment_status='paid', payment_method='pos')
-#         self.message_user(request, f"فاکتور {updated} میز با کارتخوان تسویه شد.")
-# 
-#     @admin.action(description='تسویه فاکتور به صورت نقدی')
-#     def mark_as_paid_cash(self, request, queryset):
-#         if not (request.user.is_superuser or request.user.groups.filter(name__icontains='صندوق').exists()):
-#             self.message_user(request, "گارسون دسترسی به تسویه حساب ندارد.", level=messages.ERROR)
-#             return
-#         updated = queryset.update(payment_status='paid', payment_method='cash')
-#         self.message_user(request, f"فاکتور {updated} میز به صورت نقدی تسویه شد.")
-# 
-# 
+
+    @admin.display(description='شماره سفارش', ordering='id')
+    def order_number(self, obj):
+        return format_html('<span style="font-weight: 800; color: #d4a574; font-size: 0.95rem; white-space: nowrap;">#{}</span>', obj.id)
+
+    @admin.display(description='شماره میز', ordering='table_number')
+    def table_badge(self, obj):
+        name = obj.table.name if obj.table else obj.table_number
+        return format_html(
+            '<span class="badge-table">{}</span>',
+            name or '—'
+        )
+
+    @admin.display(description='وضعیت آماده‌سازی', ordering='status')
+    def status_badge(self, obj):
+        badge_styles = {
+            'pending': ('#f59e0b', 'rgba(245, 158, 11, 0.12)', 'در صف انتظار'),
+            'preparing': ('#f97316', 'rgba(249, 115, 22, 0.15)', 'در حال آماده‌سازی'),
+            'ready': ('#10b981', 'rgba(16, 185, 129, 0.18)', 'حاضر شد'),
+            'delivered': ('#3b82f6', 'rgba(59, 130, 246, 0.14)', 'تحویل سر میز'),
+            'cancelled': ('#ef4444', 'rgba(239, 68, 68, 0.14)', 'لغو شده'),
+        }
+        color, bg, text = badge_styles.get(obj.status, ('#888', 'transparent', obj.get_status_display()))
+        extra_class = f' badge-status-{obj.status}'
+        if obj.status == 'ready':
+            extra_class += ' badge-pulse-ready'
+        return format_html(
+            '<span class="badge-status{}" data-status="{}" style="color: {}; background: {}; border: 1.5px solid {};">{}</span>',
+            extra_class, obj.status, color, bg, color, text
+        )
+
+    @admin.display(description='وضعیت تسویه', ordering='payment_status')
+    def payment_badge(self, obj):
+        if obj.payment_status == 'paid':
+            method_desc = f" ({obj.get_payment_method_display()})" if obj.payment_method != 'unspecified' else ""
+            return format_html(
+                '<span class="badge-payment-paid">تسویه شد{}</span>',
+                method_desc
+            )
+        return mark_safe('<span class="badge-payment-unpaid">تسویه نشده</span>')
+
+    @admin.display(description='اقلام سفارش')
+    def items_summary(self, obj):
+        items = list(obj.items.all()[:4])
+        if not items:
+            return mark_safe('<span style="color: #888;">بدون قلم</span>')
+        summary = "، ".join([f"{it.quantity}× {it.item.name}" for it in items])
+        more = f" و {obj.items.count() - 4} قلم دیگر" if obj.items.count() > 4 else ""
+        return format_html('<span style="font-weight: 600; font-size: 0.9rem; white-space: nowrap;">{}{}</span>', summary, more)
+
+    @admin.display(description='مبلغ فاکتور')
+    def total_price_display(self, obj):
+        if not obj or not obj.id:
+            return '—'
+        return format_html(
+            '<b style="color: #10b981; font-size: 0.98rem; white-space: nowrap;">{} تومان</b>',
+            obj.total_price_formatted()
+        )
+
+    @admin.display(description='گارسون')
+    def waiter_display(self, obj):
+        if obj.waiter:
+            full_name = obj.waiter.get_full_name() or obj.waiter.username
+            return format_html('<span style="white-space: nowrap;">{}</span>', full_name)
+        return '—'
+
+    @admin.display(description='زمان ثبت', ordering='created_at')
+    def created_time(self, obj):
+        return format_html('<span style="white-space: nowrap; font-size: 0.88rem; color: #aaa;">{}</span>', obj.created_at.strftime('%H:%M'))
+
+    # ---- اکشن‌های سریع بالای جدول ----
+    @admin.action(description='تغییر وضعیت به: در حال آماده‌سازی')
+    def mark_as_preparing(self, request, queryset):
+        if not (request.user.is_superuser or request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()):
+            self.message_user(request, "گارسون اجازه تغییر وضعیت آماده‌سازی را ندارد.", level=messages.ERROR)
+            return
+        updated = queryset.update(status='preparing')
+        self.message_user(request, f"{updated} سفارش به وضعیت «در حال آماده‌سازی» تغییر یافت.")
+
+    @admin.action(description='تغییر وضعیت به: حاضر شد (آماده تحویل به گارسون)')
+    def mark_as_ready(self, request, queryset):
+        if not (request.user.is_superuser or request.user.groups.filter(name__icontains='آشپزخانه').exists() or request.user.groups.filter(name__icontains='بار').exists()):
+            self.message_user(request, "گارسون اجازه تغییر وضعیت آماده‌سازی را ندارد.", level=messages.ERROR)
+            return
+        updated = queryset.update(status='ready')
+        self.message_user(request, f"{updated} سفارش به وضعیت «حاضر شد» تغییر یافت.")
+
+    @admin.action(description='تغییر وضعیت به: تحویل سر میز')
+    def mark_as_delivered(self, request, queryset):
+        if not (request.user.is_superuser or request.user.groups.filter(name__icontains='گارسون').exists()):
+            self.message_user(request, "پرسنل آشپزخانه اجازه ثبت تحویل سر میز را ندارند. این اقدام مختص گارسون است.", level=messages.ERROR)
+            return
+        updated = queryset.update(status='delivered')
+        self.message_user(request, f"{updated} سفارش به وضعیت «تحویل سر میز» تغییر یافت.")
+
+    @admin.action(description='تسویه فاکتور با کارتخوان (POS)')
+    def mark_as_paid_pos(self, request, queryset):
+        if not (request.user.is_superuser or request.user.groups.filter(name__icontains='صندوق').exists()):
+            self.message_user(request, "گارسون دسترسی به تسویه حساب ندارد.", level=messages.ERROR)
+            return
+        updated = queryset.update(payment_status='paid', payment_method='pos')
+        self.message_user(request, f"فاکتور {updated} میز با کارتخوان تسویه شد.")
+
+    @admin.action(description='تسویه فاکتور به صورت نقدی')
+    def mark_as_paid_cash(self, request, queryset):
+        if not (request.user.is_superuser or request.user.groups.filter(name__icontains='صندوق').exists()):
+            self.message_user(request, "گارسون دسترسی به تسویه حساب ندارد.", level=messages.ERROR)
+            return
+        updated = queryset.update(payment_status='paid', payment_method='cash')
+        self.message_user(request, f"فاکتور {updated} میز به صورت نقدی تسویه شد.")
+
+
 # ============================================================
 # سفارشی‌سازی مدیریت پرسنل و کاربران کافه (User Admin)
 # ============================================================

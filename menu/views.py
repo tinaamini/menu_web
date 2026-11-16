@@ -622,3 +622,163 @@ def waiter_notifications_api(request):
         'total_ready': sum(1 for o in orders_data if o['is_ready']),
         'total_preparing': sum(1 for o in orders_data if o['is_preparing']),
     })
+
+
+# ============================================================
+# بخش سفارش آنلاین مشتری، فاکتور و بررسی نسخه (Client Cart & Orders)
+# ============================================================
+import json
+from django.views.decorators.csrf import csrf_exempt
+
+APP_VERSION = '329.0'
+
+
+@csrf_exempt
+def submit_order_api(request):
+    """
+    ثبت سفارش آنلاین از منوی مشتری (سبد خرید)
+    ورودی JSON:
+    {
+        "table_number": "میز ۴",
+        "notes": "...",
+        "items": [
+            {"id": 12, "quantity": 2, "notes": ""}
+        ]
+    }
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'فقط متد POST مجاز است.'}, status=405)
+
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+    except Exception:
+        return JsonResponse({'success': False, 'error': 'داده‌های ارسالی نامعتبر هستند.'}, status=400)
+
+    table_number = str(data.get('table_number', '')).strip()
+    if not table_number:
+        return JsonResponse({'success': False, 'error': 'لطفاً شماره یا نام میز را وارد کنید.'}, status=400)
+
+    raw_items = data.get('items', [])
+    if not raw_items or not isinstance(raw_items, list):
+        return JsonResponse({'success': False, 'error': 'سبد خرید خالی است.'}, status=400)
+
+    customer_notes = str(data.get('notes', '')).strip()
+
+    try:
+        with transaction.atomic():
+            order = Order.objects.create(
+                table_number=table_number,
+                notes=customer_notes,
+                status='pending',
+                payment_status='unpaid',
+            )
+            order_items_created = []
+            for entry in raw_items:
+                item_id = entry.get('id')
+                try:
+                    quantity = int(entry.get('quantity', 1))
+                except Exception:
+                    quantity = 1
+                if quantity <= 0:
+                    continue
+                try:
+                    menu_item = MenuItem.objects.get(id=item_id, is_available=True)
+                except MenuItem.DoesNotExist:
+                    continue
+
+                order_item = OrderItem.objects.create(
+                    order=order,
+                    item=menu_item,
+                    quantity=quantity,
+                    unit_price=menu_item.final_price,
+                    notes=str(entry.get('notes', '')).strip()[:200]
+                )
+                order_items_created.append({
+                    'id': order_item.id,
+                    'name': menu_item.name,
+                    'name_en': menu_item.name_en or '',
+                    'quantity': order_item.quantity,
+                    'unit_price': order_item.unit_price,
+                    'unit_price_formatted': f"{order_item.unit_price:,}",
+                    'subtotal': order_item.subtotal,
+                    'subtotal_formatted': order_item.subtotal_formatted(),
+                    'image': menu_item.image.url if menu_item.image else ''
+                })
+
+            if not order_items_created:
+                raise ValueError("هیچ آیتم معتبری در سبد خرید یافت نشد.")
+
+            return JsonResponse({
+                'success': True,
+                'order': {
+                    'id': order.id,
+                    'table_number': order.table_number,
+                    'status': order.status,
+                    'status_display': order.get_status_display(),
+                    'notes': order.notes,
+                    'created_time': order.created_at.strftime('%H:%M'),
+                    'created_date': order.created_at.strftime('%Y/%m/%d'),
+                    'total_price': order.total_price,
+                    'total_price_formatted': order.total_price_formatted(),
+                    'items_count': order.total_items_count,
+                    'items': order_items_created,
+                }
+            })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': f'خطا در ثبت سفارش: {str(e)}'}, status=500)
+
+
+def get_my_orders_api(request):
+    """
+    دریافت لیست سفارش‌های ثبت‌شده مشتری جهت رهگیری و نمایش وضعیت
+    ورودی: ?ids=1,2,3
+    """
+    raw_ids = request.GET.get('ids', '')
+    if not raw_ids:
+        return JsonResponse({'orders': []})
+
+    try:
+        order_ids = [int(i.strip()) for i in raw_ids.split(',') if i.strip().isdigit()]
+    except Exception:
+        order_ids = []
+
+    if not order_ids:
+        return JsonResponse({'orders': []})
+
+    orders = Order.objects.filter(id__in=order_ids).prefetch_related('items__item').order_by('-created_at')[:20]
+
+    result = []
+    for o in orders:
+        items_data = []
+        for oi in o.items.all():
+            items_data.append({
+                'name': oi.item.name if oi.item else 'نامشخص',
+                'name_en': oi.item.name_en if oi.item else '',
+                'quantity': oi.quantity,
+                'unit_price': oi.unit_price,
+                'unit_price_formatted': f"{oi.unit_price:,}" if oi.unit_price else '۰',
+                'subtotal': oi.subtotal,
+                'subtotal_formatted': oi.subtotal_formatted(),
+            })
+
+        result.append({
+            'id': o.id,
+            'table_number': o.table_number,
+            'status': o.status,
+            'status_display': o.get_status_display(),
+            'notes': o.notes,
+            'created_time': o.created_at.strftime('%H:%M'),
+            'created_date': o.created_at.strftime('%Y/%m/%d'),
+            'total_price': o.total_price,
+            'total_price_formatted': o.total_price_formatted(),
+            'items_count': o.total_items_count,
+            'items': items_data,
+        })
+
+    return JsonResponse({'orders': result})
+
+
+def get_app_version_api(request):
+    """بازگردانی نسخه فعلی نرم‌افزار جهت اطلاع‌رسانی خودکار به‌روزرسانی به کاربران"""
+    return JsonResponse({'version': APP_VERSION})
+

@@ -10,10 +10,17 @@
   <header class="cat-header-experience" style="background: {{ theme.hero_bg }};">
     <div class="header-ambient-glow"></div>
 
-    <!-- نوار ابزار و ناوبری بالای هدر (دکمه بازگشت شناور دایره‌ای روی تصویر بنر) -->
+    <!-- نوار ابزار و ناوبری بالای هدر -->
     <div class="cat-top-bar">
       <div class="cat-top-bar-inner">
-        <!-- دکمه بازگشت به لندینگ ۳ بعدی (دایره‌ای شیشه‌ای مدرن) -->
+        <!-- دکمه مشاهده و پیگیری سفارش‌های ثبت‌شده -->
+        <button type="button" class="cat-header-orders-btn" id="headerMyOrdersBtn" title="پیگیری سفارش‌های ثبت‌شده" aria-label="پیگیری سفارش‌ها">
+          <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>سفارش‌های من</span>
+          <span class="header-orders-badge" id="myOrdersCount" style="display: none;">0</span>
+        </button>
+
+        <!-- دکمه بازگشت به لندینگ ۳ بعدی -->
         <a href="{% url 'menu:home' %}?scroll={{ theme.scroll_target }}" class="cat-return-btn" title="بازگشت به تجربه سه‌بعدی" aria-label="بازگشت به تجربه سه‌بعدی">
           <svg class="ret-arrow" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -179,7 +186,7 @@
                   </div>
 
                   {% if item.description %}
-                  <p class="card-item-desc">{{ item.description }}</p>
+                  <p class="card-item-desc">{{ item.description|linebreaksbr }}</p>
                   {% endif %}
 
                   <div class="card-bottom-row">
@@ -189,6 +196,22 @@
                       {% endif %}
                       <span class="price-val">{{ item.final_price_formatted }}</span>
                       <span class="price-currency-t">T</span>
+                    </div>
+
+                    <div class="card-cart-btn-wrap"
+                         data-item-id="{{ item.id }}"
+                         data-item-name="{{ item.name|escape }}"
+                         data-item-price="{{ item.final_price }}"
+                         data-item-img="{% if item.image %}{{ item.image.url }}{% endif %}">
+                      <button type="button" class="btn-card-add" aria-label="افزودن به سبد">
+                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.6" fill="none"><path d="M12 5v14M5 12h14"/></svg>
+                        <span>افزودن</span>
+                      </button>
+                      <div class="card-qty-stepper" style="display: none;">
+                        <button type="button" class="stepper-btn stepper-btn-minus" aria-label="کاهش">−</button>
+                        <span class="stepper-val">0</span>
+                        <button type="button" class="stepper-btn stepper-btn-plus" aria-label="افزایش">+</button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -252,7 +275,7 @@
                 </div>
 
                 {% if item.description %}
-                <p class="card-item-desc">{{ item.description }}</p>
+                <p class="card-item-desc">{{ item.description|linebreaksbr }}</p>
                 {% endif %}
 
                 <div class="card-bottom-row">
@@ -262,6 +285,22 @@
                     {% endif %}
                     <span class="price-val">{{ item.final_price_formatted }}</span>
                     <span class="price-currency-t">T</span>
+                  </div>
+
+                  <div class="card-cart-btn-wrap"
+                       data-item-id="{{ item.id }}"
+                       data-item-name="{{ item.name|escape }}"
+                       data-item-price="{{ item.final_price }}"
+                       data-item-img="{% if item.image %}{{ item.image.url }}{% endif %}">
+                    <button type="button" class="btn-card-add" aria-label="افزودن به سبد">
+                      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.6" fill="none"><path d="M12 5v14M5 12h14"/></svg>
+                      <span>افزودن</span>
+                    </button>
+                    <div class="card-qty-stepper" style="display: none;">
+                      <button type="button" class="stepper-btn stepper-btn-minus" aria-label="کاهش">−</button>
+                      <span class="stepper-val">0</span>
+                      <button type="button" class="stepper-btn stepper-btn-plus" aria-label="افزایش">+</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -314,7 +353,7 @@
                 </div>
 
                 {% if item.description %}
-                <p class="card-item-desc">{{ item.description }}</p>
+                <p class="card-item-desc">{{ item.description|linebreaksbr }}</p>
                 {% endif %}
 
                 <div class="card-bottom-row">
@@ -324,6 +363,22 @@
                     {% endif %}
                     <span class="price-val">{{ item.final_price_formatted }}</span>
                     <span class="price-currency-t">T</span>
+                  </div>
+
+                  <div class="card-cart-btn-wrap"
+                       data-item-id="{{ item.id }}"
+                       data-item-name="{{ item.name|escape }}"
+                       data-item-price="{{ item.final_price }}"
+                       data-item-img="{% if item.image %}{{ item.image.url }}{% endif %}">
+                    <button type="button" class="btn-card-add" aria-label="افزودن به سبد">
+                      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.6" fill="none"><path d="M12 5v14M5 12h14"/></svg>
+                      <span>افزودن</span>
+                    </button>
+                    <div class="card-qty-stepper" style="display: none;">
+                      <button type="button" class="stepper-btn stepper-btn-minus" aria-label="کاهش">−</button>
+                      <span class="stepper-val">0</span>
+                      <button type="button" class="stepper-btn stepper-btn-plus" aria-label="افزایش">+</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -396,9 +451,116 @@
           <span class="modal-price-val" id="modalItemPrice">۰</span>
           <span class="modal-price-unit">تومان</span>
         </div>
+
+        <button type="button" class="btn-modal-add-cart" id="modalAddCartBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.6" fill="none"><path d="M12 5v14M5 12h14"/></svg>
+          <span>افزودن به سبد</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ نوار شناور سبد خرید در پایین صفحه ============ -->
+  <div class="floating-cart-bar" id="floatingCartBar" style="display: none;">
+    <div class="cart-bar-left" id="openCartBtn">
+      <div class="cart-badge-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-badge-count" id="cartTotalCount">0</span>
+      </div>
+      <div class="cart-bar-price-info">
+        <span class="cart-bar-label">جمع کل فاکتور:</span>
+        <span class="cart-bar-total" id="cartBarTotal">۰ تومان</span>
+      </div>
+    </div>
+    <div class="cart-bar-actions">
+      <button type="button" class="btn-open-my-orders" id="openMyOrdersBtn" title="پیگیری سفارش‌ها">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </button>
+      <button type="button" class="btn-checkout-bar" id="checkoutBarBtn">
+        <span>ثبت فاکتور</span>
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ مودال شیشه‌ای فاکتور و ثبت سفارش ============ -->
+  <div class="cart-modal-backdrop" id="cartInvoiceModal" style="display: none;" aria-hidden="true" role="dialog">
+    <div class="cart-modal-panel">
+      <div class="cart-modal-header">
+        <div class="cart-header-title-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="#d4a574" stroke-width="2" fill="none"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <h3>فاکتور سبد خرید</h3>
+        </div>
+        <button type="button" class="cart-modal-close" id="closeCartModalBtn" aria-label="بستن">✕</button>
+      </div>
+
+      <div class="cart-modal-body">
+        <!-- اقلام فاکتور -->
+        <div id="cartItemsList"></div>
+
+        <div class="cart-divider"></div>
+
+        <!-- انتخاب میز -->
+        <div class="cart-table-section">
+          <label class="cart-field-label">شماره یا نام میز شما:</label>
+          <div class="table-quick-chips">
+            <button type="button" class="table-chip" data-table="۱">میز ۱</button>
+            <button type="button" class="table-chip" data-table="۲">میز ۲</button>
+            <button type="button" class="table-chip" data-table="۳">میز ۳</button>
+            <button type="button" class="table-chip" data-table="۴">میز ۴</button>
+            <button type="button" class="table-chip" data-table="۵">میز ۵</button>
+            <button type="button" class="table-chip" data-table="VIP">VIP</button>
+            <button type="button" class="table-chip" data-table="بیرون‌بر">بیرون‌بر</button>
+          </div>
+          <input type="text" id="cartTableInput" class="cart-input-table" placeholder="مثلاً: میز ۳ یا شماره میز دلخواه...">
+        </div>
+
+        <!-- یادداشت سفارش -->
+        <div class="cart-notes-section">
+          <label class="cart-field-label">یادداشت برای کافه (اختیاری):</label>
+          <input type="text" id="cartNotesInput" class="cart-input-notes" placeholder="مثلاً: کم شکر، یخ بیشتر...">
+        </div>
+
+        <!-- جمع کل فاکتور -->
+        <div class="cart-total-box">
+          <span class="total-box-label">جمع کل فاکتور:</span>
+          <span class="total-box-val" id="invoiceGrandTotal">۰ تومان</span>
+        </div>
+      </div>
+
+      <div class="cart-modal-footer">
+        <button type="button" class="btn-submit-order" id="submitOrderBtn">
+          <span class="btn-submit-text">تایید و ثبت نهایی سفارش</span>
+          <span class="spinner-loader" style="display: none;"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مودال شیشه‌ای پیگیری سفارش‌های من ============ -->
+  <div class="cart-modal-backdrop" id="myOrdersModal" style="display: none;" aria-hidden="true" role="dialog">
+    <div class="cart-modal-panel">
+      <div class="cart-modal-header">
+        <div class="cart-header-title-wrap">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="#d4a574" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <h3>سفارش‌های ثبت‌شده من</h3>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-refresh-orders" id="refreshOrdersBtn" title="به‌روزرسانی وضعیت">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+          <button type="button" class="cart-modal-close" id="closeMyOrdersBtn" aria-label="بستن">✕</button>
+        </div>
+      </div>
+
+      <div class="cart-modal-body">
+        <div id="myOrdersContainer"></div>
       </div>
     </div>
   </div>
 
 </div>
+
+<!-- اسکریپت سبد خرید لوکس و پیگیری سفارش‌ها -->
+<script src="{% static 'js/cart.js' %}?v=329.0"></script>
 {% endblock %}

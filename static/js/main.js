@@ -1404,6 +1404,14 @@ function initCategoryDetailPage() {
       }
     }
 
+    const cartWrap = card.querySelector('.card-cart-btn-wrap');
+    if (cartWrap) {
+      modal.dataset.itemId = cartWrap.dataset.itemId || '';
+      modal.dataset.itemName = cartWrap.dataset.itemName || name;
+      modal.dataset.itemPrice = cartWrap.dataset.itemPrice || '0';
+      modal.dataset.itemImg = cartWrap.dataset.itemImg || imgUrl;
+    }
+
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
@@ -1418,9 +1426,12 @@ function initCategoryDetailPage() {
     if (photoImg) photoImg.src = '';
   }
 
-  // باز کردن مودال با کلیک روی کارت یا دکمه ترکیبات
+  // باز کردن مودال با کلیک روی کارت یا دکمه ترکیبات (به جز کلیک روی دکمه سبد خرید و استپر)
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
+      if (e.target.closest('.card-cart-btn-wrap') || e.target.closest('.card-qty-stepper') || e.target.closest('.btn-card-add')) {
+        return;
+      }
       openModal(card);
     });
   });
