@@ -467,13 +467,13 @@
     </div>
     <div class="cart-bar-actions">
       <button type="button" class="btn-checkout-bar" id="checkoutBarBtn">
-        <span>ثبت فاکتور</span>
+        <span>مشاهده فاکتور</span>
         <svg viewBox="0 20 20" width="16" height="16" fill="none"><path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- ============ مودال شیشه‌ای فاکتور و ثبت سفارش ============ -->
+  <!-- ============ مودال شیشه‌ای فاکتور و جمع کل ============ -->
   <div class="cart-modal-backdrop" id="cartInvoiceModal" style="display: none;" aria-hidden="true" role="dialog">
     <div class="cart-modal-panel">
       <div class="cart-modal-header">
@@ -490,39 +490,11 @@
 
         <div class="cart-divider"></div>
 
-        <!-- انتخاب میز -->
-        <div class="cart-table-section">
-          <label class="cart-field-label">شماره یا نام میز شما:</label>
-          <div class="table-quick-chips">
-            <button type="button" class="table-chip" data-table="۱">میز ۱</button>
-            <button type="button" class="table-chip" data-table="۲">میز ۲</button>
-            <button type="button" class="table-chip" data-table="۳">میز ۳</button>
-            <button type="button" class="table-chip" data-table="۴">میز ۴</button>
-            <button type="button" class="table-chip" data-table="۵">میز ۵</button>
-            <button type="button" class="table-chip" data-table="VIP">VIP</button>
-            <button type="button" class="table-chip" data-table="بیرون‌بر">بیرون‌بر</button>
-          </div>
-          <input type="text" id="cartTableInput" class="cart-input-table" placeholder="مثلاً: میز ۳ یا شماره میز دلخواه...">
-        </div>
-
-        <!-- یادداشت سفارش -->
-        <div class="cart-notes-section">
-          <label class="cart-field-label">یادداشت برای کافه (اختیاری):</label>
-          <input type="text" id="cartNotesInput" class="cart-input-notes" placeholder="مثلاً: کم شکر، یخ بیشتر...">
-        </div>
-
         <!-- جمع کل فاکتور -->
         <div class="cart-total-box">
           <span class="total-box-label">جمع کل فاکتور:</span>
           <span class="total-box-val" id="invoiceGrandTotal">۰ تومان</span>
         </div>
-      </div>
-
-      <div class="cart-modal-footer">
-        <button type="button" class="btn-submit-order" id="submitOrderBtn">
-          <span class="btn-submit-text">تایید و ثبت نهایی سفارش</span>
-          <span class="spinner-loader" style="display: none;"></span>
-        </button>
       </div>
     </div>
   </div>
@@ -532,5 +504,5 @@
 </div>
 
 <!-- اسکریپت سبد خرید لوکس و پیگیری سفارش‌ها -->
-<script src="{% static 'js/cart.js' %}?v=331.0"></script>
+<script src="{% static 'js/cart.js' %}?v=333.0"></script>
 {% endblock %}

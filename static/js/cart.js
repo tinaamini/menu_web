@@ -47,10 +47,6 @@
       this.closeCartModalBtn = document.getElementById('closeCartModalBtn');
       this.cartItemsList = document.getElementById('cartItemsList');
       this.invoiceGrandTotalEl = document.getElementById('invoiceGrandTotal');
-      this.tableInput = document.getElementById('cartTableInput');
-      this.notesInput = document.getElementById('cartNotesInput');
-      this.tableChips = document.querySelectorAll('.table-chip');
-      this.submitOrderBtn = document.getElementById('submitOrderBtn');
     }
 
     bindEvents() {
@@ -111,20 +107,6 @@
         });
       }
 
-      // انتخاب سریع شماره میز با چیپ‌ها
-      if (this.tableChips) {
-        this.tableChips.forEach((chip) => {
-          chip.addEventListener('click', () => {
-            self.tableChips.forEach((c) => c.classList.remove('active'));
-            chip.classList.add('active');
-            if (self.tableInput) {
-              self.tableInput.value = chip.dataset.table;
-              self.tableInput.focus();
-            }
-          });
-        });
-      }
-
       // دکمه افزودن از درون مودال جزئیات آیتم
       const modalAddBtn = document.getElementById('modalAddCartBtn');
       if (modalAddBtn) {
@@ -141,11 +123,6 @@
             if (closeBtn) closeBtn.click();
           }
         });
-      }
-
-      // دکمه تایید و ثبت نهایی سفارش
-      if (this.submitOrderBtn) {
-        this.submitOrderBtn.addEventListener('click', () => self.submitOrder());
       }
     }
 
@@ -299,15 +276,11 @@
             <p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.4);">آیتم‌های دلخواهتان را با زدن دکمه «افزودن» به فاکتور اضافه کنید.</p>
           </div>
         `;
-        if (this.submitOrderBtn) this.submitOrderBtn.disabled = true;
         return;
       }
 
-      if (this.submitOrderBtn) this.submitOrderBtn.disabled = false;
-
       let html = '';
       this.items.forEach((item) => {
-        const itemSubtotal = item.price * item.quantity;
         html += `
           <div class="cart-item-row" data-id="${item.id}">
             <div class="cart-item-info">
@@ -323,7 +296,6 @@
                 <span class="m-stepper-val">${item.quantity}</span>
                 <button type="button" class="m-stepper-btn m-plus" data-id="${item.id}">+</button>
               </div>
-              <span class="cart-item-subtotal">${self.formatPrice(itemSubtotal)} T</span>
               <button type="button" class="cart-item-del-btn" data-id="${item.id}" title="حذف قلم">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
               </button>
@@ -353,122 +325,6 @@
           const id = parseInt(btnEl.dataset.id);
           self.removeItem(id);
         });
-      });
-    }
-
-    // ارسال نهایی سفارش به سرور
-    async submitOrder() {
-      if (this.items.length === 0) {
-        alert('سبد خرید شما خالی است.');
-        return;
-      }
-
-      const tableNumber = this.tableInput ? this.tableInput.value.trim() : '';
-      if (!tableNumber) {
-        alert('لطفاً شماره یا نام میز را انتخاب یا وارد نمایید.');
-        if (this.tableInput) this.tableInput.focus();
-        return;
-      }
-
-      const notes = this.notesInput ? this.notesInput.value.trim() : '';
-      const payload = {
-        table_number: tableNumber,
-        notes: notes,
-        items: this.items.map((it) => ({
-          id: it.id,
-          quantity: it.quantity,
-          notes: '',
-        })),
-      };
-
-      // حالت لودینگ دکمه
-      const btn = this.submitOrderBtn;
-      const btnText = btn.querySelector('.btn-submit-text');
-      const loader = btn.querySelector('.spinner-loader');
-      btn.disabled = true;
-      if (btnText) btnText.style.display = 'none';
-      if (loader) loader.style.display = 'inline-block';
-
-      try {
-        const response = await fetch('/api/order/submit/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          const order = data.order;
-          this.clearCart();
-          this.closeCartModal();
-          this.showOrderSuccess(order);
-        } else {
-          alert(data.error || 'خطایی در ثبت سفارش رخ داد.');
-        }
-      } catch (err) {
-        alert('خطا در برقراری ارتباط با سرور. لطفاً اتصال اینترنت را بررسی کنید.');
-      } finally {
-        btn.disabled = false;
-        if (btnText) btnText.style.display = 'inline';
-        if (loader) loader.style.display = 'none';
-      }
-    }
-
-    // نمایش پاپ‌آپ موفقیت ثبت سفارش
-    showOrderSuccess(order) {
-      const self = this;
-      let itemsListHtml = '';
-      if (order.items && order.items.length) {
-        itemsListHtml = order.items.map((it) => `<li>${it.quantity}× ${it.name} (${self.formatPrice(it.subtotal)} تومان)</li>`).join('');
-      }
-
-      const overlay = document.createElement('div');
-      overlay.className = 'order-success-modal-backdrop';
-      overlay.innerHTML = `
-        <div class="order-success-card">
-          <div class="success-icon-badge">✓</div>
-          <h3 class="success-title">سفارش شما با موفقیت ثبت شد 🎉</h3>
-          <p class="success-subtitle">سفارش بلافاصله برای بار و آشپزخانه کافه گاردو ارسال گردید.</p>
-          
-          <div class="success-order-box">
-            <div class="success-row">
-              <span class="s-label">شماره فاکتور:</span>
-              <span class="s-val" style="color: #d4a574; font-weight: 800;">#${order.id}</span>
-            </div>
-            <div class="success-row">
-              <span class="s-label">شماره میز:</span>
-              <span class="s-val">${order.table_number}</span>
-            </div>
-            <div class="success-row">
-              <span class="s-label">زمان ثبت:</span>
-              <span class="s-val">${order.created_time}</span>
-            </div>
-            <div class="success-divider"></div>
-            <ul class="success-items-list">
-              ${itemsListHtml}
-            </ul>
-            <div class="success-divider"></div>
-            <div class="success-row success-total-row">
-              <span class="s-label">جمع کل فاکتور:</span>
-              <span class="s-val-total">${order.total_price_formatted} تومان</span>
-            </div>
-          </div>
-
-          <div class="success-actions">
-            <button type="button" class="btn-submit-order" id="btnSuccessClose">متوجه شدم / بستن</button>
-          </div>
-        </div>
-      `;
-      const mountParent = document.querySelector('.cat-detail-viewport') || document.body;
-      mountParent.appendChild(overlay);
-      setTimeout(() => overlay.classList.add('is-open'), 10);
-
-      document.getElementById('btnSuccessClose').addEventListener('click', () => {
-        overlay.classList.remove('is-open');
-        setTimeout(() => overlay.remove(), 250);
       });
     }
   }
