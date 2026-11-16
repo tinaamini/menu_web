@@ -3549,24 +3549,27 @@ body:has(.coffee-hero) .header {
   align-items: center;
   position: relative;
   z-index: 5;
+  margin: 5px 0 3px 0; /* فاصله بیشتر از بالا و پایین جهت ارتقای زیبایی بصری */
 }
 
 .btn-card-add {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
   color: var(--theme-accent-light, var(--theme-accent, #d4a574));
-  padding: 5px 12px;
+  padding: 8px 16px;
+  min-height: 38px;
   border-radius: 12px;
-  font-size: 0.80rem;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .btn-card-add:hover,
@@ -3581,22 +3584,25 @@ body:has(.coffee-hero) .header {
 .card-qty-stepper {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: rgba(18, 13, 9, 0.92);
+  gap: 8px;
+  background: rgba(18, 13, 9, 0.94);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
   border-radius: 12px;
-  padding: 2px 6px;
+  padding: 5px 9px; /* فاصله بیشتر از بالا و پایین دکمه */
+  min-height: 38px; /* ارتفاع بلندتر کلید استپر عدد */
+  box-sizing: border-box;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), 0 0 10px var(--theme-accent-glow, rgba(212, 165, 116, 0.2));
 }
 
 .stepper-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: 30px; /* دکمه + با ابعاد بزرگتر و ارگونومیک */
+  height: 30px;
+  border-radius: 8px;
   border: none;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 22%, transparent);
   color: var(--theme-accent-light, #fff);
-  font-size: 1.05rem;
+  font-size: 1.25rem;
+  line-height: 1;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -3604,6 +3610,7 @@ body:has(.coffee-hero) .header {
   cursor: pointer;
   transition: all 0.18s ease;
   user-select: none;
+  padding: 0;
 }
 
 .stepper-btn:active {
@@ -3614,10 +3621,11 @@ body:has(.coffee-hero) .header {
 
 .stepper-val {
   color: #fff;
-  font-weight: 700;
-  font-size: 0.90rem;
-  min-width: 16px;
+  font-weight: 800;
+  font-size: 1.05rem; /* ابعاد بزرگتر عدد داخل دکمه */
+  min-width: 22px;
   text-align: center;
+  padding: 0 2px;
 }
 
 /* نوار شناور سبد خرید در پایین صفحه - کاملاً هماهنگ با تم صفحه */
@@ -3891,21 +3899,25 @@ body:has(.coffee-hero) .header {
 .modal-stepper {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(212, 165, 116, 0.4);
+  border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 40%, transparent);
   border-radius: 12px;
-  padding: 2px 6px;
+  padding: 4px 8px;
+  min-height: 36px;
+  box-sizing: border-box;
 }
 
 .m-stepper-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   border: none;
-  background: rgba(212, 165, 116, 0.2);
-  color: #d4a574;
+  background: color-mix(in srgb, var(--theme-accent, #d4a574) 20%, transparent);
+  color: var(--theme-accent, #d4a574);
   font-weight: 700;
+  font-size: 1.20rem;
+  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3914,10 +3926,11 @@ body:has(.coffee-hero) .header {
 
 .m-stepper-val {
   color: #fff;
-  font-weight: 700;
-  font-size: 0.9rem;
-  min-width: 16px;
+  font-weight: 800;
+  font-size: 1rem;
+  min-width: 20px;
   text-align: center;
+  padding: 0 2px;
 }
 
 .cart-item-subtotal {
