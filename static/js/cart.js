@@ -462,7 +462,8 @@
           </div>
         </div>
       `;
-      document.body.appendChild(overlay);
+      const mountParent = document.querySelector('.cat-detail-viewport') || document.body;
+      mountParent.appendChild(overlay);
       setTimeout(() => overlay.classList.add('is-open'), 10);
 
       document.getElementById('btnSuccessClose').addEventListener('click', () => {
