@@ -1822,9 +1822,10 @@ body:has(.coffee-hero) .header {
   --theme-accent: #D4A574;
   --theme-accent-light: #F5DEB3;
   --theme-accent-glow: rgba(212, 165, 116, 0.40);
-  background-color: #141312;
+  background-color: #171514;
   color: #FDF6EC;
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   overflow-x: clip; /* جلوگیری از اسکرول افقی بدون شکستن چسبندگی position: sticky */
   font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -2345,7 +2346,20 @@ body:has(.coffee-hero) .header {
   border-top: 1.5px solid rgba(255, 255, 255, 0.13);
   box-shadow: 0 -28px 70px rgba(0, 0, 0, 0.85);
   padding: 42px 0 60px;
+  min-height: calc(100vh - 180px);
+  min-height: calc(100dvh - 180px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   will-change: transform;
+}
+
+.cat-sheet-container .container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
 /* ============ منوبار ناوبری دسته‌بندی‌ها (ریسپانسیو و راست‌چین) ============ */
@@ -2362,7 +2376,7 @@ body:has(.coffee-hero) .header {
 .cat-nav-track {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* در RTL محتوا را به لبه راست می‌چسباند */
+  justify-content: center; /* در RTL محتوا را به لبه راست می‌چسباند */
   gap: 24px;
   overflow-x: auto;
   overflow-y: hidden;
@@ -2463,7 +2477,7 @@ body:has(.coffee-hero) .header {
   text-align: right;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* در RTL به راست تراز می‌شود */
+  align-items: flex-end; /* در RTL به راست تراز می‌شود */
   gap: 2px;
 }
 
@@ -2503,6 +2517,8 @@ body:has(.coffee-hero) .header {
   .cat-sheet-container .container {
     max-width: 1080px;
     padding: 0 24px;
+    min-height: 100%;
+    flex: 1;
   }
 
   .cat-nav-strip {
@@ -2511,7 +2527,7 @@ body:has(.coffee-hero) .header {
 
   .cat-nav-track {
     flex-wrap: wrap;
-    justify-content: flex-start; /* تراز قطعی به راست در دسکتاپ */
+    justify-content: center; /* تراز قطعی به راست در دسکتاپ */
     gap: 16px 32px;
     padding: 4px 0 16px;
     overflow-x: visible;
@@ -3445,7 +3461,12 @@ body:has(.coffee-hero) .header {
     border-top-left-radius: 28px;
     border-top-right-radius: 28px;
     margin-top: -24px;
-    padding: 10px 0 50px;
+    padding: 10px 0 70px;
+    min-height: calc(100vh - 180px);
+    min-height: calc(100dvh - 180px);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
   }
   .cat-brand-title {
     font-size: 1.35rem;
@@ -3468,6 +3489,24 @@ body:has(.coffee-hero) .header {
   }
   .cat-sheet-container .container {
     padding: 0 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+  }
+  .cat-menu-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .empty-items-notice {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   .lux-card {
     border-radius: 12px;
