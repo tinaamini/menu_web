@@ -2800,13 +2800,14 @@ body:has(.coffee-hero) .header {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
-  border-radius: 6px ;
-background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
   color: #FFFFFF;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
+  animation: pulseDiscount 2.2s infinite ease-in-out;
 }
 
 @keyframes pulseDiscount {
@@ -2992,14 +2993,14 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
 
 .card-bottom-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   margin-top: auto;
-  margin-bottom: 2px;
+  margin-bottom: 10px;
   padding-top: 6px;
   border-top: none;
-  gap: 8px;
-  flex-direction: row;
+  gap: 1px;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
 }
@@ -3243,7 +3244,6 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
   justify-content: space-between;
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  direction: rtl !important;
 }
 
 .modal-cart-btn-wrap {
@@ -3266,7 +3266,6 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
   display: flex;
   align-items: baseline;
   gap: 6px;
-  direction: rtl;
 }
 
 .modal-price-label {
@@ -3589,9 +3588,9 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
   justify-content: center;
   position: relative;
   z-index: 5;
-  margin: 0 0 0 auto; /* قرارگیری در سمت راست */
+  margin: 8px 0 0 auto; /* قرارگیری در سمت راست */
   align-self: flex-end;   /* تضمین انتقال قطعی به سمت راست کارت */
-  transform: translateY(2px); /* موقعیت پایین‌تر در لبه کارت */
+  transform: translateY(4px); /* موقعیت پایین‌تر در لبه کارت */
   width: 38px;
   height: 38px;
   min-width: 38px;
@@ -3615,7 +3614,7 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
   .card-cart-btn-wrap:not(.has-qty):hover {
     background: var(--theme-accent, #d4a574);
     border-color: var(--theme-accent, #d4a574);
-    transform: translateY(2px) scale(1.04);
+    transform: translateY(4px) scale(1.04);
     box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
   }
   .card-cart-btn-wrap:not(.has-qty):hover .btn-card-add {
@@ -3624,7 +3623,7 @@ background: linear-gradient(135deg, #e49b9b 0%, #db1919 100%);
 }
 
 .card-cart-btn-wrap:not(.has-qty):active {
-  transform: translateY(2px) scale(0.96);
+  transform: translateY(4px) scale(0.96);
 }
 
 /* حالت فعال بودن آیتم در سبد خرید - انبساط نرم به استپر با حفظ گوشه‌های ۱۲px */
