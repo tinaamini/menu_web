@@ -3595,10 +3595,11 @@ body:has(.coffee-hero) .header {
   margin: 8px 0 0 auto; /* قرارگیری در سمت راست */
   align-self: flex-end;   /* تضمین انتقال قطعی به سمت راست کارت */
   transform: translateY(4px); /* موقعیت پایین‌تر در لبه کارت */
-  width: 46px;
-  height: 32px;
-  min-height: 32px;
-  border-radius: 9999px; /* کپسولی کامل مشابه تصویر */
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  border-radius: 12px; /* همان فرم مربعی گوشه‌گرد اصلی اپ */
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
@@ -3629,15 +3630,15 @@ body:has(.coffee-hero) .header {
   transform: translateY(4px) scale(0.96);
 }
 
-/* حالت فعال بودن آیتم در سبد خرید - انبساط نرم به استپر */
+/* حالت فعال بودن آیتم در سبد خرید - انبساط نرم به استپر با حفظ گوشه‌های ۱۲px */
 .card-cart-btn-wrap.has-qty {
-  width: 96px;
+  width: 100px;
   background: rgba(18, 13, 9, 0.94);
   border-color: color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4), 0 0 10px var(--theme-accent-glow, rgba(212, 165, 116, 0.2));
 }
 
-/* آیکون سبد خرید درون کپسول - محو و چرخش نرم هنگام فعال شدن */
+/* آیکون سبد خرید درون مربع - محو و چرخش نرم هنگام فعال شدن */
 .btn-card-add {
   position: absolute;
   inset: 0;
@@ -3663,8 +3664,8 @@ body:has(.coffee-hero) .header {
 }
 
 .btn-card-add svg {
-  width: 17px;
-  height: 17px;
+  width: 19px;
+  height: 19px;
   display: block;
   pointer-events: none;
 }
@@ -3675,7 +3676,7 @@ body:has(.coffee-hero) .header {
   pointer-events: none;
 }
 
-/* استپر درون کپسول - با انیمیشن ظاهر و بزرگ‌نمایی نرم */
+/* استپر درون کادر - با انیمیشن ظاهر و بزرگ‌نمایی نرم */
 .card-qty-stepper {
   position: absolute;
   inset: 0;
@@ -3684,7 +3685,7 @@ body:has(.coffee-hero) .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 3px 5px;
+  padding: 3px 6px;
   box-sizing: border-box;
   opacity: 0;
   transform: scale(0.65);
@@ -3708,11 +3709,11 @@ body:has(.coffee-hero) .header {
 }
 
 .stepper-btn {
-  width: 22px;
-  height: 22px;
-  min-width: 22px;
-  min-height: 22px;
-  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 8px;
   border: none;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 22%, transparent);
   color: var(--theme-accent-light, #fff);
