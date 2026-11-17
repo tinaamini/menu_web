@@ -3606,10 +3606,10 @@ body:has(.coffee-hero) .header {
   overflow: hidden;
   box-sizing: border-box;
   padding: 0;
-  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.22s ease,
-              border-color 0.22s ease,
-              box-shadow 0.22s ease;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.35s ease,
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -3656,9 +3656,9 @@ body:has(.coffee-hero) .header {
   cursor: pointer;
   opacity: 1;
   transform: scale(1);
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1) 0.06s,
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) 0.06s,
-              color 0.2s ease;
+  transition: opacity 0.30s cubic-bezier(0.16, 1, 0.3, 1) 0.10s,
+              transform 0.30s cubic-bezier(0.16, 1, 0.3, 1) 0.10s,
+              color 0.25s ease;
   pointer-events: auto;
   z-index: 2;
   box-sizing: border-box;
@@ -3675,7 +3675,7 @@ body:has(.coffee-hero) .header {
   opacity: 0;
   transform: scale(0.4);
   pointer-events: none;
-  transition: opacity 0.14s ease, transform 0.14s ease;
+  transition: opacity 0.20s ease, transform 0.22s ease;
 }
 
 /* استپر درون کادر با ابعاد ثابت ۱۰۰px تا حین کوچک شدن فشرده و بدشکل نشود */
@@ -3694,7 +3694,7 @@ body:has(.coffee-hero) .header {
   pointer-events: none;
   visibility: hidden;
   direction: ltr; /* منهای چپ، عدد وسط، بعلاوه راست */
-  transition: opacity 0.12s ease, visibility 0.12s ease;
+  transition: opacity 0.18s ease, visibility 0.18s ease;
   z-index: 1;
   background: transparent;
   border: none;
@@ -3705,7 +3705,7 @@ body:has(.coffee-hero) .header {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
   z-index: 3;
 }
 
@@ -3762,7 +3762,7 @@ body:has(.coffee-hero) .header {
 }
 
 .stepper-val.bump {
-  animation: stepperBump 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: stepperBump 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes stepperBump {
