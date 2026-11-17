@@ -2936,7 +2936,7 @@ body:has(.coffee-hero) .header {
 
 /* بخش اطلاعات متنی کارد (سمت چپ در چینش افقی) */
 .card-info-area {
-  padding: 16px 16px 16px 20px;
+  padding: 16px 16px 12px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2993,10 +2993,10 @@ body:has(.coffee-hero) .header {
 
 .card-bottom-row {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   margin-top: auto;
-  padding-top: 0;
+  padding-top: 4px;
   border-top: none;
   gap: 8px;
 }
@@ -3529,7 +3529,7 @@ body:has(.coffee-hero) .header {
     height: 50px;
   }
   .card-info-area {
-    padding: 14px 14px 14px 18px;
+    padding: 14px 14px 10px 18px;
   }
   .card-top-row {
     margin-bottom: 2px;
@@ -3549,7 +3549,7 @@ body:has(.coffee-hero) .header {
     -webkit-line-clamp: 2;
   }
   .card-bottom-row {
-    padding-top: 0;
+    padding-top: 2px;
     margin-top: auto;
   }
   .price-val {
@@ -3588,21 +3588,22 @@ body:has(.coffee-hero) .header {
   align-items: center;
   position: relative;
   z-index: 5;
-  margin: 5px 0 3px 0; /* فاصله بیشتر از بالا و پایین جهت ارتقای زیبایی بصری */
+  margin: 6px 0 0 0; /* موقعیت پایین‌تر و متناسب در ردیف کارت */
 }
 
 .btn-card-add {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
   color: var(--theme-accent-light, var(--theme-accent, #d4a574));
-  padding: 8px 16px;
-  min-height: 38px;
   border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 700;
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -3611,12 +3612,18 @@ body:has(.coffee-hero) .header {
   box-sizing: border-box;
 }
 
+.btn-card-add svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+
 .btn-card-add:hover,
 .btn-card-add:active {
   background: var(--theme-accent, #d4a574);
   color: var(--theme-btn-text, #120c08);
   border-color: var(--theme-accent, #d4a574);
-  transform: scale(1.04);
+  transform: scale(1.05);
   box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
 }
 
