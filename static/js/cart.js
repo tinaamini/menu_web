@@ -221,7 +221,6 @@
           }
         } else {
           wrap.classList.remove('has-qty');
-          if (valEl) valEl.textContent = '0';
         }
       });
     }
@@ -308,9 +307,13 @@
             </div>
             <div class="cart-item-ctrls">
               <div class="modal-stepper">
-                <button type="button" class="m-stepper-btn m-minus" data-id="${item.id}">−</button>
+                <button type="button" class="m-stepper-btn m-minus" data-id="${item.id}" aria-label="کاهش">
+                  <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
                 <span class="m-stepper-val">${item.quantity}</span>
-                <button type="button" class="m-stepper-btn m-plus" data-id="${item.id}">+</button>
+                <button type="button" class="m-stepper-btn m-plus" data-id="${item.id}" aria-label="افزایش">
+                  <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
               </div>
               <button type="button" class="cart-item-del-btn" data-id="${item.id}" title="حذف این قلم از فاکتور" aria-label="حذف قلم">
                 <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -331,13 +334,15 @@
       // اتصال رویدادهای دکمه‌های فاکتور
       this.cartItemsList.querySelectorAll('.m-plus').forEach((btn) => {
         btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
+          const btnEl = e.target.closest('.m-plus');
+          const id = parseInt(btnEl.dataset.id);
           self.updateQuantity(id, 1);
         });
       });
       this.cartItemsList.querySelectorAll('.m-minus').forEach((btn) => {
         btn.addEventListener('click', (e) => {
-          const id = parseInt(e.target.dataset.id);
+          const btnEl = e.target.closest('.m-minus');
+          const id = parseInt(btnEl.dataset.id);
           self.updateQuantity(id, -1);
         });
       });
