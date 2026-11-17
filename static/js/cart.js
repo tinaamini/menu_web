@@ -288,7 +288,9 @@
                 <span class="cart-item-unit-price">${self.formatPrice(item.price)} تومان</span>
               </div>
             </div>
-            <div class="cart-item-ctrls">
+   
+          </div>
+                   <div class="cart-item-ctrls">
               <div class="modal-stepper">
                 <button type="button" class="m-stepper-btn m-minus" data-id="${item.id}" aria-label="کاهش">
                   <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -308,7 +310,6 @@
                 </svg>
               </button>
             </div>
-          </div>
         `;
       });
 
