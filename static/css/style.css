@@ -2996,10 +2996,13 @@ body:has(.coffee-hero) .header {
   align-items: flex-start;
   justify-content: space-between;
   margin-top: auto;
+  margin-bottom: 10px;
   padding-top: 6px;
   border-top: none;
   gap: 1px;
-      flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .card-price-wrap {
@@ -3589,7 +3592,8 @@ body:has(.coffee-hero) .header {
   align-items: center;
   position: relative;
   z-index: 5;
-  margin: 8px 0 0 0;
+  margin: 8px 0 0 auto; /* قرارگیری در سمت راست */
+  align-self: flex-end;   /* تضمین انتقال قطعی به سمت راست کارت */
   transform: translateY(4px); /* موقعیت پایین‌تر در لبه کارت */
 }
 
@@ -3598,6 +3602,7 @@ body:has(.coffee-hero) .header {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto; /* هدایت به سمت راست */
   width: 48px;
   height: 32px;
   min-width: 48px;
@@ -3606,7 +3611,7 @@ body:has(.coffee-hero) .header {
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
   color: var(--theme-accent-light, var(--theme-accent, #d4a574));
-  border-radius: 9999px; /* کپسولی دقیقاً مطابق تصویر */
+  border-radius: 16px 16px 0 16px; /* کپسولی دقیقاً مطابق تصویر */
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -3634,7 +3639,7 @@ body:has(.coffee-hero) .header {
 .card-qty-stepper {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 1px;
   background: rgba(18, 13, 9, 0.94);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
   border-radius: 9999px; /* کپسولی هماهنگ */
@@ -3646,8 +3651,8 @@ body:has(.coffee-hero) .header {
 }
 
 .stepper-btn {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: none;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 22%, transparent);
