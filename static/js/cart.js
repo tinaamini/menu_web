@@ -27,11 +27,11 @@
     }
 
     // ذخیره‌سازی اقلام در حافظه محلی
-    saveCart() {
+    saveCart(changedId = null) {
       try {
         localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items));
       } catch (e) {}
-      this.syncUI();
+      this.syncUI(changedId);
     }
 
     initDOMElements() {
@@ -54,11 +54,11 @@
 
       // هندل کردن دکمه‌های درون کارت‌ها (افزودن و استپر + / -)
       document.addEventListener('click', (e) => {
-        const addBtn = e.target.closest('.btn-card-add');
+        const addBtn = e.target.closest('.btn-card-add') || (e.target.classList.contains('card-cart-btn-wrap') && !e.target.classList.contains('has-qty') ? e.target : null);
         if (addBtn) {
           e.stopPropagation();
-          const wrap = addBtn.closest('.card-cart-btn-wrap');
-          if (wrap) {
+          const wrap = addBtn.closest('.card-cart-btn-wrap') || addBtn;
+          if (wrap && !wrap.classList.contains('has-qty')) {
             const id = parseInt(wrap.dataset.itemId);
             const name = wrap.dataset.itemName;
             const price = parseInt(wrap.dataset.itemPrice) || 0;
@@ -140,7 +140,7 @@
           quantity: 1,
         });
       }
-      this.saveCart();
+      this.saveCart(id);
       this.playHapticFeedback();
     }
 
@@ -152,7 +152,7 @@
         if (this.items[idx].quantity <= 0) {
           this.items.splice(idx, 1);
         }
-        this.saveCart();
+        this.saveCart(id);
         this.playHapticFeedback();
       }
     }
@@ -160,7 +160,7 @@
     // حذف یک قلم از فاکتور
     removeItem(id) {
       this.items = this.items.filter((item) => item.id !== id);
-      this.saveCart();
+      this.saveCart(id);
     }
 
     // پاک کردن کامل سبد
@@ -190,7 +190,7 @@
     }
 
     // همگام‌سازی استپرهای روی هر کارت با دیتای سبد
-    syncCardSteppers() {
+    syncCardSteppers(changedId = null) {
       const self = this;
       const wraps = document.querySelectorAll('.card-cart-btn-wrap');
       wraps.forEach((wrap) => {
@@ -200,20 +200,31 @@
         const stepper = wrap.querySelector('.card-qty-stepper');
         const valEl = wrap.querySelector('.stepper-val');
 
+        // اطمینان از رفع هرگونه استایل اینلاین قدیمی
+        if (addBtn && addBtn.style.display) addBtn.style.display = '';
+        if (stepper && stepper.style.display) stepper.style.display = '';
+
         if (item && item.quantity > 0) {
-          if (addBtn) addBtn.style.display = 'none';
-          if (stepper) stepper.style.display = 'inline-flex';
-          if (valEl) valEl.textContent = item.quantity;
+          const wasActive = wrap.classList.contains('has-qty');
+          wrap.classList.add('has-qty');
+          if (valEl) {
+            const oldVal = valEl.textContent;
+            valEl.textContent = item.quantity;
+            if (wasActive && oldVal !== String(item.quantity) && (changedId === null || changedId === id)) {
+              valEl.classList.remove('bump');
+              void valEl.offsetWidth; // شروع مجدد انیمیشن تپش
+              valEl.classList.add('bump');
+            }
+          }
         } else {
-          if (addBtn) addBtn.style.display = 'inline-flex';
-          if (stepper) stepper.style.display = 'none';
+          wrap.classList.remove('has-qty');
           if (valEl) valEl.textContent = '0';
         }
       });
     }
 
     // همگام‌سازی کلی واسط کاربری (نوار شناور، فاکتور و کارت‌ها)
-    syncUI() {
+    syncUI(changedId = null) {
       const totalCount = this.getTotalCount();
       const totalPrice = this.getTotalPrice();
 
@@ -240,7 +251,7 @@
         this.invoiceGrandTotalEl.textContent = `${this.formatPrice(totalPrice)} تومان`;
       }
 
-      this.syncCardSteppers();
+      this.syncCardSteppers(changedId);
       this.renderCartModalItems();
     }
 

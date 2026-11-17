@@ -3553,7 +3553,6 @@ body:has(.coffee-hero) .header {
     -webkit-line-clamp: 2;
   }
   .card-bottom-row {
-    padding-top: 4px;
     margin-top: auto;
   }
   .price-val {
@@ -3590,33 +3589,76 @@ body:has(.coffee-hero) .header {
 .card-cart-btn-wrap {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 5;
   margin: 8px 0 0 auto; /* قرارگیری در سمت راست */
   align-self: flex-end;   /* تضمین انتقال قطعی به سمت راست کارت */
   transform: translateY(4px); /* موقعیت پایین‌تر در لبه کارت */
-}
-
-/* دکمه کپسولی سبد خرید - با رنگ‌های اصلی و border-radius کپسولی مشابه تصویر */
-.btn-card-add {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto; /* هدایت به سمت راست */
-  width: 48px;
+  width: 46px;
   height: 32px;
-  min-width: 48px;
   min-height: 32px;
-  padding: 0;
+  border-radius: 9999px; /* کپسولی کامل مشابه تصویر */
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
-  color: var(--theme-accent-light, var(--theme-accent, #d4a574));
-  border-radius: 16px 16px 0 16px; /* کپسولی دقیقاً مطابق تصویر */
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 0;
+  transition: width 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              transform 0.2s ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+.card-cart-btn-wrap:not(.has-qty):hover {
+  background: var(--theme-accent, #d4a574);
+  border-color: var(--theme-accent, #d4a574);
+  transform: translateY(4px) scale(1.05);
+  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
+}
+
+.card-cart-btn-wrap:not(.has-qty):hover .btn-card-add {
+  color: var(--theme-btn-text, #120c08);
+}
+
+.card-cart-btn-wrap:not(.has-qty):active {
+  transform: translateY(4px) scale(0.96);
+}
+
+/* حالت فعال بودن آیتم در سبد خرید - انبساط نرم به استپر */
+.card-cart-btn-wrap.has-qty {
+  width: 96px;
+  background: rgba(18, 13, 9, 0.94);
+  border-color: color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4), 0 0 10px var(--theme-accent-glow, rgba(212, 165, 116, 0.2));
+}
+
+/* آیکون سبد خرید درون کپسول - محو و چرخش نرم هنگام فعال شدن */
+.btn-card-add {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--theme-accent-light, var(--theme-accent, #d4a574));
+  cursor: pointer;
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease;
+  pointer-events: auto;
+  z-index: 2;
   box-sizing: border-box;
 }
 
@@ -3624,35 +3666,52 @@ body:has(.coffee-hero) .header {
   width: 17px;
   height: 17px;
   display: block;
+  pointer-events: none;
 }
 
-.btn-card-add:hover,
-.btn-card-add:active {
-  background: var(--theme-accent, #d4a574);
-  color: var(--theme-btn-text, #120c08);
-  border-color: var(--theme-accent, #d4a574);
-  transform: scale(1.05);
-  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
+.card-cart-btn-wrap.has-qty .btn-card-add {
+  opacity: 0;
+  transform: scale(0.35) rotate(-20deg);
+  pointer-events: none;
 }
 
-/* استپر کپسولی هماهنگ با فرم دکمه سبد */
+/* استپر درون کپسول - با انیمیشن ظاهر و بزرگ‌نمایی نرم */
 .card-qty-stepper {
-  display: inline-flex;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
   align-items: center;
-  gap: 1px;
-  background: rgba(18, 13, 9, 0.94);
-  border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
-  border-radius: 9999px; /* کپسولی هماهنگ */
-  padding: 3px 6px;
-  min-height: 32px;
-  height: 32px;
+  justify-content: space-between;
+  padding: 3px 5px;
   box-sizing: border-box;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), 0 0 10px var(--theme-accent-glow, rgba(212, 165, 116, 0.2));
+  opacity: 0;
+  transform: scale(0.65);
+  pointer-events: none;
+  direction: ltr; /* منهای چپ، عدد وسط، بعلاوه راست */
+  transition: opacity 0.18s ease,
+              transform 0.2s ease;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.card-cart-btn-wrap.has-qty .card-qty-stepper {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1) 0.05s,
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) 0.03s;
+  z-index: 3;
 }
 
 .stepper-btn {
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   border-radius: 50%;
   border: none;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 22%, transparent);
@@ -3664,19 +3723,21 @@ body:has(.coffee-hero) .header {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.16s ease;
   user-select: none;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .stepper-btn:hover {
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 40%, transparent);
+  transform: scale(1.08);
 }
 
 .stepper-btn:active {
   background: var(--theme-accent, #d4a574);
   color: var(--theme-btn-text, #120c08);
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
 
 .stepper-val {
@@ -3686,6 +3747,20 @@ body:has(.coffee-hero) .header {
   min-width: 18px;
   text-align: center;
   padding: 0 2px;
+  user-select: none;
+  display: inline-block;
+  line-height: 1;
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stepper-val.bump {
+  animation: stepperBump 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes stepperBump {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
 }
 
 /* نوار شناور سبد خرید در پایین صفحه - کاملاً هماهنگ با تم صفحه */
