@@ -2993,12 +2993,13 @@ body:has(.coffee-hero) .header {
 
 .card-bottom-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   margin-top: auto;
   padding-top: 6px;
   border-top: none;
-  gap: 8px;
+  gap: 1px;
+      flex-direction: column;
 }
 
 .card-price-wrap {
@@ -3588,11 +3589,11 @@ body:has(.coffee-hero) .header {
   align-items: center;
   position: relative;
   z-index: 5;
-  margin: 6px 0 0 0;
-  transform: translateY(3px); /* موقعیت پایین‌تر و هماهنگ در لبه پایینی کارت */
+  margin: 8px 0 0 0;
+  transform: translateY(4px); /* موقعیت پایین‌تر در لبه کارت */
 }
 
-/* دکمه کپسولی سبد خرید - دیزاین شیک و سالید دقیقاً مطابق تصویر ارسالی */
+/* دکمه کپسولی سبد خرید - با رنگ‌های اصلی و border-radius کپسولی مشابه تصویر */
 .btn-card-add {
   display: inline-flex;
   align-items: center;
@@ -3602,60 +3603,58 @@ body:has(.coffee-hero) .header {
   min-width: 48px;
   min-height: 32px;
   padding: 0;
-  background: var(--theme-accent, #d4a574);
-  border: none;
-  color: var(--theme-btn-text, #120c08);
-  border-radius: 10px;
+  background: color-mix(in srgb, var(--theme-accent, #d4a574) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 55%, transparent);
+  color: var(--theme-accent-light, var(--theme-accent, #d4a574));
+  border-radius: 9999px; /* کپسولی دقیقاً مطابق تصویر */
   cursor: pointer;
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.40));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
 }
 
 .btn-card-add svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   display: block;
 }
 
-.btn-card-add:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px) scale(1.04);
-  box-shadow: 0 6px 18px var(--theme-accent-glow, rgba(212, 165, 116, 0.55));
-}
-
+.btn-card-add:hover,
 .btn-card-add:active {
-  transform: scale(0.96);
-  filter: brightness(0.95);
+  background: var(--theme-accent, #d4a574);
+  color: var(--theme-btn-text, #120c08);
+  border-color: var(--theme-accent, #d4a574);
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
 }
 
-/* استپر کپسولی هماهنگ با فرم سالید دکمه سبد */
+/* استپر کپسولی هماهنگ با فرم دکمه سبد */
 .card-qty-stepper {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--theme-accent, #d4a574);
-  border: none;
-  border-radius: 10px;
+  background: rgba(18, 13, 9, 0.94);
+  border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 65%, transparent);
+  border-radius: 9999px; /* کپسولی هماهنگ */
   padding: 3px 6px;
   min-height: 32px;
   height: 32px;
   box-sizing: border-box;
-  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.40));
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), 0 0 10px var(--theme-accent-glow, rgba(212, 165, 116, 0.2));
 }
 
 .stepper-btn {
   width: 26px;
   height: 26px;
-  border-radius: 6px;
+  border-radius: 50%;
   border: none;
-  background: color-mix(in srgb, var(--theme-btn-text, #120c08) 18%, transparent);
-  color: var(--theme-btn-text, #120c08);
+  background: color-mix(in srgb, var(--theme-accent, #d4a574) 22%, transparent);
+  color: var(--theme-accent-light, #fff);
   font-size: 1.15rem;
   line-height: 1;
-  font-weight: 800;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3666,15 +3665,17 @@ body:has(.coffee-hero) .header {
 }
 
 .stepper-btn:hover {
-  background: color-mix(in srgb, var(--theme-btn-text, #120c08) 28%, transparent);
+  background: color-mix(in srgb, var(--theme-accent, #d4a574) 40%, transparent);
 }
 
 .stepper-btn:active {
+  background: var(--theme-accent, #d4a574);
+  color: var(--theme-btn-text, #120c08);
   transform: scale(0.92);
 }
 
 .stepper-val {
-  color: var(--theme-btn-text, #120c08);
+  color: #fff;
   font-weight: 800;
   font-size: 0.95rem;
   min-width: 18px;
