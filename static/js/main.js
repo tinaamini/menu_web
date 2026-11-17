@@ -1405,11 +1405,26 @@ function initCategoryDetailPage() {
     }
 
     const cartWrap = card.querySelector('.card-cart-btn-wrap');
-    if (cartWrap) {
-      modal.dataset.itemId = cartWrap.dataset.itemId || '';
-      modal.dataset.itemName = cartWrap.dataset.itemName || name;
-      modal.dataset.itemPrice = cartWrap.dataset.itemPrice || '0';
-      modal.dataset.itemImg = cartWrap.dataset.itemImg || imgUrl;
+    const itemId = (cartWrap && cartWrap.dataset.itemId) || card.dataset.itemId || '';
+    const itemName = (cartWrap && cartWrap.dataset.itemName) || name;
+    const itemPrice = (cartWrap && cartWrap.dataset.itemPrice) || card.dataset.itemFinalPrice || '0';
+    const itemImg = (cartWrap && cartWrap.dataset.itemImg) || imgUrl;
+
+    modal.dataset.itemId = itemId;
+    modal.dataset.itemName = itemName;
+    modal.dataset.itemPrice = itemPrice;
+    modal.dataset.itemImg = itemImg;
+
+    const modalCartWrap = document.getElementById('modalCartBtnWrap');
+    if (modalCartWrap) {
+      modalCartWrap.dataset.itemId = itemId;
+      modalCartWrap.dataset.itemName = itemName;
+      modalCartWrap.dataset.itemPrice = itemPrice;
+      modalCartWrap.dataset.itemImg = itemImg;
+    }
+
+    if (window.cartManager) {
+      window.cartManager.syncCardSteppers();
     }
 
     modal.classList.add('is-open');
@@ -1424,6 +1439,13 @@ function initCategoryDetailPage() {
     document.body.style.overflow = '';
     const photoImg = document.getElementById('modalItemPhoto');
     if (photoImg) photoImg.src = '';
+    const modalCartWrap = document.getElementById('modalCartBtnWrap');
+    if (modalCartWrap) {
+      modalCartWrap.dataset.itemId = '';
+      modalCartWrap.classList.remove('has-qty');
+      const valEl = modalCartWrap.querySelector('.stepper-val');
+      if (valEl) valEl.textContent = '0';
+    }
   }
 
   // باز کردن مودال با کلیک روی کارت یا دکمه ترکیبات (به جز کلیک روی دکمه سبد خرید و استپر)

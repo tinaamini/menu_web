@@ -3246,23 +3246,19 @@ body:has(.coffee-hero) .header {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.btn-modal-add-cart {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--theme-accent, #d4a574);
-  color: var(--theme-btn-text, #120c08);
-  border: none;
-  border-radius: 12px;
-  padding: 8px 18px;
-  font-size: 0.90rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 14px var(--theme-accent-glow, rgba(212, 165, 116, 0.35));
-  transition: all 0.2s;
+.modal-cart-btn-wrap {
+  margin: 0;
+  transform: none;
+  align-self: center;
 }
 
-.btn-modal-add-cart:active {
+@media (hover: hover) and (pointer: fine) {
+  .modal-cart-btn-wrap:not(.has-qty):hover {
+    transform: scale(1.05);
+  }
+}
+
+.modal-cart-btn-wrap:not(.has-qty):active {
   transform: scale(0.96);
 }
 
@@ -3809,9 +3805,9 @@ body:has(.coffee-hero) .header {
 
 .cart-badge-icon {
   position: relative;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+    width: 45px;
+    height: 42px;
+    border-radius: 31%;
   background: color-mix(in srgb, var(--theme-accent, #d4a574) 18%, transparent);
   border: 1px solid color-mix(in srgb, var(--theme-accent, #d4a574) 50%, transparent);
   display: flex;

@@ -109,24 +109,6 @@
           if (e.target === self.cartModal) self.closeCartModal();
         });
       }
-
-      // دکمه افزودن از درون مودال جزئیات آیتم
-      const modalAddBtn = document.getElementById('modalAddCartBtn');
-      if (modalAddBtn) {
-        modalAddBtn.addEventListener('click', () => {
-          const m = document.getElementById('itemDetailModal');
-          if (m && m.dataset.itemId) {
-            const id = parseInt(m.dataset.itemId);
-            const name = m.dataset.itemName || '';
-            const price = parseInt(m.dataset.itemPrice) || 0;
-            const img = m.dataset.itemImg || '';
-            self.addItem(id, name, price, img);
-            
-            const closeBtn = document.getElementById('modalCloseBtn');
-            if (closeBtn) closeBtn.click();
-          }
-        });
-      }
     }
 
     // افزودن آیتم به سبد
@@ -221,6 +203,7 @@
           }
         } else {
           wrap.classList.remove('has-qty');
+          if (valEl) valEl.textContent = '0';
         }
       });
     }

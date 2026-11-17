@@ -454,10 +454,25 @@
           <span class="modal-price-unit">تومان</span>
         </div>
 
-        <button type="button" class="btn-modal-add-cart" id="modalAddCartBtn">
-          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.6" fill="none"><path d="M12 5v14M5 12h14"/></svg>
-          <span>افزودن به سبد</span>
-        </button>
+        <div class="card-cart-btn-wrap modal-cart-btn-wrap"
+             id="modalCartBtnWrap"
+             data-item-id=""
+             data-item-name=""
+             data-item-price=""
+             data-item-img="">
+          <button type="button" class="btn-card-add" aria-label="افزودن به سبد خرید" title="افزودن به سبد خرید">
+            <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </button>
+          <div class="card-qty-stepper">
+            <button type="button" class="stepper-btn stepper-btn-minus" aria-label="کاهش">
+              <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+            <span class="stepper-val">0</span>
+            <button type="button" class="stepper-btn stepper-btn-plus" aria-label="افزایش">
+              <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -516,5 +531,5 @@
 <script>
   window.GARDOO_DEFAULT_LOGO = "{% static 'images/gardoo_3d_emblem.webp' %}";
 </script>
-<script src="{% static 'js/cart.js' %}?v=343.0"></script>
+<script src="{% static 'js/cart.js' %}?v=346.0"></script>
 {% endblock %}
