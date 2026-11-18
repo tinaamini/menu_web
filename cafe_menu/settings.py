@@ -60,13 +60,23 @@ WSGI_APPLICATION = 'cafe_menu.wsgi.application'
 # ==============================================================================
 import shutil
 
-DATA_DIR = BASE_DIR / 'data'
+POSSIBLE_DATA_DIRS = [
+    BASE_DIR / 'data',      # مسیر پیش‌فرض: /usr/src/app/data
+    Path('/data'),          # در صورتی که دیسک در مسیر /data ایجاد شود
+]
+
+DATA_DIR = None
+for p in POSSIBLE_DATA_DIRS:
+    if p.exists() and os.access(p, os.W_OK):
+        DATA_DIR = p
+        break
+
 TMP_DIR = Path('/tmp')
 ORIG_DB = BASE_DIR / 'db.sqlite3'
 ORIG_MEDIA = BASE_DIR / 'media'
 
 # اولویت ۱: دیسک ماندگار متصل‌شده در لیارا (پوشه data)
-if DATA_DIR.exists() and os.access(DATA_DIR, os.W_OK):
+if DATA_DIR:
     DB_PATH = DATA_DIR / 'db.sqlite3'
     if not DB_PATH.exists() and ORIG_DB.exists():
         try:
