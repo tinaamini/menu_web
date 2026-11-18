@@ -3,5 +3,11 @@
   "platform": "django",
   "django": {
     "pythonVersion": "3.12"
-  }
+  },
+  "disks": [
+    {
+      "name": "gardo-data",
+      "mountTo": "data"
+    }
+  ]
 }

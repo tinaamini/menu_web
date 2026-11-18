@@ -11,3 +11,4 @@ __pycache__
 .vscode
 scratch_*
 db_backup.sqlite3
+data/
