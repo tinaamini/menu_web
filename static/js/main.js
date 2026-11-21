@@ -70,7 +70,7 @@ function initCoffeeHero() {
   if (!section || !canvas) return;
 
   // توقف قطعی اسکرول در انتهای فصل ۵ (استقرار کامل قلیان لوکس و تابلوی نئونی)
-  const MAX_PAGE_SCROLL = 1460;
+  const MAX_PAGE_SCROLL = 2140;
 
   // ضریب افزایش مسافت اسکرول و آرام‌تر کردن سرعت تعامل فقط در گوشی (موبایل)
   function getScrollFactor() {
@@ -186,24 +186,24 @@ function initCoffeeHero() {
   const HOT_END   = 382;         // استقرار کامل و پوشش ۱۰۰٪ ارتفاع در ۳۸۲
   const EXIT_START = 414;        // شروع خروج معکوس HOT COFFEE و فنجان در ۴۱۴
   const EXIT_END   = 513;        // خروج کامل و ناپدید شدن از صفحه در ۵۱۳
-  const COLD_START = 442;        // شروع ظاهر شدن قهوه سرد در مرکز تصویر در اسکرول ۴۴۲
-  const COLD_END   = 540;        // استقرار کامل قهوه سرد در مرکز تصویر در ۵۴۰
-  const ICE_START  = 497;        // شروع پرتاب تکه‌های یخ از پشت لیوان در اسکرول ۴۹۷
-  const ICE_END    = 630;        // استقرار کامل تکه‌های یخ در اطراف لیوان در ۶۳۰
-  const TEXT_START = 543;        // شروع ظهور متن یخی ICE COFFEE روی لیوان در اسکرول ۵۴۳
-  const TEXT_END   = 630;        // استقرار کامل متن یخی در ۶۳۰
-  const FINAL_EXIT_START = 662;  // شروع خروج هم‌زمان یخ‌ها، متن و دانه‌های قهوه در اسکرول ۶۶۲
-  const FINAL_EXIT_END   = 740;  // خروج کامل و محو شدن در ۷۴۰
-  const TEA_START        = 730;  // شروع ورود فنجان دمنوش و پرواز گیاهان معطر در اسکرول ۷۳۰
-  const TEA_SETTLE       = 815;  // استقرار کامل در مرکز صفحه (۸۱۵ تا ۸۶۰)
-  const TEA_EXIT_START   = 865;  // شروع خروج فنجان دمنوش و بزرگ‌شدن طاق سبز در اسکرول ۸۶۵
-  const TEA_EXIT_END     = 940;  // خروج کامل دمنوش و پوشش ۱۰۰٪ پس‌زمینه ماچایی در ۹۴۰
-  const MOJITO_START     = 930;  // شروع ظهور ملایم لیوان موهیتو شیک در مرکز کادر
-  const MOJITO_SETTLE    = 1010; // استقرار کامل در اسکرول ۱۰۱۰
-  const RED_TRANS_START  = 1100; // شروع تغییرات پس‌زمینه و خروج موهیتو از ۱۱۰۰
-  const RED_TRANS_END    = 1240; // استقرار نهایی پس‌زمینه در اسکرول ۱۲۴۰
-  const SHISHA_START     = 1180; // شروع ورود قطعات قلیان و دود غلیظ هم‌زمان با خروج موکتل
-  const SHISHA_ASSEMBLE  = 1420; // استقرار کامل قطعات انفجاری در مرکز تصویر
+  const COLD_START = 450;        // شروع ظاهر شدن قهوه سرد در مرکز تصویر در اسکرول ۴۵۰
+  const COLD_END   = 560;        // استقرار کامل قهوه سرد در مرکز تصویر در ۵۶۰
+  const ICE_START  = 510;        // شروع پرتاب تکه‌های یخ از پشت لیوان در اسکرول ۵۱۰
+  const ICE_END    = 650;        // استقرار کامل تکه‌های یخ در اطراف لیوان در ۶۵۰
+  const TEXT_START = 560;        // شروع ظهور متن یخی ICE COFFEE روی لیوان در اسکرول ۵۶۰
+  const TEXT_END   = 650;        // استقرار کامل متن یخی در ۶۵۰
+  const FINAL_EXIT_START = 830;  // شروع خروج هم‌زمان یخ‌ها، متن و دانه‌های قهوه در اسکرول ۸۳۰ (بازه نمایش طولانی و آرام آیس‌کافی)
+  const FINAL_EXIT_END   = 990;  // خروج آرام و کامل در ۹۹۰
+  const TEA_START        = 940;  // شروع ورود باشکوه فنجان دمنوش و پرواز گیاهان معطر در اسکرول ۹۴۰
+  const TEA_SETTLE       = 1110; // استقرار کامل در مرکز صفحه (۱۱۱۰ تا ۱۲۹۰ بازه نمایش دلنشین دمنوش)
+  const TEA_EXIT_START   = 1290; // شروع خروج فنجان دمنوش و بزرگ‌شدن طاق سبز در اسکرول ۱۲۹۰
+  const TEA_EXIT_END     = 1440; // خروج کامل دمنوش و پوشش ۱۰۰٪ پس‌زمینه ماچایی در ۱۴۴۰
+  const MOJITO_START     = 1400; // شروع ظهور ملایم لیوان موهیتو شیک در مرکز کادر
+  const MOJITO_SETTLE    = 1540; // استقرار کامل در اسکرول ۱۵۴۰
+  const RED_TRANS_START  = 1690; // شروع تغییرات پس‌زمینه و خروج موهیتو از ۱۶۹۰
+  const RED_TRANS_END    = 1860; // استقرار نهایی پس‌زمینه در اسکرول ۱۸۶۰
+  const SHISHA_START     = 1800; // شروع ورود قطعات قلیان و دود غلیظ هم‌زمان با خروج موکتل
+  const SHISHA_ASSEMBLE  = 2080; // استقرار کامل قطعات انفجاری در مرکز تصویر
 
   const iceCubesConfig = [
     { dx: -28, dy: -29, rot: -50, scale: 1.15, maxO: 0.95, phase: 0.0, speed: 0.0016, ampY: 8.5, ampX: 5.0, ampRot: 3.5 },  // بالا چپ ۱
@@ -1162,10 +1162,10 @@ function initSlideNavDock() {
   const slides = [
     { id: 0, name: 'هیرو گاردو', scrollY: 0, url: '/category/1/' },
     { id: 1, name: 'نوشیدنی‌های گرم', scrollY: 390, url: '/category/1/' },
-    { id: 2, name: 'قهوه سرد و آیس کافی', scrollY: 640, url: '/category/2/' },
-    { id: 3, name: 'دمنوش و چای طبیعی', scrollY: 840, url: '/category/3/' },
-    { id: 4, name: 'موهیتو و موکتل', scrollY: 1050, url: '/category/4/' },
-    { id: 5, name: 'قلیان‌های ویژه لوکس', scrollY: 1420, url: '/category/5/' }
+    { id: 2, name: 'قهوه سرد و آیس کافی', scrollY: 740, url: '/category/2/' },
+    { id: 3, name: 'دمنوش و چای طبیعی', scrollY: 1200, url: '/category/3/' },
+    { id: 4, name: 'موهیتو و موکتل', scrollY: 1615, url: '/category/4/' },
+    { id: 5, name: 'قلیان‌های ویژه لوکس', scrollY: 2080, url: '/category/5/' }
   ];
 
   // پالت رنگ‌های هماهنگ با تم هر اسلاید برای تغییر نرم و انیمیشنی داک
@@ -1216,10 +1216,10 @@ function initSlideNavDock() {
 
   function getSlideIndex(sy) {
     if (sy < 283) return 0;
-    if (sy < 480) return 1;
-    if (sy < 720) return 2;
-    if (sy < 910) return 3;
-    if (sy < 1140) return 4;
+    if (sy < 540) return 1;
+    if (sy < 915) return 2;
+    if (sy < 1365) return 3;
+    if (sy < 1745) return 4;
     return 5;
   }
 

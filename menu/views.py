@@ -35,7 +35,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(229, 169, 60, 0.45)',
         'hero_bg': 'linear-gradient(135deg, #c49d74 0%, #b2885d 50%, #986f45 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(62, 45, 30, 0.90) 0%, rgba(32, 22, 14, 0.95) 100%)',
-        'scroll_target': 640,
+        'scroll_target': 740,
     },
     3: {
         'code': 'herbal-tea',
@@ -50,7 +50,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(132, 188, 82, 0.45)',
         'hero_bg': 'linear-gradient(135deg, #1d3319 0%, #101c0e 50%, #060e05 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(32, 56, 30, 0.90) 0%, rgba(14, 26, 13, 0.95) 100%)',
-        'scroll_target': 840,
+        'scroll_target': 1200,
     },
     4: {
         'code': 'mojito',
@@ -65,7 +65,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(142, 168, 105, 0.50)',
         'hero_bg': 'linear-gradient(155deg, #c4d7b2 0%, #b2c99b 50%, #9cb585 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(32, 42, 28, 0.90) 0%, rgba(16, 22, 14, 0.95) 100%)',
-        'scroll_target': 1050,
+        'scroll_target': 1615,
     },
     5: {
         'code': 'shisha',
@@ -80,7 +80,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(37, 99, 235, 0.55)',
         'hero_bg': 'linear-gradient(155deg, #0a0d10 0%, #030406 50%, #000000 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(14, 24, 48, 0.90) 0%, rgba(6, 12, 24, 0.95) 100%)',
-        'scroll_target': 1420,
+        'scroll_target': 2080,
     },
 }
 
