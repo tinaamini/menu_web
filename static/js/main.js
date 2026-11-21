@@ -195,7 +195,7 @@ function initCoffeeHero() {
   const ICE_END    = 650;        // استقرار کامل تکه‌های یخ در اطراف لیوان در ۶۵۰
   const TEXT_START = 560;        // شروع ظهور متن یخی ICE COFFEE روی لیوان در اسکرول ۵۶۰
   const TEXT_END   = 650;        // استقرار کامل متن یخی در ۶۵۰
-  const FINAL_EXIT_START = 830;  // شروع خروج هم‌زمان یخ‌ها، متن و دانه‌های قهوه در اسکرول ۸۳۰ (بازه نمایش طولانی و آرام آیس‌کافی)
+  const FINAL_EXIT_START = 830;  // شروع خروج هم‌زمان یخ‌ها و متن آیس‌کافی در اسکرول ۸۳۰ (بازه نمایش طولانی و آرام آیس‌کافی)
   const FINAL_EXIT_END   = 990;  // خروج آرام و کامل در ۹۹۰
   const TEA_START        = 940;  // شروع ورود باشکوه فنجان دمنوش و پرواز گیاهان معطر در اسکرول ۹۴۰
   const TEA_SETTLE       = 1110; // استقرار کامل در مرکز صفحه (۱۱۱۰ تا ۱۳۹۰ بازه نمایش دلنشین و طولانی دمنوش)
@@ -908,7 +908,8 @@ function initCoffeeHero() {
     const w = cachedCanvasWidth;
     const h = cachedCanvasHeight;
 
-    if (sy >= FINAL_EXIT_END) {
+    // حذف کامل دانه‌های قهوه به محض پر شدن و پوشش کامل صفحه توسط پس‌زمینه هات‌کافی (اسکرول ۵۱۳)
+    if (sy >= EXIT_END) {
       if (!beansCleared) {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, w, h);
@@ -926,7 +927,7 @@ function initCoffeeHero() {
 
         let curX, curY, curRot, curAlpha = b.alpha;
 
-        // تثبیت در نقطه توقف تایید شده (p = 0.648)
+        // تثبیت در نقطه توقف تایید شده (p = 1.0)
         const animP = p;
 
         if (animP < b.startP) {
@@ -951,12 +952,12 @@ function initCoffeeHero() {
           curRot = b.startRot + normP * b.rotSpeed * Math.PI;
         }
 
-        // خروج دانه‌های قهوه از تصویر در اسکرول ۶۶۲
-        if (sy >= FINAL_EXIT_START && sy < FINAL_EXIT_END) {
-          const bExitRaw = (sy - FINAL_EXIT_START) / (FINAL_EXIT_END - FINAL_EXIT_START);
+        // خروج دانه‌های قهوه هم‌زمان با پر شدن صفحه توسط پس‌زمینه هات‌کافی (۴۱۴ تا ۵۱۳)
+        if (sy >= EXIT_START && sy < EXIT_END) {
+          const bExitRaw = (sy - EXIT_START) / (EXIT_END - EXIT_START);
           curAlpha *= Math.max(0, 1 - bExitRaw);
-          curY -= bExitRaw * 100;
-        } else if (sy >= FINAL_EXIT_END) {
+          curY -= bExitRaw * 60;
+        } else if (sy >= EXIT_END) {
           curAlpha = 0;
         }
 
