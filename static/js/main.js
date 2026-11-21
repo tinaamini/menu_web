@@ -693,35 +693,35 @@ function initCoffeeHero() {
     // ============ فصل ۴: صحنه ادیتوریال موهیتو گاردو (سایه برگ‌های نخل، لیوان شیک، لیموها و نعناع) ============
     let mojitoPct = 0;
 
-    // سایه ارگانیک برگ‌های نخل استوایی روی پس‌زمینه ماتچایی (کم‌رنگ و ملایم)
+    // سایه ارگانیک برگ‌های نخل استوایی روی پس‌زمینه ماتچایی (کم‌رنگ، ملایم و بدون کوچک‌ترین لرزش)
     if (mojitoLeafShadow) {
       if (sy < MOJITO_START) {
         mojitoLeafShadow.style.opacity = '0';
-        mojitoLeafShadow.style.transform = 'translate(0, -15px) scale(1.01)';
+        mojitoLeafShadow.style.transform = 'translate3d(0, -15px, 0)';
       } else if (sy >= MOJITO_START && sy < MOJITO_SETTLE) {
         const sRaw   = (sy - MOJITO_START) / (MOJITO_SETTLE - MOJITO_START);
         const sEased = easeInOutCubic(sRaw);
         const sAlpha = (sEased * 0.32).toFixed(3); // سایه کم‌رنگ و ملایم
         const sY     = (-15 * (1 - sEased)).toFixed(1);
         mojitoLeafShadow.style.opacity = sAlpha;
-        mojitoLeafShadow.style.transform = `translate(0, ${sY}px) scale(1)`;
+        mojitoLeafShadow.style.transform = `translate3d(0, ${sY}px, 0)`;
       } else if (sy >= MOJITO_SETTLE && sy < RED_TRANS_START) {
-        // استقرار کامل و پایدار در مرکز صفحه بدون محو شدن یا لرزش (۱۰۱۰ تا ۱۱۰۰)
+        // استقرار کامل و پایدار در مرکز صفحه بدون محو شدن یا لرزش
         mojitoLeafShadow.style.opacity = '0.32';
-        mojitoLeafShadow.style.transform = 'translate(0, 0) scale(1)';
+        mojitoLeafShadow.style.transform = 'translate3d(0, 0, 0)';
       } else if (sy >= RED_TRANS_START && sy <= RED_TRANS_END) {
-        // خروج برگ‌ها به سمت بالا با اسکرول کاربر دقیقاً از اسکرول ۱۱۰۰ تا ۱۲۴۰
+        // خروج برگ‌ها به سمت بالا با اسکرول کاربر
         const lRaw      = (sy - RED_TRANS_START) / (RED_TRANS_END - RED_TRANS_START);
         const lEased    = easeInQuad(lRaw);
         const leafY     = (-lEased * 115).toFixed(1); // حرکت به سمت بالا تا -115vh (خروج کامل از صفحه)
         const leafAlpha = Math.max(0, 0.32 * (1 - lRaw * 1.15)).toFixed(3);
 
         mojitoLeafShadow.style.opacity = leafAlpha;
-        mojitoLeafShadow.style.transform = `translate(0, ${leafY}vh) scale(1)`;
+        mojitoLeafShadow.style.transform = `translate3d(0, ${leafY}vh, 0)`;
       } else {
-        // پس از اتمام گذار در ۱۲۴۰: خروج کامل برگ‌ها از بالای کادر و محو شدن
+        // پس از اتمام گذار: خروج کامل برگ‌ها از بالای کادر و محو شدن
         mojitoLeafShadow.style.opacity = '0';
-        mojitoLeafShadow.style.transform = 'translate(0, -115vh) scale(1)';
+        mojitoLeafShadow.style.transform = 'translate3d(0, -115vh, 0)';
       }
     }
 
