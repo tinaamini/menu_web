@@ -217,7 +217,7 @@
                   <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
                   {% else %}
                   <div class="card-icon-art">
-                    <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                    <img src="{% static 'images/gardoo_3d_emblem.webp' %}?v=4.0" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
                   </div>
                   {% endif %}
                 </div>
@@ -309,7 +309,7 @@
                 <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
                 {% else %}
                 <div class="card-icon-art">
-                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}?v=4.0" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
                 </div>
                 {% endif %}
               </div>
@@ -390,7 +390,7 @@
                 <img src="{{ item.image.url }}" alt="{{ item.name_en|default:item.name }}" class="card-photo" loading="lazy">
                 {% else %}
                 <div class="card-icon-art">
-                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
+                  <img src="{% static 'images/gardoo_3d_emblem.webp' %}?v=4.0" alt="Gardoo" class="art-gardoo-emblem" loading="lazy">
                 </div>
                 {% endif %}
               </div>
@@ -401,7 +401,7 @@
         {% else %}
         <div class="empty-items-notice" style="text-align: center; padding: 65px 20px; color: rgba(255, 255, 255, 0.60);">
           <div style="margin-bottom: 14px; opacity: 0.75;">
-            <img src="{% static 'images/gardoo_3d_emblem.webp' %}" alt="Gardoo" style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 14px rgba(224, 122, 63, 0.35));">
+            <img src="{% static 'images/gardoo_3d_emblem.webp' %}?v=4.0" alt="Gardoo" style="width: 54px; height: 54px; object-fit: contain; filter: drop-shadow(0 4px 14px rgba(224, 122, 63, 0.35));">
           </div>
           <p style="font-size: 1.2rem; font-weight: 600; color: #FFF; margin-bottom: 8px;">آیتم‌های این دسته‌بندی به زودی اضافه خواهند شد</p>
           <p style="font-size: 0.90rem; color: rgba(255, 255, 255, 0.45);">می‌توانید از طریق پنل ادمین جنگو، آیتم‌های جدید را همراه با قیمت، عکس و توضیحات اضافه کنید.</p>
@@ -531,7 +531,7 @@
 
 <!-- اسکریپت سبد خرید لوکس و صدور فاکتور -->
 <script>
-  window.GARDOO_DEFAULT_LOGO = "{% static 'images/gardoo_3d_emblem.webp' %}";
+  window.GARDOO_DEFAULT_LOGO = "{% static 'images/gardoo_3d_emblem.webp' %}?v=4.0";
 </script>
 <script src="{% static 'js/cart.js' %}?v=346.0"></script>
 {% endblock %}
