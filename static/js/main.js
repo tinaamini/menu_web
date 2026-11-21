@@ -80,15 +80,16 @@ function initCoffeeHero() {
   function adjustPageEnd() {
     const pageContent = document.getElementById('pageContent');
     const hero = document.getElementById('coffee-hero');
+    const totalMaxScroll = MAX_PAGE_SCROLL * getScrollFactor();
     if (hero) {
-      const totalMaxScroll = MAX_PAGE_SCROLL * getScrollFactor();
-      hero.style.height = `calc(100vh + ${totalMaxScroll}px)`;
-      if (pageContent) {
-        pageContent.style.minHeight = '0px';
-        pageContent.style.height = '0px';
-        pageContent.style.padding = '0';
-        pageContent.style.margin = '0';
-      }
+      hero.style.height = '100vh';
+      hero.style.height = '100dvh';
+    }
+    if (pageContent) {
+      pageContent.style.minHeight = '0px';
+      pageContent.style.height = `${totalMaxScroll}px`;
+      pageContent.style.padding = '0';
+      pageContent.style.margin = '0';
     }
   }
   adjustPageEnd();
@@ -135,8 +136,8 @@ function initCoffeeHero() {
     const startP = 0.02 + (i / NUM_BEANS) * 0.20;
     // مدت زمان سقوط هر دانه تا استقرار کامل در طول صفحه
     const durationP = 0.38 + ((i * 7) % 5) * 0.08;
-    // توزیع عمودی دانه‌ها در سراسر صفحه تا انتهای کادر پایین و فراتر از آن (از ۴۵٪ تا ۱۱۵٪ ارتفاع صفحه)
-    const targetYRatio = 0.45 + (((i * 13) % 17) / 16.0) * 0.70;
+    // توزیع عمودی دانه‌ها در سراسر صفحه از بالا تا نزدیک لبه پایین کادر (از ۳۲٪ تا ۹۲٪ ارتفاع صفحه)
+    const targetYRatio = 0.32 + (((i * 13) % 17) / 16.0) * 0.60;
 
     // عمق و ابعاد متنوع
     const depth = 0.65 + ((i * 11) % 6) * 0.08;
