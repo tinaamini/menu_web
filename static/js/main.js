@@ -70,7 +70,7 @@ function initCoffeeHero() {
   if (!section || !canvas) return;
 
   // توقف قطعی اسکرول در انتهای فصل ۵ (استقرار کامل قلیان لوکس و تابلوی نئونی)
-  const MAX_PAGE_SCROLL = 2140;
+  const MAX_PAGE_SCROLL = 2640;
 
   // ضریب افزایش مسافت اسکرول و آرام‌تر کردن سرعت تعامل فقط در گوشی (موبایل)
   function getScrollFactor() {
@@ -198,15 +198,15 @@ function initCoffeeHero() {
   const FINAL_EXIT_START = 830;  // شروع خروج هم‌زمان یخ‌ها، متن و دانه‌های قهوه در اسکرول ۸۳۰ (بازه نمایش طولانی و آرام آیس‌کافی)
   const FINAL_EXIT_END   = 990;  // خروج آرام و کامل در ۹۹۰
   const TEA_START        = 940;  // شروع ورود باشکوه فنجان دمنوش و پرواز گیاهان معطر در اسکرول ۹۴۰
-  const TEA_SETTLE       = 1110; // استقرار کامل در مرکز صفحه (۱۱۱۰ تا ۱۲۹۰ بازه نمایش دلنشین دمنوش)
-  const TEA_EXIT_START   = 1290; // شروع خروج فنجان دمنوش و بزرگ‌شدن طاق سبز در اسکرول ۱۲۹۰
-  const TEA_EXIT_END     = 1440; // خروج کامل دمنوش و پوشش ۱۰۰٪ پس‌زمینه ماچایی در ۱۴۴۰
-  const MOJITO_START     = 1400; // شروع ظهور ملایم لیوان موهیتو شیک در مرکز کادر
-  const MOJITO_SETTLE    = 1540; // استقرار کامل در اسکرول ۱۵۴۰
-  const RED_TRANS_START  = 1690; // شروع تغییرات پس‌زمینه و خروج موهیتو از ۱۶۹۰
-  const RED_TRANS_END    = 1860; // استقرار نهایی پس‌زمینه در اسکرول ۱۸۶۰
-  const SHISHA_START     = 1800; // شروع ورود قطعات قلیان و دود غلیظ هم‌زمان با خروج موکتل
-  const SHISHA_ASSEMBLE  = 2080; // استقرار کامل قطعات انفجاری در مرکز تصویر
+  const TEA_SETTLE       = 1110; // استقرار کامل در مرکز صفحه (۱۱۱۰ تا ۱۳۹۰ بازه نمایش دلنشین و طولانی دمنوش)
+  const TEA_EXIT_START   = 1390; // شروع خروج فنجان دمنوش و بزرگ‌شدن طاق سبز در اسکرول ۱۳۹۰
+  const TEA_EXIT_END     = 1640; // خروج کامل دمنوش و پوشش ۱۰۰٪ پس‌زمینه ماچایی در ۱۶۴۰ (۲۵۰ پیکسل گذار نرم و سینمایی)
+  const MOJITO_START     = 1600; // شروع ظهور ملایم لیوان موهیتو شیک در مرکز کادر
+  const MOJITO_SETTLE    = 1840; // استقرار کامل در اسکرول ۱۸۴۰
+  const RED_TRANS_START  = 2080; // شروع تغییرات پس‌زمینه و خروج موهیتو از ۲۰۸۰
+  const RED_TRANS_END    = 2340; // استقرار نهایی پس‌زمینه در اسکرول ۲۳۴۰
+  const SHISHA_START     = 2280; // شروع ورود قطعات قلیان و دود غلیظ هم‌زمان با خروج موکتل
+  const SHISHA_ASSEMBLE  = 2580; // استقرار کامل قطعات انفجاری در مرکز تصویر
 
   const iceCubesConfig = [
     { dx: -28, dy: -29, rot: -50, scale: 1.15, maxO: 0.95, phase: 0.0, speed: 0.0016, ampY: 8.5, ampX: 5.0, ampRot: 3.5 },  // بالا چپ ۱
@@ -330,9 +330,9 @@ function initCoffeeHero() {
         }
         hotPct = 0;
       } else if (sy >= TEA_EXIT_START && sy < TEA_EXIT_END) {
-        // در اسکرول ۸۵۵ تا ۹۲۸، همراه با خروج فنجان دمنوش، پس‌زمینه کرم به آرامی محو شده و تم تاریک برای موکتل بازمی‌گردد
+        // در اسکرول خروج فنجان دمنوش، پس‌زمینه کرم به آرامی محو شده و تم برای موکتل آماده می‌شود
         const fRaw   = (sy - TEA_EXIT_START) / (TEA_EXIT_END - TEA_EXIT_START);
-        const fEased = easeOutCubic(fRaw);
+        const fEased = easeInOutCubic(fRaw);
         if (hotBanner) {
           hotBanner.style.opacity = Math.max(0, 1 - fEased).toFixed(3);
           hotBanner.style.transform = 'translateX(0vw)';
@@ -550,19 +550,19 @@ function initCoffeeHero() {
           teaArchInner.style.opacity = '1';
         }
       } else if (sy >= TEA_EXIT_START && sy < TEA_EXIT_END) {
-        // فاز خروج فنجان دمنوش و بزرگ‌شدن طاق سبز تا پوشش ۱۰۰٪ کل صفحه (۸۶۵ تا ۹۴۰)
+        // فاز خروج فنجان دمنوش و بزرگ‌شدن طاق سبز تا پوشش ۱۰۰٪ کل صفحه
         const exitRaw   = (sy - TEA_EXIT_START) / (TEA_EXIT_END - TEA_EXIT_START);
-        const exitEased = easeOutCubic(exitRaw);
+        const exitEased = easeInOutCubic(exitRaw);
 
         const curScale    = (1.00 + exitEased * (cachedCoverScale - 1.00)).toFixed(3);
-        const borderAlpha = Math.max(0, 0.65 * (1 - exitEased * 2.5)).toFixed(3);
+        const borderAlpha = Math.max(0, 0.65 * (1 - exitEased * 1.8)).toFixed(3);
 
         teaArch.style.opacity = '1';
         teaArch.style.transform = `translate(-50%, -50%) scale(${curScale})`;
         teaArch.style.borderColor = borderAlpha > 0.05 ? `rgba(255, 255, 255, ${borderAlpha})` : 'transparent';
         teaArch.style.boxShadow = 'none';
         if (teaArchInner) {
-          teaArchInner.style.opacity = Math.max(0, 1 - exitEased * 2.5).toFixed(3);
+          teaArchInner.style.opacity = Math.max(0, 1 - exitEased * 1.8).toFixed(3);
         }
       } else {
         // پس از اتمام انبساط: طاق سبز کاملاً بزرگ شده و کل صفحه را به عنوان پس‌زمینه موهیتو پوشانده است
@@ -608,9 +608,9 @@ function initCoffeeHero() {
         teaCup.style.transform = `translate(-50%, -50%) rotate(0deg) scale(${targetScale})`;
         teaPct = 100;
       } else if (sy >= TEA_EXIT_START && sy < TEA_EXIT_END) {
-        // فاز خروج فنجان دمنوش از تصویر در اسکرول ۸۶۵ تا ۹۴۰
+        // فاز خروج فنجان دمنوش از تصویر با منحنی نرم S-Curve
         const exitRaw   = (sy - TEA_EXIT_START) / (TEA_EXIT_END - TEA_EXIT_START);
-        const exitEased = easeOutCubic(exitRaw);
+        const exitEased = easeInOutCubic(exitRaw);
         teaPct          = ((1 - exitRaw) * 100).toFixed(0);
 
         const curScale  = (targetScale - exitEased * 0.35).toFixed(3);
@@ -664,9 +664,9 @@ function initCoffeeHero() {
           h.el.style.transform = `translate(${floatX}px, ${floatY}px) rotate(${floatRot}deg) scale(${h.scale})`;
         });
       } else if (sy >= TEA_EXIT_START && sy < TEA_EXIT_END) {
-        // فاز خروج گیاهان معطر (لیمو، بادیان و برگ‌ها) در اسکرول ۸۵۵ تا ۹۲۸
+        // فاز خروج گیاهان معطر (لیمو، بادیان و برگ‌ها) با شتاب‌گیری و توقف سینمایی
         const exitRaw   = (sy - TEA_EXIT_START) / (TEA_EXIT_END - TEA_EXIT_START);
-        const exitEased = easeOutCubic(exitRaw);
+        const exitEased = easeInOutCubic(exitRaw);
 
         herbElements.forEach(h => {
           if (!h.el) return;
@@ -699,7 +699,7 @@ function initCoffeeHero() {
         mojitoLeafShadow.style.transform = 'translate(0, -15px) scale(1.01)';
       } else if (sy >= MOJITO_START && sy < MOJITO_SETTLE) {
         const sRaw   = (sy - MOJITO_START) / (MOJITO_SETTLE - MOJITO_START);
-        const sEased = easeOutCubic(sRaw);
+        const sEased = easeInOutCubic(sRaw);
         const sAlpha = (sEased * 0.32).toFixed(3); // سایه کم‌رنگ و ملایم
         const sY     = (-15 * (1 - sEased)).toFixed(1);
         mojitoLeafShadow.style.opacity = sAlpha;
@@ -732,7 +732,7 @@ function initCoffeeHero() {
         mocktailBgText.style.color = '#1c4418';
       } else if (sy >= MOJITO_START && sy < MOJITO_SETTLE) {
         const mRaw   = (sy - MOJITO_START) / (MOJITO_SETTLE - MOJITO_START);
-        const mEased = easeOutCubic(mRaw);
+        const mEased = easeInOutCubic(mRaw);
         const textY  = (-22 * (1 - mEased)).toFixed(2);
         mocktailBgText.style.opacity   = mEased.toFixed(3);
         mocktailBgText.style.transform = `translate(-50%, calc(-50% + ${textY}vh))`;
@@ -771,9 +771,9 @@ function initCoffeeHero() {
         mocktailWrap.style.transform = 'translate(-50%, -50%) scale(0.60)';
         mojitoPct = 0;
       } else if (sy >= MOJITO_START && sy < MOJITO_SETTLE) {
-        // پدیدار شدن با زوم نرم به سمت جلو در مرکز کادر (۹۳۰ تا ۱۰۱۰)
+        // پدیدار شدن با زوم نرم به سمت جلو در مرکز کادر
         const mRaw   = (sy - MOJITO_START) / (MOJITO_SETTLE - MOJITO_START);
-        const mEased = easeOutCubic(mRaw);
+        const mEased = easeInOutCubic(mRaw);
         mojitoPct    = (mRaw * 100).toFixed(0);
 
         const scale = (0.60 + mEased * 0.40).toFixed(3);
@@ -1039,6 +1039,8 @@ function initCoffeeHero() {
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 function easeInQuad(t) { return t * t; }
 function easeInCubic(t) { return t * t * t; }
+function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function easeInOutQuad(t) { return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
 
 
 // ----- ذرات canvas (بخار/نقطه‌های درخشان پس‌زمینه) -----
@@ -1170,9 +1172,9 @@ function initSlideNavDock() {
     { id: 0, name: 'هیرو گاردو', scrollY: 0, url: '/category/1/' },
     { id: 1, name: 'نوشیدنی‌های گرم', scrollY: 390, url: '/category/1/' },
     { id: 2, name: 'قهوه سرد و آیس کافی', scrollY: 740, url: '/category/2/' },
-    { id: 3, name: 'دمنوش و چای طبیعی', scrollY: 1200, url: '/category/3/' },
-    { id: 4, name: 'موهیتو و موکتل', scrollY: 1615, url: '/category/4/' },
-    { id: 5, name: 'قلیان‌های ویژه لوکس', scrollY: 2080, url: '/category/5/' }
+    { id: 3, name: 'دمنوش و چای طبیعی', scrollY: 1250, url: '/category/3/' },
+    { id: 4, name: 'موهیتو و موکتل', scrollY: 1940, url: '/category/4/' },
+    { id: 5, name: 'قلیان‌های ویژه لوکس', scrollY: 2580, url: '/category/5/' }
   ];
 
   // پالت رنگ‌های هماهنگ با تم هر اسلاید برای تغییر نرم و انیمیشنی داک
@@ -1225,8 +1227,8 @@ function initSlideNavDock() {
     if (sy < 283) return 0;
     if (sy < 540) return 1;
     if (sy < 915) return 2;
-    if (sy < 1365) return 3;
-    if (sy < 1745) return 4;
+    if (sy < 1490) return 3;
+    if (sy < 2180) return 4;
     return 5;
   }
 
