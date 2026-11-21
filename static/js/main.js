@@ -2,6 +2,13 @@
 // کافه گاردو - Coffee Scroll & Bean Physics Animation
 // ============================================
 
+// ضریب افزایش مسافت اسکرول و تنظیم سرعت نرم در دستگاه‌های مختلف (موبایل، تبلت و دسکتاپ)
+function getGlobalScrollFactor() {
+  if (window.innerWidth <= 480) return 3.4; // موبایل‌های با عرض کم: مسافت اسکرول ۳.۴ برابر جهت اسکرول بسیار آرام و دلنشین
+  if (window.innerWidth <= 768) return 2.6; // تبلت‌ها و موبایل‌های بزرگ
+  return 1.0; // دسکتاپ
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
   // ============ COFFEE HERO SCROLL & BEANS ============
@@ -67,7 +74,7 @@ function initCoffeeHero() {
 
   // ضریب افزایش مسافت اسکرول و آرام‌تر کردن سرعت تعامل فقط در گوشی (موبایل)
   function getScrollFactor() {
-    return window.innerWidth <= 768 ? 1.85 : 1.0;
+    return getGlobalScrollFactor();
   }
 
   function adjustPageEnd() {
@@ -90,8 +97,8 @@ function initCoffeeHero() {
   if (heroScrollIndicator) {
     heroScrollIndicator.addEventListener('click', () => {
       const isMobile = window.innerWidth <= 768;
-      const factor = isMobile ? 1.85 : 1.0;
-      const duration = isMobile ? 1100 : 650;
+      const factor = getScrollFactor();
+      const duration = isMobile ? 1200 : 650;
       if (typeof window.smoothScrollToSlide === 'function') {
         window.smoothScrollToSlide(320 * factor, duration);
       } else {
@@ -209,8 +216,7 @@ function initCoffeeHero() {
 
   function onScroll() {
     const actualScrollY  = window.scrollY || window.pageYOffset || 0;
-    const isMobile       = window.innerWidth <= 768;
-    const factor         = isMobile ? 1.85 : 1.0;
+    const factor         = getGlobalScrollFactor();
     const virtualSy      = actualScrollY / factor;
 
     // دانه‌ها از ۰ تا ۲۸۳ پیکسل حرکت کرده و در ۲۸۳ روی ۰.۶۴۸ فریز کامل می‌مانند
@@ -225,7 +231,7 @@ function initCoffeeHero() {
 
   function renderLoop() {
     const isMobile = window.innerWidth <= 768;
-    const factor = isMobile ? 1.85 : 1.0;
+    const factor = getGlobalScrollFactor();
     const actualSy = window.scrollY || window.pageYOffset || 0;
     const targetSy = actualSy / factor;
 
@@ -235,20 +241,20 @@ function initCoffeeHero() {
     }
 
     // سرعت اسکرول و انتقال انیمیشن‌ها در گوشی بسیار آرام‌تر و پیوسته‌تر (Lerp ملایم‌تر)
-    const lerpSpeed = isMobile ? 0.065 : 0.18;
+    const lerpSpeed = isMobile ? 0.088 : 0.18;
     animSy += (targetSy - animSy) * lerpSpeed;
-    if (Math.abs(targetSy - animSy) < 0.04) {
+    if (Math.abs(targetSy - animSy) < 0.03) {
       animSy = targetSy;
     }
     const sy = animSy;
 
     // فیزیک ملایم‌تر و آرام‌تر سقوط دانه‌های قهوه در گوشی
-    const beanLerp = isMobile ? 0.065 : 0.14;
+    const beanLerp = isMobile ? 0.075 : 0.14;
     currentProgress += (targetProgress - currentProgress) * beanLerp;
     const p = Math.min(FREEZE_P, currentProgress);
 
     // سرعت آرام‌تر انیمیشن‌های متناوب و شناور در گوشی (حدود نصف سرعت دسکتاپ)
-    const timeScale = isMobile ? 0.55 : 1.0;
+    const timeScale = isMobile ? 0.60 : 1.0;
     const now = (performance.now() - startTime) * timeScale;
 
     // انیمیشن موج پیوسته کرم: ورود از چپ برای Hot Coffee (انحنا دار)، ادامه حرکت به راست برای رنگ‌آمیزی کامل صفحه، و میزبانی Ice Coffee (صاف و یکدست)
@@ -1242,8 +1248,7 @@ function initSlideNavDock() {
   let currentThemeIdx = -1;
   let lastDockScrollY = -9999;
   function updateDockState(customSy) {
-    const isMobile = window.innerWidth <= 768;
-    const factor = isMobile ? 1.85 : 1.0;
+    const factor = getGlobalScrollFactor();
     const sy = (typeof customSy === 'number') ? customSy : ((window.scrollY || window.pageYOffset || 0) / factor);
     if (Math.abs(sy - lastDockScrollY) < 1) return;
     lastDockScrollY = sy;
@@ -1281,11 +1286,11 @@ function initSlideNavDock() {
     prevBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const isMobile = window.innerWidth <= 768;
-      const factor = isMobile ? 1.85 : 1.0;
+      const factor = getGlobalScrollFactor();
       const sy = (window.scrollY || window.pageYOffset || 0) / factor;
       const idx = getSlideIndex(sy);
       const targetIdx = Math.max(0, idx - 1);
-      const duration = isMobile ? 1100 : 650;
+      const duration = isMobile ? 1200 : 650;
       smoothScrollTo(slides[targetIdx].scrollY * factor, duration);
     });
   }
@@ -1294,11 +1299,11 @@ function initSlideNavDock() {
     nextBtn.addEventListener('click', (e) => {
       e.preventDefault();
       const isMobile = window.innerWidth <= 768;
-      const factor = isMobile ? 1.85 : 1.0;
+      const factor = getGlobalScrollFactor();
       const sy = (window.scrollY || window.pageYOffset || 0) / factor;
       const idx = getSlideIndex(sy);
       const targetIdx = Math.min(slides.length - 1, idx + 1);
-      const duration = isMobile ? 1100 : 650;
+      const duration = isMobile ? 1200 : 650;
       smoothScrollTo(slides[targetIdx].scrollY * factor, duration);
     });
   }
@@ -1314,8 +1319,8 @@ function initSlideNavDock() {
     const scrollTarget = urlParams.get('scroll');
     const slideTarget = urlParams.get('slide');
     const isMobile = window.innerWidth <= 768;
-    const factor = isMobile ? 1.85 : 1.0;
-    const duration = isMobile ? 1100 : 550;
+    const factor = getGlobalScrollFactor();
+    const duration = isMobile ? 1200 : 550;
     if (scrollTarget !== null) {
       const sy = parseInt(scrollTarget, 10);
       if (!isNaN(sy) && sy >= 0) {
