@@ -80,14 +80,15 @@ function initCoffeeHero() {
   function adjustPageEnd() {
     const pageContent = document.getElementById('pageContent');
     const hero = document.getElementById('coffee-hero');
-    if (pageContent && hero) {
-      const heroHeight = hero.offsetHeight || (window.innerHeight + 238);
+    if (hero) {
       const totalMaxScroll = MAX_PAGE_SCROLL * getScrollFactor();
-      const neededHeight = Math.max(0, totalMaxScroll + window.innerHeight - heroHeight);
-      pageContent.style.minHeight = '0px';
-      pageContent.style.height = `${neededHeight}px`;
-      pageContent.style.padding = '0';
-      pageContent.style.margin = '0';
+      hero.style.height = `calc(100vh + ${totalMaxScroll}px)`;
+      if (pageContent) {
+        pageContent.style.minHeight = '0px';
+        pageContent.style.height = '0px';
+        pageContent.style.padding = '0';
+        pageContent.style.margin = '0';
+      }
     }
   }
   adjustPageEnd();
@@ -134,8 +135,8 @@ function initCoffeeHero() {
     const startP = 0.02 + (i / NUM_BEANS) * 0.20;
     // مدت زمان سقوط هر دانه تا استقرار کامل در طول صفحه
     const durationP = 0.38 + ((i * 7) % 5) * 0.08;
-    // توزیع عمودی دانه‌ها در سراسر صفحه تا انتهای کادر پایین (از ۳۵٪ تا ۹۵٪ ارتفاع صفحه)
-    const targetYRatio = 0.35 + (((i * 13) % 17) / 16.0) * 0.60;
+    // توزیع عمودی دانه‌ها در سراسر صفحه تا انتهای کادر پایین و فراتر از آن (از ۴۵٪ تا ۱۱۵٪ ارتفاع صفحه)
+    const targetYRatio = 0.45 + (((i * 13) % 17) / 16.0) * 0.70;
 
     // عمق و ابعاد متنوع
     const depth = 0.65 + ((i * 11) % 6) * 0.08;
@@ -183,7 +184,7 @@ function initCoffeeHero() {
     beansCleared = false;
   }
 
-  const BEAN_FREEZE_SCROLL = 283; // نقطه دقیق اسکرول ۲۸۳ پیکسل
+  const BEAN_FREEZE_SCROLL = 360; // ریزش ممتد و نرم دانه‌ها تا زمان ورود و استقرار کامل هات‌کافی
   const FREEZE_P = 1.0;          // استقرار کامل دانه‌ها در سراسر کادر تا انتهای پایین صفحه
   const HOT_START = 283;         // شروع ورود HOT COFFEE دقیقاً پس از فریز دانه‌ها در ۲۸۳
   const HOT_END   = 382;         // استقرار کامل و پوشش ۱۰۰٪ ارتفاع در ۳۸۲
@@ -956,7 +957,7 @@ function initCoffeeHero() {
         if (sy >= EXIT_START && sy < EXIT_END) {
           const bExitRaw = (sy - EXIT_START) / (EXIT_END - EXIT_START);
           curAlpha *= Math.max(0, 1 - bExitRaw);
-          curY -= bExitRaw * 60;
+          curY += bExitRaw * 40;
         } else if (sy >= EXIT_END) {
           curAlpha = 0;
         }

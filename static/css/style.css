@@ -478,7 +478,7 @@ body:has(.coffee-hero) .header {
 /* ----- بخش اصلی hero ----- */
 .coffee-hero {
   position: relative;
-  height: calc(100vh + 238px); /* در ۲۳۸ پیکسل (دقیقاً پس از شروع ورود HOT COFFEE در ۲۲۱)، دانه‌ها با ادامه اسکرول بالا می‌روند */
+  height: 100vh; /* ارتفاع اسکرول به صورت داینامیک در adjustPageEnd تعیین می‌شود تا ظرف استیکی در تمام طول اسکرول ثابت بماند */
   background-color: #1c1b1a;
 }
 
