@@ -130,10 +130,12 @@ function initCoffeeHero() {
     const xRatio = Math.max(0.04, Math.min(0.96, 0.06 + col * 0.90 + jitter));
     const imgIdx = i % 6;
 
-    // شروع سقوط با اسکرول (از p = 0.04 تا 0.30)
-    const startP = 0.04 + (i / NUM_BEANS) * 0.26;
-    // اولین دانه دقیقا در p = 1.0 به پایین کادر می‌رسد و سایر دانه‌ها در طول صفحه پخش می‌مانند
-    const durationP = (i === 0) ? (1.0 - startP) : (0.55 + ((i * 7) % 5) * 0.10);
+    // شروع سقوط با اسکرول (از p = 0.02 تا 0.22)
+    const startP = 0.02 + (i / NUM_BEANS) * 0.20;
+    // مدت زمان سقوط هر دانه تا استقرار کامل در طول صفحه
+    const durationP = 0.38 + ((i * 7) % 5) * 0.08;
+    // توزیع عمودی دانه‌ها در سراسر صفحه تا انتهای کادر پایین (از ۳۵٪ تا ۹۵٪ ارتفاع صفحه)
+    const targetYRatio = 0.35 + (((i * 13) % 17) / 16.0) * 0.60;
 
     // عمق و ابعاد متنوع
     const depth = 0.65 + ((i * 11) % 6) * 0.08;
@@ -150,6 +152,7 @@ function initCoffeeHero() {
       xRatio,
       startP,
       durationP,
+      targetYRatio,
       scale,
       alpha,
       drift,
@@ -181,7 +184,7 @@ function initCoffeeHero() {
   }
 
   const BEAN_FREEZE_SCROLL = 283; // نقطه دقیق اسکرول ۲۸۳ پیکسل
-  const FREEZE_P = 0.648;        // نقطه فریز دقیق دانه‌ها
+  const FREEZE_P = 1.0;          // استقرار کامل دانه‌ها در سراسر کادر تا انتهای پایین صفحه
   const HOT_START = 283;         // شروع ورود HOT COFFEE دقیقاً پس از فریز دانه‌ها در ۲۸۳
   const HOT_END   = 382;         // استقرار کامل و پوشش ۱۰۰٪ ارتفاع در ۳۸۲
   const EXIT_START = 414;        // شروع خروج معکوس HOT COFFEE و فنجان در ۴۱۴
@@ -934,13 +937,17 @@ function initCoffeeHero() {
           curRot = b.startRot + Math.sin(now * 0.001 + b.idlePhase) * 0.2;
           curAlpha *= Math.max(0, 1 - (b.startP - animP) * 3);
         } else {
-          // حین سقوط یا توقف کامل در انتهای hero-canvas
+          // حین سقوط و استقرار دانه‌ها در سراسر کادر تا پایین صفحه
           const normP = Math.min(1, (animP - b.startP) / b.durationP);
-          const easedP = Math.pow(normP, 1.45);
+          const easedP = Math.pow(normP, 1.35);
 
-          curX = w * b.xRatio + Math.sin(normP * Math.PI) * b.drift;
-          // دانه پیشرو حداکثر تا انتهای کادر hero-canvas می‌رسد و به پایین صفحه نخواهد رسید
-          curY = -45 + (h - 20) * easedP;
+          // شناوری زنده و ارگانیک پس از استقرار
+          const floatIdleY = Math.sin(now * 0.0012 + b.idlePhase) * 4.5 * easedP;
+          const floatIdleX = Math.cos(now * 0.0010 + b.idlePhase) * 3.0 * easedP;
+
+          curX = w * b.xRatio + Math.sin(normP * Math.PI) * b.drift + floatIdleX;
+          // دانه‌ها در سراسر کادر و تا پایین‌ترین بخش‌های صفحه سرازیر می‌شوند
+          curY = -45 + (h * b.targetYRatio + 45) * easedP + floatIdleY;
           curRot = b.startRot + normP * b.rotSpeed * Math.PI;
         }
 
@@ -977,8 +984,8 @@ function initCoffeeHero() {
       if (p <= 0.02) {
         scrollLogo.style.opacity = '1';
         scrollLogo.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1)';
-      } else if (p > 0.02 && p <= 0.32) {
-        const t = (p - 0.02) / 0.30;
+      } else if (p > 0.02 && p <= 0.48) {
+        const t = (p - 0.02) / 0.46;
         const easeT = easeOutCubic(t);
         // چرخش ۳بعدی حول محورهای Y و X همراه با دور شدن ملایم
         const rotY = (t * 150).toFixed(1);
