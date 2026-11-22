@@ -1142,31 +1142,22 @@ body:has(.coffee-hero) .header {
   object-fit: cover;
   object-position: left top;
   display: block;
-  transform-origin: 0% 0%;
-  animation: palmBreezeSway 14s ease-in-out infinite;
+  transform-origin: center center;
+  animation: palmBreezeSway 9s ease-in-out infinite;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* انیمیشن طبیعی و ارگانیک نسیم ملایم استوایی روی برگ‌های نخل - فوق‌العاده سیال، واقع‌گرایانه و بدون لرزش */
+/* حرکت خالص و ملایم بالا و پایین سایه برگ‌ها بدون کوچک‌ترین لرزش افقی به چپ و راست */
 @keyframes palmBreezeSway {
   0% {
-    transform: rotate(0deg) translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
-  22% {
-    transform: rotate(2.2deg) translate3d(8px, 4px, 0);
-  }
-  42% {
-    transform: rotate(0.9deg) translate3d(3px, 6px, 0);
-  }
-  68% {
-    transform: rotate(2.8deg) translate3d(10px, 3px, 0);
-  }
-  84% {
-    transform: rotate(1.4deg) translate3d(4px, 2px, 0);
+  50% {
+    transform: translate3d(0, 14px, 0);
   }
   100% {
-    transform: rotate(0deg) translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -1641,7 +1632,7 @@ body:has(.coffee-hero) .header {
 @media (max-width: 768px) {
   /* آرام‌تر کردن سرعت انیمیشن‌ها و ترنزیشن‌ها در گوشی */
   .leaf-shadow-img {
-    animation-duration: 18s;
+    animation-duration: 11s;
   }
   .shisha-smoke-img--base {
     animation-duration: 18s;

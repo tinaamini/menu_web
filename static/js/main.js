@@ -45,11 +45,11 @@ function initCoffeeHero() {
   const teaArchInner = document.getElementById('teaArchInner');
   const teaArchDarkOverlay = document.getElementById('teaArchDarkOverlay');
   const herbElements = [
-    { el: document.getElementById('herbLemon'),      startX: -160, startY: -160, startRot: -65, endRot: -15, exitX: -65, exitY: -65, exitRot: -45, scale: 1.05, phase: 0.0, ampY: 5.8, ampX: 3.5, ampRot: 2.2, speed: 0.0016 },
-    { el: document.getElementById('herbLeaf1'),      startX:   80, startY: -170, startRot: -50, endRot:  15, exitX:  45, exitY: -65, exitRot:  35, scale: 1.00, phase: 0.9, ampY: 5.2, ampX: 4.2, ampRot: 2.8, speed: 0.0015 },
-    { el: document.getElementById('herbLeaf2'),      startX:  -80, startY:  170, startRot:  60, endRot: -18, exitX: -45, exitY:  65, exitRot: -35, scale: 0.95, phase: 3.6, ampY: 5.4, ampX: 3.6, ampRot: 2.6, speed: 0.0017 },
-    { el: document.getElementById('herbAnise'),      startX: -110, startY: -150, startRot:  55, endRot:  18, exitX: -45, exitY: -65, exitRot:  40, scale: 1.00, phase: 5.1, ampY: 4.8, ampX: 3.2, ampRot: 2.4, speed: 0.0014 },
-    { el: document.getElementById('herbAniseLarge'), startX:  180, startY:   90, startRot:  75, endRot:  22, exitX:  70, exitY:  25, exitRot:  50, scale: 1.15, phase: 2.2, ampY: 6.5, ampX: 4.2, ampRot: 2.0, speed: 0.0012 },
+    { el: document.getElementById('herbLemon'),      startX: -160, startY: -160, startRot: -65, endRot: -15, exitX: -65, exitY: -65, exitRot: -45, scale: 1.05, phase: 0.0, ampY: 6.0, ampX: 0.0, ampRot: 0.0, speed: 0.0014 },
+    { el: document.getElementById('herbLeaf1'),      startX:   80, startY: -170, startRot: -50, endRot:  15, exitX:  45, exitY: -65, exitRot:  35, scale: 1.00, phase: 0.9, ampY: 5.5, ampX: 0.0, ampRot: 0.0, speed: 0.0013 },
+    { el: document.getElementById('herbLeaf2'),      startX:  -80, startY:  170, startRot:  60, endRot: -18, exitX: -45, exitY:  65, exitRot: -35, scale: 0.95, phase: 3.6, ampY: 5.8, ampX: 0.0, ampRot: 0.0, speed: 0.0015 },
+    { el: document.getElementById('herbAnise'),      startX: -110, startY: -150, startRot:  55, endRot:  18, exitX: -45, exitY: -65, exitRot:  40, scale: 1.00, phase: 5.1, ampY: 5.0, ampX: 0.0, ampRot: 0.0, speed: 0.0012 },
+    { el: document.getElementById('herbAniseLarge'), startX:  180, startY:   90, startRot:  75, endRot:  22, exitX:  70, exitY:  25, exitRot:  50, scale: 1.15, phase: 2.2, ampY: 6.8, ampX: 0.0, ampRot: 0.0, speed: 0.0011 },
   ];
 
   // عناصر صحنه ادیتوریال موهیتو (سایه برگ‌های نخل، قاب استیج موهیتو و تایپوگرافی موکتل)
@@ -642,28 +642,24 @@ function initCoffeeHero() {
 
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = Math.sin(now * (h.speed || 0.0015) + (h.phase || 0)) * (h.ampY || 5.5) * hEased;
-          const floatX = Math.cos(now * (h.speed || 0.0015) * 0.8 + (h.phase || 0)) * (h.ampX || 3.5) * hEased;
-          const floatRot = Math.sin(now * (h.speed || 0.0015) * 0.7 + (h.phase || 0)) * (h.ampRot || 2.2) * hEased;
+          const floatY = Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5) * hEased;
 
-          const curX = (h.startX * (1 - hEased) + floatX).toFixed(1);
+          const curX = (h.startX * (1 - hEased)).toFixed(1);
           const curY = (h.startY * (1 - hEased) + floatY).toFixed(1);
-          const curRot = (h.startRot + (h.endRot - h.startRot) * hEased + floatRot).toFixed(1);
+          const curRot = (h.startRot + (h.endRot - h.startRot) * hEased).toFixed(1);
           const curScale = (0.5 + (h.scale - 0.5) * hEased).toFixed(2);
 
           h.el.style.opacity = hEased.toFixed(3);
           h.el.style.transform = `translate(${curX}px, ${curY}px) rotate(${curRot}deg) scale(${curScale})`;
         });
       } else if (sy >= TEA_SETTLE && sy < TEA_EXIT_START) {
-        // فاز استقرار و شناوری ارگانیک گیاهان در کادر (۸۲۵ تا ۸۵۵)
+        // فاز استقرار و شناوری ارگانیک گیاهان در کادر - حرکت خالص، نرم و آرام بالا و پایین بدون هیچ لرزش چپ و راست
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = (Math.sin(now * (h.speed || 0.0015) + (h.phase || 0)) * (h.ampY || 5.5)).toFixed(1);
-          const floatX = (Math.cos(now * (h.speed || 0.0015) * 0.8 + (h.phase || 0)) * (h.ampX || 3.5)).toFixed(1);
-          const floatRot = (h.endRot + Math.sin(now * (h.speed || 0.0015) * 0.7 + (h.phase || 0)) * (h.ampRot || 2.2)).toFixed(1);
+          const floatY = (Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5)).toFixed(1);
 
           h.el.style.opacity = '1';
-          h.el.style.transform = `translate(${floatX}px, ${floatY}px) rotate(${floatRot}deg) scale(${h.scale})`;
+          h.el.style.transform = `translate(0px, ${floatY}px) rotate(${h.endRot}deg) scale(${h.scale})`;
         });
       } else if (sy >= TEA_EXIT_START && sy < TEA_EXIT_END) {
         // فاز خروج گیاهان معطر (لیمو، بادیان و برگ‌ها) با شتاب‌گیری و توقف سینمایی
@@ -672,15 +668,14 @@ function initCoffeeHero() {
 
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = (Math.sin(now * (h.speed || 0.0015) + (h.phase || 0)) * (h.ampY || 5.5) * (1 - exitEased)).toFixed(1);
-          const floatX = (Math.cos(now * (h.speed || 0.0015) * 0.8 + (h.phase || 0)) * (h.ampX || 3.5) * (1 - exitEased)).toFixed(1);
+          const floatY = (Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5) * (1 - exitEased)).toFixed(1);
 
           const curRot = (h.endRot + (h.exitRot || 40) * exitEased).toFixed(1);
           const curScale = (h.scale * (1 - exitEased * 0.35)).toFixed(2);
           const curAlpha = Math.max(0, 1 - exitEased).toFixed(3);
 
           h.el.style.opacity = curAlpha;
-          h.el.style.transform = `translate(calc(${floatX}px + ${(h.exitX * exitEased).toFixed(1)}vw), calc(${floatY}px + ${(h.exitY * exitEased).toFixed(1)}vh)) rotate(${curRot}deg) scale(${curScale})`;
+          h.el.style.transform = `translate(${(h.exitX * exitEased).toFixed(1)}vw, calc(${floatY}px + ${(h.exitY * exitEased).toFixed(1)}vh)) rotate(${curRot}deg) scale(${curScale})`;
         });
       } else {
         // پس از ۹۲۸: کاملاً خارج از صفحه و مخفی
