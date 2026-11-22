@@ -662,9 +662,14 @@ body:has(.coffee-hero) .header {
 }
 
 @media (max-width: 768px) {
-  /* آرام‌تر کردن سرعت انیمیشن‌ها در گوشی */
-  .hero-scroll-logo {
-    animation-duration: 7.5s;
+  /* تنظیم ابعاد، نورپردازی و درخشش طلایی نشان گاردو در گوشی */
+  .hero-gold-logo-img {
+    width: 65vw;
+    max-width: 275px;
+    max-height: 42vh;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65))
+            drop-shadow(0 0 22px rgba(212, 168, 92, 0.32));
+    animation-duration: 5s;
   }
   .hero-scroll-indicator {
     display: none !important;

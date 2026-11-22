@@ -985,33 +985,39 @@ function initCoffeeHero() {
       });
     }
 
-    // نشان سه بعدی طلایی گاردو: اول صفحه نمایان، چرخش سه بعدی طبیعی با اسکرول و محو شدن تدریجی تا اسکرول ۱۸۰
+    // نشان سه بعدی طلایی گاردو: اول صفحه نمایان با شناوری زنده ۳بعدی، چرخش سینمایی طبیعی با اسکرول (بدون نازک شدن یا وارونگی) و محو شدن تدریجی تا اسکرول ۱۸۰
     if (scrollLogo) {
       if (p <= 0.02) {
+        // شناوری آرام، زنده و ارگانیک نشان طلایی در مرکز کادر هنگام توقف
+        const idleFloatY = Math.sin(now * 0.0014) * (isMobile ? 3.5 : 5.0);
+        const idleRotY = Math.sin(now * 0.0011) * (isMobile ? 2.5 : 3.5);
+        const idleRotX = Math.cos(now * 0.0009) * (isMobile ? 1.5 : 2.0);
         scrollLogo.style.opacity = '1';
-        scrollLogo.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1)';
+        scrollLogo.style.transform = `translate(-50%, calc(-50% + ${idleFloatY.toFixed(1)}px)) perspective(1000px) rotateY(${idleRotY.toFixed(1)}deg) rotateX(${idleRotX.toFixed(1)}deg) scale(1)`;
       } else if (p > 0.02 && p <= 0.50) {
         const t = (p - 0.02) / 0.48;
         const easeT = easeOutCubic(t);
-        // چرخش ۳بعدی حول محورهای Y و X همراه با دور شدن ملایم
-        const rotY = (t * 150).toFixed(1);
-        const rotX = (Math.sin(t * Math.PI) * 16).toFixed(1);
-        const scale = (1 - easeT * 0.22).toFixed(3);
-        const translateY = (easeT * 40).toFixed(1);
+        // چرخش ۳بعدی پرستیژ و لوکس (حداکثر ۳۲ درجه در موبایل) - ضخامت و شکوه حفظ می‌شود و وارونه نمی‌شود
+        const maxRotY = isMobile ? 32 : 38;
+        const rotY = (t * maxRotY).toFixed(1);
+        const rotX = (Math.sin(t * Math.PI) * (isMobile ? 10 : 14)).toFixed(1);
+        const scale = (1 - easeT * 0.15).toFixed(3);
+        const translateY = (easeT * (isMobile ? 24 : 32)).toFixed(1);
 
         // محو شدن روان هم‌زمان با پایین آمدن دانه‌های قهوه تا استقرار در نقطه ۱۸۰
-        const fadeStart = 0.12;
+        const fadeStart = 0.18;
         let opacity = 1;
         if (t > fadeStart) {
           const fadeP = (t - fadeStart) / (1 - fadeStart);
-          opacity = Math.max(0, 1 - Math.pow(fadeP, 1.25));
+          opacity = Math.max(0, 1 - Math.pow(fadeP, 1.35));
         }
 
         scrollLogo.style.opacity = opacity.toFixed(3);
         scrollLogo.style.transform = `translate(-50%, calc(-50% + ${translateY}px)) perspective(1000px) rotateY(${rotY}deg) rotateX(${rotX}deg) scale(${scale})`;
       } else {
+        const maxRotY = isMobile ? 32 : 38;
         scrollLogo.style.opacity = '0';
-        scrollLogo.style.transform = 'translate(-50%, calc(-50% + 40px)) perspective(1000px) rotateY(150deg) rotateX(0deg) scale(0.78)';
+        scrollLogo.style.transform = `translate(-50%, calc(-50% + 24px)) perspective(1000px) rotateY(${maxRotY}deg) rotateX(0deg) scale(0.85)`;
       }
     }
 
