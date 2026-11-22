@@ -187,8 +187,8 @@ function initCoffeeHero() {
 
   const BEAN_FREEZE_SCROLL = 360; // ریزش ممتد و نرم دانه‌ها تا زمان ورود و استقرار کامل هات‌کافی
   const FREEZE_P = 1.0;          // استقرار کامل دانه‌ها در سراسر کادر تا انتهای پایین صفحه
-  const HOT_START = 283;         // شروع ورود HOT COFFEE دقیقاً پس از فریز دانه‌ها در ۲۸۳
-  const HOT_END   = 382;         // استقرار کامل و پوشش ۱۰۰٪ ارتفاع در ۳۸۲
+  const HOT_START = 180;         // شروع ورود HOT COFFEE دقیقاً بلافاصله پس از محو شدن نشان سه بعدی لوگو در ۱۸۰
+  const HOT_END   = 290;         // استقرار کامل هات‌کافی در مرکز تصویر در ۲۹۰
   const EXIT_START = 414;        // شروع خروج معکوس HOT COFFEE و فنجان در ۴۱۴
   const EXIT_END   = 513;        // خروج کامل و ناپدید شدن از صفحه در ۵۱۳
   const COLD_START = 450;        // شروع ظاهر شدن قهوه سرد در مرکز تصویر در اسکرول ۴۵۰
@@ -985,13 +985,13 @@ function initCoffeeHero() {
       });
     }
 
-    // نشان سه بعدی طلایی گاردو: اول صفحه نمایان، چرخش سه بعدی طبیعی با اسکرول و سپس محو شدن
+    // نشان سه بعدی طلایی گاردو: اول صفحه نمایان، چرخش سه بعدی طبیعی با اسکرول و محو شدن تدریجی تا اسکرول ۱۸۰
     if (scrollLogo) {
       if (p <= 0.02) {
         scrollLogo.style.opacity = '1';
         scrollLogo.style.transform = 'translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1)';
-      } else if (p > 0.02 && p <= 0.48) {
-        const t = (p - 0.02) / 0.46;
+      } else if (p > 0.02 && p <= 0.50) {
+        const t = (p - 0.02) / 0.48;
         const easeT = easeOutCubic(t);
         // چرخش ۳بعدی حول محورهای Y و X همراه با دور شدن ملایم
         const rotY = (t * 150).toFixed(1);
@@ -999,7 +999,7 @@ function initCoffeeHero() {
         const scale = (1 - easeT * 0.22).toFixed(3);
         const translateY = (easeT * 40).toFixed(1);
 
-        // محو شدن روان هم‌زمان با پایین آمدن دانه‌های قهوه
+        // محو شدن روان هم‌زمان با پایین آمدن دانه‌های قهوه تا استقرار در نقطه ۱۸۰
         const fadeStart = 0.12;
         let opacity = 1;
         if (t > fadeStart) {
@@ -1230,7 +1230,7 @@ function initSlideNavDock() {
   ];
 
   function getSlideIndex(sy) {
-    if (sy < 283) return 0;
+    if (sy < 180) return 0;
     if (sy < 540) return 1;
     if (sy < 915) return 2;
     if (sy < 1490) return 3;
