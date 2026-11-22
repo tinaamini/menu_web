@@ -123,28 +123,28 @@ function initCoffeeHero() {
     beanImages.push(img);
   }
 
-  // تعریف صورت‌فلکی دانه‌های قهوه در عرض کل صفحه با عمق‌ها و سرعت‌های مختلف
-  const NUM_BEANS = 24;
+  // تعریف صورت‌فلکی غنی و پرحجم دانه‌های قهوه (۴۴ دانه واقعی) با ریزش ممتد، آبشاری و مداوم از بالا در طول اسکرول
+  const NUM_BEANS = 44;
   const beansData = [];
   for (let i = 0; i < NUM_BEANS; i++) {
-    const col = (i % 8) / 8; // توزیع در ۸ ستون در عرض صفحه
-    const jitter = Math.sin(i * 3.7) * 0.04;
-    const xRatio = Math.max(0.04, Math.min(0.96, 0.06 + col * 0.90 + jitter));
+    const col = (i % 11) / 11.0; // توزیع در ۱۱ ستون در سراسر عرض صفحه
+    const jitter = Math.sin(i * 3.7) * 0.035;
+    const xRatio = Math.max(0.04, Math.min(0.96, 0.05 + col * 0.90 + jitter));
     const imgIdx = i % 6;
 
-    // شروع سقوط با اسکرول (از p = 0.02 تا 0.22)
-    const startP = 0.02 + (i / NUM_BEANS) * 0.20;
-    // مدت زمان سقوط هر دانه تا استقرار کامل در طول صفحه
-    const durationP = 0.38 + ((i * 7) % 5) * 0.08;
-    // توزیع عمودی دانه‌ها در سراسر صفحه از بالا تا نزدیک لبه پایین کادر (از ۳۲٪ تا ۹۲٪ ارتفاع صفحه)
-    const targetYRatio = 0.32 + (((i * 13) % 17) / 16.0) * 0.60;
+    // شروع سقوط تدریجی و پیوسته دانه‌ها با اسکرول (از p = 0.01 تا 0.68) - ورود ممتد دانه از بالا
+    const startP = 0.01 + (i / (NUM_BEANS - 1)) * 0.68;
+    // مدت زمان سقوط هر دانه تا استقرار کامل
+    const durationP = 0.24 + ((i * 7) % 5) * 0.035;
+    // توزیع عمودی دانه‌ها در سراسر صفحه از بالا تا انتهای پایین کادر (از ۲۲٪ تا ۹۴٪ ارتفاع صفحه)
+    const targetYRatio = 0.22 + (((i * 17) % 23) / 22.0) * 0.72;
 
-    // عمق و ابعاد متنوع
+    // ابعاد استاندارد، پرحجم و طبیعی قهوه بر اساس اندازه مورد تایید
     const depth = 0.65 + ((i * 11) % 6) * 0.08;
-    const scale = 0.22 + depth * 0.16; // بین ۰.۳۲ تا ۰.۴۴
-    const alpha = Math.min(1, 0.70 + depth * 0.30);
+    const scale = 0.24 + depth * 0.16; // بین ۰.۳۴ تا ۰.۴۶
+    const alpha = Math.min(1, 0.75 + depth * 0.25);
 
-    const drift = (Math.sin(i * 2.1) * 55);
+    const drift = (Math.sin(i * 2.1) * 45);
     const startRot = (i * 1.4) % (Math.PI * 2);
     const rotSpeed = (i % 2 === 0 ? 1 : -1) * (2.2 + ((i * 13) % 4) * 0.8);
     const idlePhase = i * 0.9;
@@ -917,11 +917,8 @@ function initCoffeeHero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // رندر دانه‌های قهوه با فیزیک سقوط آزاد، چرخش و رانش باد (بهینه‌سازی ویژه برای موبایل)
-      beansData.forEach((b, idx) => {
-        // در گوشی دانه‌ها به تعداد ۱۵ عدد گلچین می‌شوند تا صفحه خلوت، لوکس و بدون تراکم ناموزون بماند
-        if (isMobile && idx >= 15) return;
-
+      // رندر دانه‌های قهوه با فیزیک سقوط آزاد ممتد، چرخش و رانش باد (۴۴ دانه پیوسته از بالا)
+      beansData.forEach((b) => {
         const bImg = beanImages[b.imgIdx];
         if (!bImg || !bImg.complete || bImg.naturalWidth === 0) return;
 
@@ -930,41 +927,36 @@ function initCoffeeHero() {
         // تثبیت در نقطه توقف تایید شده (p = 1.0)
         const animP = p;
 
-        // مقیاس دانه‌ها در موبایل متناسب با ابعاد صفحه گوشی تنظیم می‌شود تا درشت و متراکم به نظر نرسند
-        const scaleMul = isMobile ? 0.68 : 1.0;
-        const bw = bImg.naturalWidth * b.scale * scaleMul;
-        const bh = bImg.naturalHeight * b.scale * scaleMul;
+        // ابعاد پرحجم و طبیعی قهوه (همان اندازه تایید شده)
+        const bw = bImg.naturalWidth * b.scale;
+        const bh = bImg.naturalHeight * b.scale;
 
-        // زمان‌بندی و توزیع عمودی ویژه موبایل: دانه‌ها روان‌تر و تا انتهای پایین صفحه سرازیر می‌شوند
-        const bStartP = isMobile ? (0.01 + (idx / 15) * 0.12) : b.startP;
-        const bDurationP = isMobile ? (0.28 + ((idx * 7) % 5) * 0.05) : b.durationP;
-        const bTargetYRatio = isMobile ? (0.24 + (((idx * 13) % 17) / 16.0) * 0.68) : b.targetYRatio;
-        const driftAmount = b.drift * (isMobile ? 0.30 : 1.0);
+        const driftAmount = b.drift * (isMobile ? 0.40 : 1.0);
 
-        if (animP < bStartP) {
-          // قبل از سقوط: شناور بودن ملایم در بالای کادر
-          const idleWave = Math.sin(now * 0.0018 + b.idlePhase) * (isMobile ? 6 : 12);
+        if (animP < b.startP) {
+          // قبل از سقوط: شناور بودن ملایم در بالای کادر تا رسیدن نوبت ورود
+          const idleWave = Math.sin(now * 0.0018 + b.idlePhase) * (isMobile ? 6 : 10);
           curX = w * b.xRatio;
-          curY = -35 + idleWave - (bStartP - animP) * 180;
+          curY = -45 + idleWave - (b.startP - animP) * 200;
           curRot = b.startRot + Math.sin(now * 0.001 + b.idlePhase) * 0.2;
-          curAlpha *= Math.max(0, 1 - (bStartP - animP) * 3);
+          curAlpha *= Math.max(0, 1 - (b.startP - animP) * 4);
         } else {
           // حین سقوط و استقرار دانه‌ها در سراسر کادر تا پایین صفحه
-          const normP = Math.min(1, (animP - bStartP) / bDurationP);
-          const easedP = Math.pow(normP, 1.35);
+          const normP = Math.min(1, (animP - b.startP) / b.durationP);
+          const easedP = Math.pow(normP, 1.30);
 
           // شناوری زنده و ارگانیک پس از استقرار
-          const floatIdleY = Math.sin(now * 0.0012 + b.idlePhase) * (isMobile ? 3.0 : 4.5) * easedP;
-          const floatIdleX = Math.cos(now * 0.0010 + b.idlePhase) * (isMobile ? 1.5 : 3.0) * easedP;
+          const floatIdleY = Math.sin(now * 0.0012 + b.idlePhase) * (isMobile ? 3.2 : 4.5) * easedP;
+          const floatIdleX = Math.cos(now * 0.0010 + b.idlePhase) * (isMobile ? 1.8 : 3.0) * easedP;
 
           curX = w * b.xRatio + Math.sin(normP * Math.PI) * driftAmount + floatIdleX;
-          // دانه‌ها در سراسر کادر و تا پایین‌ترین بخش‌های صفحه سرازیر می‌شوند
-          curY = -45 + (h * bTargetYRatio + 45) * easedP + floatIdleY;
+          // دانه‌ها مدام از بالای کادر (-45px) سرازیر شده و در سراسر کادر مستقر می‌شوند
+          curY = -45 + (h * b.targetYRatio + 45) * easedP + floatIdleY;
           curRot = b.startRot + normP * b.rotSpeed * Math.PI;
         }
 
-        // جلوگیری از خروج دانه‌ها از لبه‌های چپ و راست صفحه در موبایل
-        const edgePad = bw * 0.5 + 8;
+        // جلوگیری از خروج دانه‌ها از لبه‌های چپ و راست صفحه
+        const edgePad = bw * 0.5 + 4;
         curX = Math.max(edgePad, Math.min(w - edgePad, curX));
 
         // خروج دانه‌های قهوه هم‌زمان با پر شدن صفحه توسط پس‌زمینه هات‌کافی (۴۱۴ تا ۵۱۳)
