@@ -45,11 +45,11 @@ function initCoffeeHero() {
   const teaArchInner = document.getElementById('teaArchInner');
   const teaArchDarkOverlay = document.getElementById('teaArchDarkOverlay');
   const herbElements = [
-    { el: document.getElementById('herbLemon'),      startX: -160, startY: -160, startRot: -65, endRot: -15, exitX: -65, exitY: -65, exitRot: -45, scale: 1.05, phase: 0.0, ampY: 6.0, ampX: 0.0, ampRot: 0.0, speed: 0.0014 },
-    { el: document.getElementById('herbLeaf1'),      startX:   80, startY: -170, startRot: -50, endRot:  15, exitX:  45, exitY: -65, exitRot:  35, scale: 1.00, phase: 0.9, ampY: 5.5, ampX: 0.0, ampRot: 0.0, speed: 0.0013 },
-    { el: document.getElementById('herbLeaf2'),      startX:  -80, startY:  170, startRot:  60, endRot: -18, exitX: -45, exitY:  65, exitRot: -35, scale: 0.95, phase: 3.6, ampY: 5.8, ampX: 0.0, ampRot: 0.0, speed: 0.0015 },
-    { el: document.getElementById('herbAnise'),      startX: -110, startY: -150, startRot:  55, endRot:  18, exitX: -45, exitY: -65, exitRot:  40, scale: 1.00, phase: 5.1, ampY: 5.0, ampX: 0.0, ampRot: 0.0, speed: 0.0012 },
-    { el: document.getElementById('herbAniseLarge'), startX:  180, startY:   90, startRot:  75, endRot:  22, exitX:  70, exitY:  25, exitRot:  50, scale: 1.15, phase: 2.2, ampY: 6.8, ampX: 0.0, ampRot: 0.0, speed: 0.0011 },
+    { el: document.getElementById('herbLemon'),      startX: -160, startY: -160, startRot: -65, endRot: -15, exitX: -65, exitY: -65, exitRot: -45, scale: 1.05, phase: 0.0, ampY: 6.0, ampX: 0.0, ampRot: 0.0, speed: 0.0028 },
+    { el: document.getElementById('herbLeaf1'),      startX:   80, startY: -170, startRot: -50, endRot:  15, exitX:  45, exitY: -65, exitRot:  35, scale: 1.00, phase: 0.9, ampY: 5.5, ampX: 0.0, ampRot: 0.0, speed: 0.0026 },
+    { el: document.getElementById('herbLeaf2'),      startX:  -80, startY:  170, startRot:  60, endRot: -18, exitX: -45, exitY:  65, exitRot: -35, scale: 0.95, phase: 3.6, ampY: 5.8, ampX: 0.0, ampRot: 0.0, speed: 0.0030 },
+    { el: document.getElementById('herbAnise'),      startX: -110, startY: -150, startRot:  55, endRot:  18, exitX: -45, exitY: -65, exitRot:  40, scale: 1.00, phase: 5.1, ampY: 5.0, ampX: 0.0, ampRot: 0.0, speed: 0.0024 },
+    { el: document.getElementById('herbAniseLarge'), startX:  180, startY:   90, startRot:  75, endRot:  22, exitX:  70, exitY:  25, exitRot:  50, scale: 1.15, phase: 2.2, ampY: 6.8, ampX: 0.0, ampRot: 0.0, speed: 0.0022 },
   ];
 
   // عناصر صحنه ادیتوریال موهیتو (سایه برگ‌های نخل، قاب استیج موهیتو و تایپوگرافی موکتل)
@@ -253,13 +253,13 @@ function initCoffeeHero() {
     }
     const sy = animSy;
 
-    // فیزیک ملایم‌تر و آرام‌تر سقوط دانه‌های قهوه در گوشی
-    const beanLerp = isMobile ? 0.075 : 0.14;
+    // فیزیک روان و پاسخگوی سقوط دانه‌های قهوه در گوشی بدون تاخیر
+    const beanLerp = isMobile ? 0.12 : 0.14;
     currentProgress += (targetProgress - currentProgress) * beanLerp;
     const p = Math.min(FREEZE_P, currentProgress);
 
-    // سرعت آرام‌تر انیمیشن‌های متناوب و شناور در گوشی (حدود نصف سرعت دسکتاپ)
-    const timeScale = isMobile ? 0.60 : 1.0;
+    // سرعت متوازن و زنده انیمیشن‌های متناوب و شناور در گوشی
+    const timeScale = isMobile ? 0.85 : 1.0;
     const now = (performance.now() - startTime) * timeScale;
 
     // انیمیشن موج پیوسته کرم: ورود از چپ برای Hot Coffee (انحنا دار)، ادامه حرکت به راست برای رنگ‌آمیزی کامل صفحه، و میزبانی Ice Coffee (صاف و یکدست)
@@ -642,7 +642,7 @@ function initCoffeeHero() {
 
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5) * hEased;
+          const floatY = Math.sin(now * (h.speed || 0.0026) + (h.phase || 0)) * (h.ampY || 5.5) * hEased;
 
           const curX = (h.startX * (1 - hEased)).toFixed(1);
           const curY = (h.startY * (1 - hEased) + floatY).toFixed(1);
@@ -656,7 +656,7 @@ function initCoffeeHero() {
         // فاز استقرار و شناوری ارگانیک گیاهان در کادر - حرکت خالص، نرم و آرام بالا و پایین بدون هیچ لرزش چپ و راست
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = (Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5)).toFixed(1);
+          const floatY = (Math.sin(now * (h.speed || 0.0026) + (h.phase || 0)) * (h.ampY || 5.5)).toFixed(1);
 
           h.el.style.opacity = '1';
           h.el.style.transform = `translate(0px, ${floatY}px) rotate(${h.endRot}deg) scale(${h.scale})`;
@@ -668,7 +668,7 @@ function initCoffeeHero() {
 
         herbElements.forEach(h => {
           if (!h.el) return;
-          const floatY = (Math.sin(now * (h.speed || 0.0014) + (h.phase || 0)) * (h.ampY || 5.5) * (1 - exitEased)).toFixed(1);
+          const floatY = (Math.sin(now * (h.speed || 0.0026) + (h.phase || 0)) * (h.ampY || 5.5) * (1 - exitEased)).toFixed(1);
 
           const curRot = (h.endRot + (h.exitRot || 40) * exitEased).toFixed(1);
           const curScale = (h.scale * (1 - exitEased * 0.35)).toFixed(2);
@@ -917,8 +917,11 @@ function initCoffeeHero() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
-      // رندر دانه‌های قهوه با فیزیک سقوط آزاد، چرخش و رانش باد
-      beansData.forEach((b) => {
+      // رندر دانه‌های قهوه با فیزیک سقوط آزاد، چرخش و رانش باد (بهینه‌سازی ویژه برای موبایل)
+      beansData.forEach((b, idx) => {
+        // در گوشی دانه‌ها به تعداد ۱۵ عدد گلچین می‌شوند تا صفحه خلوت، لوکس و بدون تراکم ناموزون بماند
+        if (isMobile && idx >= 15) return;
+
         const bImg = beanImages[b.imgIdx];
         if (!bImg || !bImg.complete || bImg.naturalWidth === 0) return;
 
@@ -927,27 +930,42 @@ function initCoffeeHero() {
         // تثبیت در نقطه توقف تایید شده (p = 1.0)
         const animP = p;
 
-        if (animP < b.startP) {
+        // مقیاس دانه‌ها در موبایل متناسب با ابعاد صفحه گوشی تنظیم می‌شود تا درشت و متراکم به نظر نرسند
+        const scaleMul = isMobile ? 0.68 : 1.0;
+        const bw = bImg.naturalWidth * b.scale * scaleMul;
+        const bh = bImg.naturalHeight * b.scale * scaleMul;
+
+        // زمان‌بندی و توزیع عمودی ویژه موبایل: دانه‌ها روان‌تر و تا انتهای پایین صفحه سرازیر می‌شوند
+        const bStartP = isMobile ? (0.01 + (idx / 15) * 0.12) : b.startP;
+        const bDurationP = isMobile ? (0.28 + ((idx * 7) % 5) * 0.05) : b.durationP;
+        const bTargetYRatio = isMobile ? (0.24 + (((idx * 13) % 17) / 16.0) * 0.68) : b.targetYRatio;
+        const driftAmount = b.drift * (isMobile ? 0.30 : 1.0);
+
+        if (animP < bStartP) {
           // قبل از سقوط: شناور بودن ملایم در بالای کادر
-          const idleWave = Math.sin(now * 0.0018 + b.idlePhase) * 12;
+          const idleWave = Math.sin(now * 0.0018 + b.idlePhase) * (isMobile ? 6 : 12);
           curX = w * b.xRatio;
-          curY = -35 + idleWave - (b.startP - animP) * 180;
+          curY = -35 + idleWave - (bStartP - animP) * 180;
           curRot = b.startRot + Math.sin(now * 0.001 + b.idlePhase) * 0.2;
-          curAlpha *= Math.max(0, 1 - (b.startP - animP) * 3);
+          curAlpha *= Math.max(0, 1 - (bStartP - animP) * 3);
         } else {
           // حین سقوط و استقرار دانه‌ها در سراسر کادر تا پایین صفحه
-          const normP = Math.min(1, (animP - b.startP) / b.durationP);
+          const normP = Math.min(1, (animP - bStartP) / bDurationP);
           const easedP = Math.pow(normP, 1.35);
 
           // شناوری زنده و ارگانیک پس از استقرار
-          const floatIdleY = Math.sin(now * 0.0012 + b.idlePhase) * 4.5 * easedP;
-          const floatIdleX = Math.cos(now * 0.0010 + b.idlePhase) * 3.0 * easedP;
+          const floatIdleY = Math.sin(now * 0.0012 + b.idlePhase) * (isMobile ? 3.0 : 4.5) * easedP;
+          const floatIdleX = Math.cos(now * 0.0010 + b.idlePhase) * (isMobile ? 1.5 : 3.0) * easedP;
 
-          curX = w * b.xRatio + Math.sin(normP * Math.PI) * b.drift + floatIdleX;
+          curX = w * b.xRatio + Math.sin(normP * Math.PI) * driftAmount + floatIdleX;
           // دانه‌ها در سراسر کادر و تا پایین‌ترین بخش‌های صفحه سرازیر می‌شوند
-          curY = -45 + (h * b.targetYRatio + 45) * easedP + floatIdleY;
+          curY = -45 + (h * bTargetYRatio + 45) * easedP + floatIdleY;
           curRot = b.startRot + normP * b.rotSpeed * Math.PI;
         }
+
+        // جلوگیری از خروج دانه‌ها از لبه‌های چپ و راست صفحه در موبایل
+        const edgePad = bw * 0.5 + 8;
+        curX = Math.max(edgePad, Math.min(w - edgePad, curX));
 
         // خروج دانه‌های قهوه هم‌زمان با پر شدن صفحه توسط پس‌زمینه هات‌کافی (۴۱۴ تا ۵۱۳)
         if (sy >= EXIT_START && sy < EXIT_END) {
@@ -965,13 +983,11 @@ function initCoffeeHero() {
         ctx.translate(curX, curY);
         ctx.rotate(curRot);
 
-        // سایه ملایم و گرم قهوه
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.55)';
-        ctx.shadowBlur = 14;
-        ctx.shadowOffsetY = 8;
+        // سایه ملایم و سبک قهوه با رندر بهینه در موبایل (جلوگیری از افت فریم)
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+        ctx.shadowBlur = isMobile ? 6 : 14;
+        ctx.shadowOffsetY = isMobile ? 4 : 8;
 
-        const bw = bImg.naturalWidth * b.scale;
-        const bh = bImg.naturalHeight * b.scale;
         ctx.drawImage(bImg, -bw / 2, -bh / 2, bw, bh);
         ctx.restore();
       });
