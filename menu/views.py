@@ -21,7 +21,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(224, 122, 63, 0.45)',
         'hero_bg': 'linear-gradient(135deg, #241108 0%, #140905 50%, #0d0503 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(82, 38, 19, 0.90) 0%, rgba(36, 17, 9, 0.95) 100%)',
-        'scroll_target': 390,
+        'scroll_target': 260,
     },
     2: {
         'code': 'cold-coffee',
@@ -35,7 +35,7 @@ THEME_CONFIGS = {
         'accent_glow': 'rgba(229, 169, 60, 0.45)',
         'hero_bg': 'linear-gradient(135deg, #c49d74 0%, #b2885d 50%, #986f45 100%)',
         'card_bg': 'linear-gradient(145deg, rgba(62, 45, 30, 0.90) 0%, rgba(32, 22, 14, 0.95) 100%)',
-        'scroll_target': 740,
+        'scroll_target': 620,
     },
     3: {
         'code': 'herbal-tea',

@@ -188,15 +188,15 @@ function initCoffeeHero() {
   const BEAN_FREEZE_SCROLL = 360; // ریزش ممتد و نرم دانه‌ها تا زمان ورود و استقرار کامل هات‌کافی
   const FREEZE_P = 1.0;          // استقرار کامل دانه‌ها در سراسر کادر تا انتهای پایین صفحه
   const HOT_START = 180;         // شروع ورود HOT COFFEE دقیقاً بلافاصله پس از محو شدن نشان سه بعدی لوگو در ۱۸۰
-  const HOT_END   = 290;         // استقرار کامل هات‌کافی در مرکز تصویر در ۲۹۰
-  const EXIT_START = 414;        // شروع خروج معکوس HOT COFFEE و فنجان در ۴۱۴
-  const EXIT_END   = 513;        // خروج کامل و ناپدید شدن از صفحه در ۵۱۳
-  const COLD_START = 450;        // شروع ظاهر شدن قهوه سرد در مرکز تصویر در اسکرول ۴۵۰
-  const COLD_END   = 560;        // استقرار کامل قهوه سرد در مرکز تصویر در ۵۶۰
-  const ICE_START  = 510;        // شروع پرتاب تکه‌های یخ از پشت لیوان در اسکرول ۵۱۰
-  const ICE_END    = 650;        // استقرار کامل تکه‌های یخ در اطراف لیوان در ۶۵۰
-  const TEXT_START = 560;        // شروع ظهور متن یخی ICE COFFEE روی لیوان در اسکرول ۵۶۰
-  const TEXT_END   = 650;        // استقرار کامل متن یخی در ۶۵۰
+  const HOT_END   = 260;         // استقرار کامل هات‌کافی در مرکز تصویر در ۲۶۰
+  const EXIT_START = 310;        // شروع خروج هات‌کافی و ورود سریع آیس‌کافی با یک اسکرول کوچک در ۳۱۰
+  const EXIT_END   = 390;        // پوشش کامل صفحه با رنگ کرم در ۳۹۰
+  const COLD_START = 330;        // شروع ظهور قهوه سرد در مرکز تصویر بلافاصله با اسکرول کوچک در ۳۳۰
+  const COLD_END   = 410;        // استقرار کامل قهوه سرد در مرکز تصویر در ۴۱۰
+  const ICE_START  = 370;        // شروع پرتاب تکه‌های یخ از پشت لیوان در اسکرول ۳۷۰
+  const ICE_END    = 440;        // استقرار کامل تکه‌های یخ در اطراف لیوان در ۴۴۰
+  const TEXT_START = 390;        // شروع ظهور متن یخی ICE COFFEE روی لیوان در اسکرول ۳۹۰
+  const TEXT_END   = 460;        // استقرار کامل متن یخی در ۴۶۰
   const FINAL_EXIT_START = 830;  // شروع خروج هم‌زمان یخ‌ها و متن آیس‌کافی در اسکرول ۸۳۰ (بازه نمایش طولانی و آرام آیس‌کافی)
   const FINAL_EXIT_END   = 990;  // خروج آرام و کامل در ۹۹۰
   const TEA_START        = 940;  // شروع ورود باشکوه فنجان دمنوش و پرواز گیاهان معطر در اسکرول ۹۴۰
@@ -1176,8 +1176,8 @@ function initSlideNavDock() {
 
   const slides = [
     { id: 0, name: 'هیرو گاردو', scrollY: 0, url: '/category/1/' },
-    { id: 1, name: 'نوشیدنی‌های گرم', scrollY: 390, url: '/category/1/' },
-    { id: 2, name: 'قهوه سرد و آیس کافی', scrollY: 740, url: '/category/2/' },
+    { id: 1, name: 'نوشیدنی‌های گرم', scrollY: 260, url: '/category/1/' },
+    { id: 2, name: 'قهوه سرد و آیس کافی', scrollY: 620, url: '/category/2/' },
     { id: 3, name: 'دمنوش و چای طبیعی', scrollY: 1250, url: '/category/3/' },
     { id: 4, name: 'موهیتو و موکتل', scrollY: 1940, url: '/category/4/' },
     { id: 5, name: 'قلیان‌های ویژه لوکس', scrollY: 2580, url: '/category/5/' }
@@ -1231,7 +1231,7 @@ function initSlideNavDock() {
 
   function getSlideIndex(sy) {
     if (sy < 180) return 0;
-    if (sy < 540) return 1;
+    if (sy < 330) return 1;
     if (sy < 915) return 2;
     if (sy < 1490) return 3;
     if (sy < 2180) return 4;
