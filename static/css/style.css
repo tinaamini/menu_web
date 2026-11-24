@@ -545,7 +545,6 @@ body:has(.coffee-hero) .header {
   left: 50%;
   transform-origin: center center;
   transform-style: preserve-3d;
-  perspective: 1000px;
   transform: translate(-50%, -50%) perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1);
   opacity: 1;
   z-index: 4;
@@ -562,7 +561,13 @@ body:has(.coffee-hero) .header {
   max-height: 52vh;
   object-fit: contain;
   display: block;
-  transform-style: preserve-3d;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  outline: 1px solid transparent;
   filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.4))
           drop-shadow(0 0 16px rgba(212, 168, 92, 0.22));
   animation: logoSoftGlow 4s ease-in-out infinite alternate;
@@ -662,14 +667,21 @@ body:has(.coffee-hero) .header {
 }
 
 @media (max-width: 768px) {
-  /* تنظیم ابعاد، نورپردازی و درخشش طلایی نشان گاردو در گوشی */
+  /* تنظیم ابعاد، نورپردازی و درخشش طلایی نشان گاردو در گوشی با شفافیت و رندر برداری بدون پلگی */
   .hero-gold-logo-img {
     width: 65vw;
     max-width: 275px;
     max-height: 42vh;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    outline: 1px solid transparent;
     filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65))
             drop-shadow(0 0 22px rgba(212, 168, 92, 0.32));
-    animation-duration: 5s;
+    animation: none; /* جلوگیری از تخریب بافر GPU و حفظ رزولوشن بی‌نقص لبه‌های گرد در موبایل */
   }
   .hero-scroll-indicator {
     display: none !important;
